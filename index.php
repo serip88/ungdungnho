@@ -1,5 +1,5 @@
 <?php
-/** hotfix2
+/** hotfix2 - release-1.0
  * CodeIgniter
  *
  * An open source application development framework for PHP
