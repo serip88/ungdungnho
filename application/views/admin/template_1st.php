@@ -40,6 +40,10 @@
   <script src="<?php echo base_url();?>app/vendor/angular/angular-translate/loader-static-files.js"></script>
   <script src="<?php echo base_url();?>app/vendor/angular/angular-translate/storage-cookie.js"></script>
   <script src="<?php echo base_url();?>app/vendor/angular/angular-translate/storage-local.js"></script>
+  <!-- lib -->
+  <!--<link rel="stylesheet" href="<?php echo base_url();?>app/js/lib/Validation-Engine/css/validationEngine.jquery.css" type="text/css">
+  <script src="<?php echo base_url();?>app/js/lib/Validation-Engine/js/languages/jquery.validationEngine-vi.js" type="text/javascript" charset="utf-8"></script>
+  <script src="<?php echo base_url();?>app/js/lib/Validation-Engine/js/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>-->
 
   <!-- App -->
   <script src="<?php echo base_url();?>app/js/app.js"></script>

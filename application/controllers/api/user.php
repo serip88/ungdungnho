@@ -22,7 +22,7 @@ class User extends REST_Controller {
     {
         // Construct the parent class
         parent::__construct();
-
+        $this->load->library('user_lib');
         // Configure limits on our controller methods
         // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
         $this->methods['user_get']['limit'] = 500; // 500 requests per hour per user/key
@@ -30,65 +30,10 @@ class User extends REST_Controller {
         $this->methods['user_delete']['limit'] = 50; // 50 requests per hour per user/key
     }
 
-    public function users_get()
+    public function user_get()
     {
-        // Users from a data store e.g. database
-        $users = [
-            ['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'fact' => 'Loves coding'],
-            ['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com', 'fact' => 'Developed on CodeIgniter'],
-            ['id' => 3, 'name' => 'Jane', 'email' => 'jane@example.com', 'fact' => 'Lives in the USA', ['hobbies' => ['guitar', 'cycling']]],
-        ];
-
-        $id = $this->get('id');
-
-        // If the id parameter doesn't exist return all the users
-
-        if ($id === NULL)
-        {
-            // Check if the users data store contains users (in case the database result returns NULL)
-            if ($users)
-            {
-                // Set the response and exit
-                $this->response($users, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
-            }
-            else
-            {
-                // Set the response and exit
-                $this->response([
-                    'status' => FALSE,
-                    'message' => 'No users were found'
-                ], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-            }
-        }
-
-        // Find and return a single record for a particular user.
-
-        $id = (int) $id;
-
-        // Validate the id.
-        if ($id <= 0)
-        {
-            // Invalid id, set the response and exit.
-            $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
-        }
-
-        // Get the user from the array, using the id as key for retreival.
-        // Usually a model is to be used for this.
-
-        $user = NULL;
-
-        if (!empty($users))
-        {
-            foreach ($users as $key => $value)
-            {
-                if (isset($value['id']) && $value['id'] === $id)
-                {
-                    $user = $value;
-                }
-            }
-        }
-
-        if (!empty($user))
+        
+        /*if (!empty($user))
         {
             $this->set_response($user, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
         }
@@ -98,16 +43,92 @@ class User extends REST_Controller {
                 'status' => FALSE,
                 'message' => 'User could not be found'
             ], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-        }
+        }*/
     }
-    public function group_user_post()
+    public function user_list_get()
     {
+        $data = $this->user_lib->get_user_list();
+        if($data){
+            $stt=TRUE;
+            $data = $this->user_lib->format_user_list($data);
+        }
+        else 
+            $stt=FALSE;
+
         $this->set_response([
-            'status' => TRUE,
-            'message' => 'User could not be found'
+            'status' => $stt,
+            'rows' => $data
         ], REST_Controller::HTTP_OK);
     }
-    public function users_post()
+    public function user_detail_get()
+    {
+        $param = $this->get();
+        $user_id = isset($param['user_id']) && $param['user_id'] ? $param['user_id'] : 0;
+        $data_user = $this->user_lib->get_user($user_id);
+        $data_group = $this->user_lib->get_user_group();
+        if($data_user && $data_group)
+            $stt=TRUE;
+        else 
+            $stt=FALSE;
+
+        $this->set_response([
+            'status' => $stt,
+            'user' => $data_user,
+            'user_group' => $data_group,
+        ], REST_Controller::HTTP_OK);
+    }
+    
+    public function user_group_get()
+    {
+        $data = $this->user_lib->get_user_group();
+        if($data)
+            $stt=TRUE;
+        else 
+            $stt=FALSE;
+
+        $this->set_response([
+            'status' => $stt,
+            'rows' => $data
+        ], REST_Controller::HTTP_OK);
+    }
+    public function user_save_post(){
+        $param = $this->post();
+        $param = $this->user_lib->validate_save_user($param);
+        if($param){
+            $id = $this->user_lib->save_user($param);
+        }else{
+            $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST);// BAD_REQUEST (400) being the HTTP response code
+        }
+        if($id)
+            $stt=TRUE;
+        else 
+            $stt=FALSE;
+        $this->set_response([
+            'status' => $stt,
+            'rows' => $id
+        ], REST_Controller::HTTP_OK);
+    }
+    public function user_edit_post(){
+        $param = $this->post();
+        $param = $this->user_lib->validate_edit_user($param);
+        
+        if($param){
+            $id = $this->user_lib->edit_user($param);
+        }else{
+            $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST);// BAD_REQUEST (400) being the HTTP response code
+        }
+            
+        if($id)
+            $stt=TRUE;
+        else 
+            $stt=FALSE;
+        $this->set_response([
+            'status' => $stt,
+            'rows' => $id
+        ], REST_Controller::HTTP_OK);
+    }
+
+    /*public function users_post()
     {
         // $this->some_model->update_user( ... );
         $message = [
@@ -118,7 +139,7 @@ class User extends REST_Controller {
         ];
 
         $this->set_response($message, REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
-    }
+    }*/
 
     public function users_delete()
     {
