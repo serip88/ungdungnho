@@ -13,7 +13,7 @@ app.service('openModal', ['$modal', '$rootScope', '$document', '$timeout', funct
         if(obj.no_padding){
             noPaddingClass = 'no-padding';
         }
-        var cancel = 'Cancel';
+        var cancel = 'Close';
         var template = '<div class="modal-header">' +
           '<button type="button" class="close" ng-click="cancel(false)">' +
           '<i class="ace-icon fa fa-times"></i>' +
