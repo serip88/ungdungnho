@@ -6,7 +6,8 @@
 
   var userApi = {
     baseUrl: baseConfig.apiUrl,
-    groupUsers: 'user/group_user',
+    getUserGroup: 'user/user_group',
+    getUserList: 'user/user_list',
     userDetail: 'user/user_detail',
     userSave: 'user/user_save',
     userEdit: 'user/user_edit',
@@ -92,44 +93,95 @@
         $log.info('Modal dismissed at: ' + new Date());
       });
     };*/
-
-  $scope.openAddUser = function (size) {
+  function modalAddUser(size,group_user) {
     var modalObj = {
-      templateUrl: [adBaseUrl, 'modal/add_user.html'].join('/'),
+      templateUrl: adBaseUrl +'modal/add_user.html',
       size: size,
       controller: ['$scope', '$modalInstance', function(scope, $modalInstance){
-            userService.httpPost('api/' + userApi.groupUsers).then(function(responseData) {
-                if (responseData.success) {
-                    $scope.fileInfo = responseData.rows;
-                }
-            });
-            scope.cancel = function(){
-              $modalInstance.close();
-            };
-            scope.ok = function(){
-              console.log(scope.newuser);
-              if(1){
-                openModal.confirm({
-                    title: 'title',
-                    body: 'Do you want to move it?',
-                    ok:{
-                      txt: 'Ok',
-                      fn: function () {
-                         
-                      }
-                    }
-                });
+        scope.newuser = {};
+        scope.newuser.group_user = group_user;
+        scope.cancel = function(){
+          $modalInstance.close();
+        };
+        scope.ok = function(){
+          console.log(scope.newuser);
+          scope.newuser.user_group_id = scope.newuser.user_group_id.id;
+          userService.httpPost('api/' + userApi.userSave,scope.newuser).then(function(responseData) {
+              if (responseData.status) {
+               openModal.alert('Add user','Add user thành công'); 
+               userList();
+               $modalInstance.close();
               }
-              else{
-                openModal.alert('Error');
-              }
-            };
+          });
+        };
         }]
     };
     openModal.custom(modalObj);
+  }
+  $scope.openAddUser = function (size) {
+    userService.httpGet('api/' + userApi.getUserGroup).then(function(responseData) {
+        if (responseData.status) {
+          modalAddUser(size,responseData.rows);
+        }
+    });
+    
   };
-
-
+  $scope.userView = function (user_id) {
+     userService.httpGet('api/' + userApi.userDetail,{user_id:user_id}).then(function(responseData) {
+        if (responseData.status) {
+          modalEditUser('lg',responseData.user_group,responseData.user);
+        }
+    });
+  }
+  $scope.userEdit = function (item) {
+     userService.httpGet('api/' + userApi.getUserGroup).then(function(responseData) {
+        if (responseData.status) {
+          modalEditUser('lg',responseData.rows,item);
+        }
+    });
+  }
+  function modalEditUser(size,group_user,item) {
+    var modalObj = {
+      templateUrl: adBaseUrl +'modal/edit_user.html',
+      size: size,
+      controller: ['$scope', '$modalInstance','dataInit', function(scope, $modalInstance, dataInit){
+        scope.newuser = item;
+        scope.newuser.group_user = dataInit;
+        scope.newuser.user_group_id = {id:item.user_group_id};
+        scope.cancel = function(){
+          $modalInstance.close();
+        };
+        scope.ok = function(){
+          console.log(scope.newuser);
+          scope.newuser.user_group_id = scope.newuser.user_group_id.id;
+          userService.httpPost('api/' + userApi.userEdit,scope.newuser).then(function(responseData) {
+              if (responseData.status) {
+               openModal.alert('Edit user','edit user thành công'); 
+               userList();
+               $modalInstance.close();
+              }else{
+                openModal.alert('Warning','edit user False'); 
+              }
+          });
+        };
+        }]
+    };
+    modalObj.resolve = {
+        dataInit: function(){
+            return group_user;
+        }
+    };
+    openModal.custom(modalObj);
+  }
+  function userList() {
+        $scope.userList = {};
+      userService.httpGet('api/' + userApi.getUserList).then(function(responseData) {
+        if (responseData.status) {
+            $scope.userList = responseData.rows;
+        }
+      });
+    }
+  userList();
   /*$scope.open = function (size) {
     var modalObj = {
         title: 'title',
@@ -146,11 +198,20 @@
 
   }]);
 
-  app.controller('UserListCtrl', ['$scope', '$modal', function($scope, $modal) {
-    $scope.newuser = ['newuser1', 'newuser2', 'newuser3'];
-    $scope.ok = function () {
-      alert('Ok');
-    };
+  app.controller('UserListCtrl', ['$scope', '$modal', 'userService', function($scope, $modal, userService) {
+    /*$scope.newuser = ['newuser1', 'newuser2', 'newuser3'];
+    function userList() {
+        $scope.userList = {};
+      userService.httpGet('api/' + userApi.getUserList).then(function(responseData) {
+        if (responseData.status) {
+            $scope.userList = responseData.rows;
+        }
+      });
+    }
+    userList();
+    */
+   
+  
   }]);
 
   app.controller('UserDetailCtrl', ['$scope', '$stateParams', function($scope, $stateParams) {

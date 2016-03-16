@@ -10,6 +10,7 @@
     margin-bottom: 5px;
 }
 </style>
+
 <div ng-controller="UserCtrl">
   <div ng-controller="UserListCtrl">
       <div class="page-header">
@@ -44,12 +45,15 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    <tr ng-repeat="(key, value) in userList">
                       <td class="text-center"><input type="checkbox" name="selected[]" value="1"></td>
-                      <td class="text-left">admin</td>
-                      <td class="text-left">Enabled</td>
-                      <td class="text-left">06/12/2015</td>
-                      <td class="text-right"><a href="http://dm-opencart.localhost/admin/index.php?route=user/user/edit&amp;token=2ZTnUtHITXGsI7HquT095oijzDUvgDgy&amp;user_id=1" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Edit"><i class="fa fa-pencil"></i></a></td>
+                      <td class="text-left">{{value.username}}</td>
+                      <td class="text-left">{{value.ui_status}}</td>
+                      <td class="text-left">{{value.ui_date_added}}</td>
+                      <td class="text-right">
+                        <a data-ng-click="userView(value.user_id)" data-toggle="tooltip" title="" class="btn btn-success" data-original-title="Edit"><i class="fa fa-eye"></i></a>
+                        <a data-ng-click="userEdit(value)" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+                      </td>
                     </tr>
                   </tbody>
                 </table>

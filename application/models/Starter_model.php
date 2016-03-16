@@ -3,16 +3,17 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Starter_model extends CI_Model
+class Starter_Model extends CI_Model
 {
-    private $_tb_name = '';
+    protected $_tb_name = '';
            
     public function __construct()
     {
-        parent::__construct();        
+        parent::__construct();     
+        $this->load->database();   
     }
 
-    public function insert_data($data){
+    public function insert_data($data){ 
      	$this->db->insert($this->_tb_name,$data);
      	return $this->db->insert_id();
    }
