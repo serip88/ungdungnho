@@ -184,7 +184,7 @@ angular.module('app')
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad){
-                          return uiLoad.load('js/controllers/form.js');
+                          return uiLoad.load(baseUrl+'js/controllers/form.js');
                       }]
                   }
               })
@@ -194,7 +194,7 @@ angular.module('app')
               })
               .state('app.form.validation', {
                   url: '/validation',
-                  templateUrl: 'tpl/form_validation.html'
+                  templateUrl: adBaseUrl+'form_validation.html'
               })
               .state('app.form.wizard', {
                   url: '/wizard',

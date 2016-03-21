@@ -13,6 +13,7 @@ angular.module('app', [
     'ui.load',
     'ui.jq',
     'ui.validate',
+    'checklist-model',
     'oc.lazyLoad',
     'pascalprecht.translate'
 ]);

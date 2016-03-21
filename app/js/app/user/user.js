@@ -103,9 +103,11 @@
         scope.cancel = function(){
           $modalInstance.close();
         };
-        scope.ok = function(){
+        scope.ok = function(invalid){
           console.log(scope.newuser);
-          scope.newuser.user_group_id = scope.newuser.user_group_id.id;
+          if(!validateAddUser() && invalid){
+            return;
+          }       
           userService.httpPost('api/' + userApi.userSave,scope.newuser).then(function(responseData) {
               if (responseData.status) {
                openModal.alert('Add user','Add user thành công'); 
@@ -114,10 +116,35 @@
               }
           });
         };
-        }]
+        function validateAddUser() {
+          if(typeof(scope.newuser.user_group_id)=='undefined' || typeof(scope.newuser.username == 'undefined') ){
+            return 0;
+          }else{
+            return 1;
+          } 
+        };
+        scope.formAllGood = function () {
+            return (scope.usernameGood && scope.passwordGood && scope.passwordCGood && scope.selectGood && scope.nameGood)
+        }
+      }]
     };
     openModal.custom(modalObj);
   }
+  $scope.deleteUser = function () {
+    var modalObj = {
+        title: 'Delete User',
+        body: 'Do you want delete selected user(s) ?',
+        ok: {
+            txt: 'Yes',
+            fn: function () {
+               alert('ok');
+
+            }
+        }
+    };
+    openModal.confirm(modalObj);
+  }
+  
   $scope.openAddUser = function (size) {
     userService.httpGet('api/' + userApi.getUserGroup).then(function(responseData) {
         if (responseData.status) {
@@ -174,14 +201,38 @@
     openModal.custom(modalObj);
   }
   function userList() {
-        $scope.userList = {};
+      $scope.userList = {};
       userService.httpGet('api/' + userApi.getUserList).then(function(responseData) {
         if (responseData.status) {
             $scope.userList = responseData.rows;
+            $scope.userSelected = [];
+            $scope.userRoles = [];
+            angular.forEach( $scope.userList, function(value, key) {
+              $scope.userList[key]['user_id'] = parseInt(value.user_id) ;
+              //$scope.userRoles[value.user_id]= value.username ;
+              $scope.userRoles.push({id:value.user_id,name:value.username});
+            });
+            $scope.is_check_all = false;
         }
       });
-    }
+  }
   userList();
+
+  $scope.checkAll = function() {
+    $scope.userSelected = $scope.userRoles.map(function(item) { return item.id; });
+  };
+  $scope.uncheckAll = function() {
+    $scope.userSelected = [];
+  };
+  $scope.isCheckAll = function() {
+    $scope.is_check_all = !$scope.is_check_all;
+    if($scope.is_check_all){
+      $scope.checkAll();
+    }else{
+      $scope.uncheckAll();
+    }
+  };
+  
   /*$scope.open = function (size) {
     var modalObj = {
         title: 'title',

@@ -66,6 +66,7 @@
   <script src="<?php echo base_url();?>app/js/directives/ui-shift.js"></script>
   <script src="<?php echo base_url();?>app/js/directives/ui-toggleclass.js"></script>
   <script src="<?php echo base_url();?>app/js/directives/ui-validate.js"></script>
+  <script src="<?php echo base_url();?>app/js/directives/checklist-model.js"></script>
   <script src="<?php echo base_url();?>app/js/controllers/bootstrap.js"></script>
   <!-- Lazy loading -->
 </body>
