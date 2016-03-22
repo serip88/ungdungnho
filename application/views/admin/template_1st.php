@@ -44,7 +44,7 @@
   <!--<link rel="stylesheet" href="<?php echo base_url();?>app/js/lib/Validation-Engine/css/validationEngine.jquery.css" type="text/css">
   <script src="<?php echo base_url();?>app/js/lib/Validation-Engine/js/languages/jquery.validationEngine-vi.js" type="text/javascript" charset="utf-8"></script>
   <script src="<?php echo base_url();?>app/js/lib/Validation-Engine/js/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>-->
-
+  <link rel="stylesheet" href="<?php echo base_url();?>app/js/lib/sweetalert/dist/sweetalert.css">
   <!-- App -->
   <script src="<?php echo base_url();?>app/js/app.js"></script>
   <script src="<?php echo base_url();?>app/js/config.js"></script>
@@ -66,6 +66,8 @@
   <script src="<?php echo base_url();?>app/js/directives/ui-shift.js"></script>
   <script src="<?php echo base_url();?>app/js/directives/ui-toggleclass.js"></script>
   <script src="<?php echo base_url();?>app/js/directives/ui-validate.js"></script>
+  <script src="<?php echo base_url();?>app/js/directives/sweet-alert.min.js"></script>
+  <script src="<?php echo base_url();?>app/js/directives/SweetAlert.min.js"></script>
   <script src="<?php echo base_url();?>app/js/directives/checklist-model.js"></script>
   <script src="<?php echo base_url();?>app/js/controllers/bootstrap.js"></script>
   <!-- Lazy loading -->

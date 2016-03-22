@@ -3,7 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
-require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . '/libraries/Base_controller.php';
 
 /**
  * This is an example of a few basic user interaction methods you could use
@@ -16,7 +16,7 @@ require APPPATH . '/libraries/REST_Controller.php';
  * @license         MIT
  * @link            https://github.com/chriskacerguis/codeigniter-restserver
  */
-class User extends REST_Controller {
+class User extends Base_controller {
 
     function __construct()
     {
@@ -140,7 +140,12 @@ class User extends REST_Controller {
 
         $this->set_response($message, REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
     }*/
-
+    public function user_delete_post(){
+        $this->set_response([
+            'status' => true,
+            'rows' => $this->post()
+        ], REST_Controller::HTTP_OK);
+    }
     public function users_delete()
     {
         $id = (int) $this->get('id');

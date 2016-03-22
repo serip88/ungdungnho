@@ -46,7 +46,7 @@
     }
     return userObject;
   }]);
-  app.controller('UserCtrl', ['$scope', '$modal', '$log', 'openModal', 'userService', function($scope, $modal, $log, openModal, userService) {
+  app.controller('UserCtrl', ['$scope', '$modal', '$log', 'openModal', 'userService', 'SweetAlert', function($scope, $modal, $log, openModal, userService, SweetAlert) {
     $scope.folds = [
       {name: 'Inbox', filter:''},
       {name: 'Starred', filter:'starred'},
@@ -137,12 +137,33 @@
         ok: {
             txt: 'Yes',
             fn: function () {
-               alert('ok');
+              if($scope.user.selected.length){
+                userService.httpPost('api/' + userApi.userDelete,{'user_delete':$scope.user.selected} ).then(function(responseData) {
+                    if (responseData.status) {
+                     SweetAlert.swal("Delete success!", "", "success");
+                     userList();
+                     
+                    }else{
 
+                    }
+                });
+              }else{
+                openModal.alert('Chú ý', 'Vui lòng chọn user');
+              }
             }
         }
     };
-    openModal.confirm(modalObj);
+    if($scope.user.selected.length){
+      openModal.confirm(modalObj);  
+    }else{
+      SweetAlert.swal({
+         title: "Please select users!",
+         text: "",
+         type: "warning",
+         confirmButtonText: "Ok"
+        
+       });
+    }
   }
   
   $scope.openAddUser = function (size) {
@@ -205,28 +226,26 @@
       userService.httpGet('api/' + userApi.getUserList).then(function(responseData) {
         if (responseData.status) {
             $scope.userList = responseData.rows;
-            $scope.userSelected = [];
-            $scope.userRoles = [];
+            $scope.user = {selected:[],roles:[],is_check_all:false};
             angular.forEach( $scope.userList, function(value, key) {
               $scope.userList[key]['user_id'] = parseInt(value.user_id) ;
-              //$scope.userRoles[value.user_id]= value.username ;
-              $scope.userRoles.push({id:value.user_id,name:value.username});
+              //$scope.user.roles[value.user_id]= value.username ;
+              $scope.user.roles.push({id:value.user_id,name:value.username});
             });
-            $scope.is_check_all = false;
         }
       });
   }
   userList();
 
   $scope.checkAll = function() {
-    $scope.userSelected = $scope.userRoles.map(function(item) { return item.id; });
+    $scope.user.selected = $scope.user.roles.map(function(item) { return item.id; });
   };
   $scope.uncheckAll = function() {
-    $scope.userSelected = [];
+    $scope.user.selected = [];
   };
   $scope.isCheckAll = function() {
-    $scope.is_check_all = !$scope.is_check_all;
-    if($scope.is_check_all){
+    $scope.user.is_check_all = !$scope.user.is_check_all;
+    if($scope.user.is_check_all){
       $scope.checkAll();
     }else{
       $scope.uncheckAll();

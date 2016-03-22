@@ -14,6 +14,7 @@ angular.module('app', [
     'ui.jq',
     'ui.validate',
     'checklist-model',
+    'oitozero.ngSweetAlert',
     'oc.lazyLoad',
     'pascalprecht.translate'
 ]);

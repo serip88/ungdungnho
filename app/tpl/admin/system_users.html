@@ -46,7 +46,7 @@
                         <i></i></label>
                       </td>
                       <td class="text-left"> 
-                        <a href="http://dm-opencart.localhost/admin/index.php?route=user/user&amp;token=2ZTnUtHITXGsI7HquT095oijzDUvgDgy&amp;sort=username&amp;order=DESC" class="asc"> {{userSelected}}  Username</a></td>
+                        <a href="http://dm-opencart.localhost/admin/index.php?route=user/user&amp;token=2ZTnUtHITXGsI7HquT095oijzDUvgDgy&amp;sort=username&amp;order=DESC" class="asc"> {{user.selected}}  Username</a></td>
                       <td class="text-left"><a href="http://dm-opencart.localhost/admin/index.php?route=user/user&amp;token=2ZTnUtHITXGsI7HquT095oijzDUvgDgy&amp;sort=status&amp;order=DESC">Status</a></td>
                       <td class="text-left"><a href="http://dm-opencart.localhost/admin/index.php?route=user/user&amp;token=2ZTnUtHITXGsI7HquT095oijzDUvgDgy&amp;sort=date_added&amp;order=DESC">Date Added</a></td>
                       <td class="text-right">Action</td>
@@ -56,7 +56,7 @@
                     <tr ng-repeat="(key, value) in userList">
                       <td class="text-center">
                         <label class="i-checks m-b-none" data-ng-click="myform.selected.click()">
-                        <input type="checkbox" checklist-model="userSelected" name="selected[]"  checklist-value="value.user_id">
+                        <input type="checkbox" checklist-model="user.selected" name="selected[]"  checklist-value="value.user_id">
                         <i></i></label>
                       </td>
                       <td class="text-left">{{value.username}}</td>
