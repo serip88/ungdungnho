@@ -43,18 +43,27 @@ class Login extends Base_controller {
                     $status = $this->user_lib->check_user($where);
                     if($status){
                         $msg = 'Login success';
+                        $this->user_lib->set_user_session($user_data);
                     }else{
                         $msg = 'Password Incorrect';   
                     }
                 }else{
                     $msg = 'This email/user deactived';
                 }
-                
             }
         }
-        $response = array('status' => $status,'msg'=> $msg);
+        $response = array('status' => $status,'msg'=> $msg,'user_data'=>$user_data);
         $this->custom_response($response);
         
+    }
+    public function login_out_post(){
+        $this->user_lib->unset_user_session();
+        $status = false;
+        if(!$_SESSION['user_data']){
+            $status = true;
+        }
+        $response = array('status' => $status);
+        $this->custom_response($response);
     }
 
    

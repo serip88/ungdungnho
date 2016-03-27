@@ -16,13 +16,12 @@
 
   app.factory("userService", ["$http", "$q", function ($http, $q) {
     var userObject = {};
-
     userObject.httpGet = function (path, params, block) {
         if(typeof block == 'undefined'){
             block = true;
         }
         var deferred = $q.defer();
-        $http.get([userApi.apiUrl, path].join('/'), {block: block, params: params})
+        $http.get([baseConfig.apiUrl, path].join('/'), {block: block, params: params})
             .success(function (data) {
                 deferred.resolve(data);
             }).error(function (data) {
@@ -36,7 +35,7 @@
         if(typeof block == 'undefined'){
             block = httpBlockConfig;
         }
-        $http.post([userApi.apiUrl, path].join('/'), params, block)
+        $http.post([baseConfig.apiUrl, path].join('/'), params, block)
             .success(function (data) {
                 deferred.resolve(data);
             }).error(function (data) {
@@ -107,9 +106,10 @@
           if(!validateAddUser() && invalid){
             return;
           }       
-          userService.httpPost('api/' + userApi.userSave,scope.newuser).then(function(responseData) {
+
+          userService.httpPost(userApi.userSave,scope.newuser).then(function(responseData) {
               if (responseData.status) {
-               openModal.alert('Add user','Add user thành công'); 
+               SweetAlert.swal("Add success!", "", "success");
                userList();
                $modalInstance.close();
               }
@@ -130,7 +130,7 @@
     openModal.custom(modalObj);
   }
   function deletUserAction(){
-    userService.httpPost('api/' + userApi.userDelete,{'user_delete':$scope.user.selected} ).then(function(responseData) {
+    userService.httpPost(userApi.userDelete,{'user_delete':$scope.user.selected} ).then(function(responseData) {
         if (responseData.status) {
          SweetAlert.swal("Delete success!", "", "success");
          userList();
@@ -153,7 +153,7 @@
             txt: 'Yes',
             fn: function () {
               if($scope.user.selected.length){
-                userService.httpPost('api/' + userApi.userDelete,{'user_delete':$scope.user.selected} ).then(function(responseData) {
+                userService.httpPost(userApi.userDelete,{'user_delete':$scope.user.selected} ).then(function(responseData) {
                     if (responseData.status) {
                      SweetAlert.swal("Delete success!", "", "success");
                      userList();
@@ -193,7 +193,7 @@
   }
   
   $scope.openAddUser = function (size) {
-    userService.httpGet('api/' + userApi.getUserGroup).then(function(responseData) {
+    userService.httpGet(userApi.getUserGroup).then(function(responseData) {
         if (responseData.status) {
           modalAddUser(size,responseData.rows);
         }
@@ -201,14 +201,14 @@
     
   };
   $scope.userView = function (user_id) {
-     userService.httpGet('api/' + userApi.userDetail,{user_id:user_id}).then(function(responseData) {
+     userService.httpGet(userApi.userDetail,{user_id:user_id}).then(function(responseData) {
         if (responseData.status) {
           modalEditUser('lg',responseData.user_group,responseData.user);
         }
     });
   }
   $scope.userEdit = function (item) {
-     userService.httpGet('api/' + userApi.getUserGroup).then(function(responseData) {
+     userService.httpGet(userApi.getUserGroup).then(function(responseData) {
         if (responseData.status) {
           modalEditUser('lg',responseData.rows,item);
         }
@@ -227,7 +227,7 @@
         };
         scope.ok = function(){
           scope.newuser.user_group_id = scope.newuser.user_group_id.id;
-          userService.httpPost('api/' + userApi.userEdit,scope.newuser).then(function(responseData) {
+          userService.httpPost(userApi.userEdit,scope.newuser).then(function(responseData) {
               if (responseData.status) {
                SweetAlert.swal("Edit user success!", "", "success");
                userList();
@@ -253,7 +253,7 @@
   }
   function userList() {
       $scope.userList = {};
-      userService.httpGet('api/' + userApi.getUserList).then(function(responseData) {
+      userService.httpGet(userApi.getUserList).then(function(responseData) {
         if (responseData.status) {
             $scope.userList = responseData.rows;
             $scope.user = {selected:[],roles:[],is_check_all:false};
@@ -302,7 +302,7 @@
     /*$scope.newuser = ['newuser1', 'newuser2', 'newuser3'];
     function userList() {
         $scope.userList = {};
-      userService.httpGet('api/' + userApi.getUserList).then(function(responseData) {
+      userService.httpGet(userApi.getUserList).then(function(responseData) {
         if (responseData.status) {
             $scope.userList = responseData.rows;
         }

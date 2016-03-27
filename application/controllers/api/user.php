@@ -77,7 +77,17 @@ class User extends Base_controller {
             'user_group' => $data_group,
         ], REST_Controller::HTTP_OK);
     }
-    
+    public function user_ss_get()
+    {
+        $status = false;
+        $data_user = $this->user_lib->get_user_session();
+        if($data_user){
+            $status = true;
+        }
+        $response = array('status' => $status, 'user_data'=> $data_user);
+        $this->custom_response($response);
+    }
+
     public function user_group_get()
     {
         $data = $this->user_lib->get_user_group();
@@ -93,20 +103,17 @@ class User extends Base_controller {
     }
     public function user_save_post(){
         $param = $this->post();
+        $stt=FALSE;
+        $msg='';
         $param = $this->user_lib->validate_save_user($param);
         if($param){
-            $id = $this->user_lib->save_user($param);
-        }else{
-            $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST);// BAD_REQUEST (400) being the HTTP response code
+            $stt = $this->user_lib->save_user($param);
+            if(!$stt){
+                $msg = 'Error! Cannot create user.';
+            }
         }
-        if($id)
-            $stt=TRUE;
-        else 
-            $stt=FALSE;
-        $this->set_response([
-            'status' => $stt,
-            'rows' => $id
-        ], REST_Controller::HTTP_OK);
+        $response = array('status' => $stt,'msg'=> $msg);
+        $this->custom_response($response);
     }
     public function user_edit_post(){
         $param = $this->post();

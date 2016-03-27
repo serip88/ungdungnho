@@ -1,7 +1,7 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+session_start();
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
 require APPPATH . '/libraries/REST_Controller.php';
 
@@ -27,7 +27,7 @@ class Base_controller extends REST_Controller {
     	if(isset($arr_reponse['status']) && $arr_reponse['status']){
     		$this->set_response($arr_reponse, REST_Controller::HTTP_OK);
     	}else{
-    		 $this->set_response($arr_reponse, REST_Controller::HTTP_BAD_REQUEST);
+    		 $this->set_response($arr_reponse, REST_Controller::HTTP_NO_CONTENT);
     	}
         
     }

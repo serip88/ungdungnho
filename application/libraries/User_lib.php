@@ -1,20 +1,21 @@
 <?php
 /*
   +------------------------------------------------------------------------+
-  | Copyright (C) 2015 Hanbiro Inc.                                        |
+  | Copyright (C) 2016 Toigiaitri.                                        |
   |                                                                        |
   | This program is free software; you can redistribute it and/or          |
-  | modify it under the terms of the Hanbiro  License                      |
+  | modify it under the terms of the Toigiaitri  License                      |
   |                                                                        |
   +------------------------------------------------------------------------+
   | o Developer : Rain                                                     |
-  | o HomePage  : http://www.hanbiro.com/                                  |
-  | o Email     : vu.nguyen@hanbiro.com                                    |
+  | o HomePage  : http://www.toigiaitri.net/                               |
+  | o Email     : serip88@gmail.com                                        |
   +------------------------------------------------------------------------+
  */
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-class User_lib {
+require APPPATH . '/libraries/Common_lib.php';
+class User_lib extends Common_lib {
   protected $CI = null ;
   protected $_lang ;
 
@@ -121,7 +122,7 @@ class User_lib {
     $data['salt'] = $this->generateRandomString();
     $data['password'] = md5($data['salt'].$param['password']);
     $data['code'] = '';
-    $data['ip']   = '127.0.0.1';//$param['ip'];
+    $data['ip']   = $_SERVER["REMOTE_ADDR"];//$param['ip'];
     $data['date_added'] = time();
     $data['status'] = $param['status'];
     $id = $this->CI->User_Model->insert_data($data);
@@ -169,7 +170,7 @@ class User_lib {
       }
     }
     $data['code'] = 'code';
-    $data['ip']   = '127.0.0.1';//$param['ip'];
+    $data['ip']   = $_SERVER["REMOTE_ADDR"];//$param['ip'];
     $data['updated_date'] = time();
     $data['status'] = $param['status'];
     if(isset($param['user_id']) && $param['user_id']){
@@ -194,5 +195,18 @@ class User_lib {
     $where = array("user_id"=>$user_id);
     $stt = $this->CI->User_Model->delete_data($where);
     return $stt;
+  }
+  function set_user_session($user_data){      
+      $_SESSION['user_data'] = $user_data;
+  }
+  function get_user_session(){  
+      if(isset($_SESSION['user_data']) && $_SESSION['user_data']){
+        return $_SESSION['user_data'];
+      }else{
+        return '';
+      }   
+  }
+  function unset_user_session(){
+    $_SESSION['user_data'] = '';
   }
 }

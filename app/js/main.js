@@ -3,8 +3,44 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', 
-    function(              $scope,   $translate,   $localStorage,   $window ) {
+  .factory("loginService", ["$http", "$q", function ($http, $q) {
+    var userObject = {};    
+    userObject.syn = {user_data:{}};
+    userObject.httpGet = function (path, params, block) {
+        if(typeof block == 'undefined'){
+            block = true;
+        }
+        var deferred = $q.defer();
+        $http.get([baseConfig.apiUrl, path].join('/'), {block: block, params: params})
+            .success(function (data) {
+                deferred.resolve(data);
+            }).error(function (data) {
+                deferred.resolve(data);
+            });
+        return deferred.promise;
+    }
+
+    userObject.httpPost = function (path, params, block) {
+        var deferred = $q.defer();
+        if(typeof block == 'undefined'){
+            block = httpBlockConfig;
+        }
+        $http.post([baseConfig.apiUrl, path].join('/'), params, block)
+            .success(function (data) {
+                deferred.resolve(data);
+                if(typeof(data.user_data)){
+                  angular.copy(data.user_data, userObject.syn.user_data);
+                }
+                
+            }).error(function (data) {
+                deferred.resolve(data);
+            });
+        return deferred.promise;
+    }
+    return userObject;
+  }])
+  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', '$state', 'loginService', 
+    function(              $scope,   $translate,   $localStorage, $window, $state, loginService ) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -37,9 +73,19 @@ angular.module('app')
           container: false,
           adBaseUrl: baseUrl,
           adBaseUrl: adBaseUrl,
-        }
+        },
+        user_data: loginService.syn.user_data
       }
-
+      if(isEmpty(loginService.syn.user_data)){
+        loginService.httpGet('user/user_ss')
+          .then(function(response) {
+            if (response.status) {
+              angular.copy(response.user_data, loginService.syn.user_data);  
+              $state.go('app.dashboard');
+            }
+          }
+        );  
+      }
       // save settings to local storage
       if ( angular.isDefined($localStorage.settings) ) {
         $scope.app.settings = $localStorage.settings;
@@ -67,12 +113,42 @@ angular.module('app')
         $scope.lang.isopen = !$scope.lang.isopen;
       };
 
+      $scope.logout = function() {
+        loginService.httpPost('login/login_out')
+          .then(function(response) {
+            if (response.status) {
+              angular.copy({}, loginService.syn.user_data);  
+              $state.go('access.signin');
+            }
+          }
+        );  
+      };
+
       function isSmartDevice( $window )
       {
           // Adapted from http://www.detectmobilebrowsers.com
           var ua = $window['navigator']['userAgent'] || $window['navigator']['vendor'] || $window['opera'];
           // Checks for iOs, Android, Blackberry, Opera Mini, and Windows mobile devices
           return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
+      }
+      function isEmpty(obj) {
+
+          // null and undefined are "empty"
+          if (obj == null) return true;
+
+          // Assume if it has a length property with a non-zero value
+          // that that property is correct.
+          if (obj.length > 0)    return false;
+          if (obj.length === 0)  return true;
+
+          // Otherwise, does it have any properties of its own?
+          // Note that this doesn't handle
+          // toString and valueOf enumeration bugs in IE < 9
+          for (var key in obj) {
+              if (hasOwnProperty.call(obj, key)) return false;
+          }
+
+          return true;
       }
 
   }]);
