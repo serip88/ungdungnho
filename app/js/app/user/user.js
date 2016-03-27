@@ -104,7 +104,6 @@
           $modalInstance.close();
         };
         scope.ok = function(invalid){
-          console.log(scope.newuser);
           if(!validateAddUser() && invalid){
             return;
           }       
@@ -130,6 +129,22 @@
     };
     openModal.custom(modalObj);
   }
+  function deletUserAction(){
+    userService.httpPost('api/' + userApi.userDelete,{'user_delete':$scope.user.selected} ).then(function(responseData) {
+        if (responseData.status) {
+         SweetAlert.swal("Delete success!", "", "success");
+         userList();
+        }else{
+          SweetAlert.swal({
+            title: "Have problem when delete user!",
+            text: "",
+            type: "warning",
+            confirmButtonText: "Ok"
+          });
+        }
+    });
+  }
+
   $scope.deleteUser = function () {
     var modalObj = {
         title: 'Delete User',
@@ -142,7 +157,6 @@
                     if (responseData.status) {
                      SweetAlert.swal("Delete success!", "", "success");
                      userList();
-                     
                     }else{
 
                     }
@@ -154,14 +168,26 @@
         }
     };
     if($scope.user.selected.length){
-      openModal.confirm(modalObj);  
+      //openModal.confirm(modalObj); 
+      SweetAlert.swal({
+         title: "Are you sure?",
+         text: "Your will not be able to recover this imaginary file!",
+         type: "warning",
+         showCancelButton: true,
+         confirmButtonColor: "#DD6B55",
+         confirmButtonText: "Yes, delete it!",
+         closeOnConfirm: false}, 
+      function(isConfirm){ 
+          if(isConfirm){
+            deletUserAction();
+          }
+      });
     }else{
       SweetAlert.swal({
          title: "Please select users!",
          text: "",
          type: "warning",
          confirmButtonText: "Ok"
-        
        });
     }
   }
@@ -200,15 +226,19 @@
           $modalInstance.close();
         };
         scope.ok = function(){
-          console.log(scope.newuser);
           scope.newuser.user_group_id = scope.newuser.user_group_id.id;
           userService.httpPost('api/' + userApi.userEdit,scope.newuser).then(function(responseData) {
               if (responseData.status) {
-               openModal.alert('Edit user','edit user thành công'); 
+               SweetAlert.swal("Edit user success!", "", "success");
                userList();
                $modalInstance.close();
               }else{
-                openModal.alert('Warning','edit user False'); 
+                SweetAlert.swal({
+                  title: "Edit user False!",
+                  text: "",
+                  type: "warning",
+                  confirmButtonText: "Close"
+                });
               }
           });
         };

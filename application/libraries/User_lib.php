@@ -43,7 +43,8 @@ class User_lib {
   }
   function format_user_list($data){
     foreach ($data as $key => $value) {
-      list($date, $time) = explode(' ',$value['date_added']);
+      //list($date, $time) = explode(' ',$value['date_added']);
+      $date = date("Y-m-d H:i", time());
       $data[$key]['ui_date_added'] = $date;
       $data[$key]['ui_status'] =  $value['status']?$this->_lang['user_status_enabled']:$this->_lang['user_status_disabled'];
     }
@@ -61,6 +62,26 @@ class User_lib {
     }else{
       return 0;  
     }
+  }
+  function get_user_by_email($user_email){
+    $select="A.user_id,A.user_group_id,A.username,A.salt,A.firstname,A.lastname,A.email,A.image,A.date_added,A.status,B.name";
+    $tb_join = array();
+    $tb_join[] = array('table_name'=>'user_group as B','condition'=>"A.user_group_id =B.user_group_id", 'type'=>'left');
+    $where = array("A.email"=>$user_email);
+    $data = $this->CI->User_Model->get_data_join($select,$where,$tb_join,1);
+    if($data){
+      return $data[0];
+    }else{
+      return 0;  
+    }
+  }
+  function check_user($where = array()){
+    if($where){
+      $data = $this->CI->User_Model->get_total($where);
+      return $data;
+    }else
+      return 1;
+      
   }
   function get_user_group(){
 
@@ -101,7 +122,7 @@ class User_lib {
     $data['password'] = md5($data['salt'].$param['password']);
     $data['code'] = '';
     $data['ip']   = '127.0.0.1';//$param['ip'];
-    $data['date_added'] = date ( "Y-m-d H:i:s", time());
+    $data['date_added'] = time();
     $data['status'] = $param['status'];
     $id = $this->CI->User_Model->insert_data($data);
     return $id;
@@ -149,11 +170,11 @@ class User_lib {
     }
     $data['code'] = 'code';
     $data['ip']   = '127.0.0.1';//$param['ip'];
-    $data['updated_date'] = date ( "Y-m-d H:i:s", time());
+    $data['updated_date'] = time();
     $data['status'] = $param['status'];
     if(isset($param['user_id']) && $param['user_id']){
       $where = array("user_id"=> $param['user_id']);
-      $stt = $this->CI->User_Model->update_data($data,$where);
+      $stt = $this->CI->User_Model->update_data($data,$where); 
       return $stt;
     }else{
       return FALSE;
@@ -169,5 +190,9 @@ class User_lib {
     }
     return $randomString;
   }
-  
+  function user_delete($user_id){
+    $where = array("user_id"=>$user_id);
+    $stt = $this->CI->User_Model->delete_data($where);
+    return $stt;
+  }
 }

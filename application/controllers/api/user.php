@@ -141,10 +141,31 @@ class User extends Base_controller {
         $this->set_response($message, REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
     }*/
     public function user_delete_post(){
-        $this->set_response([
-            'status' => true,
-            'rows' => $this->post()
-        ], REST_Controller::HTTP_OK);
+        $params = $this->post();
+        $users_id = isset($params['user_delete']) && $params['user_delete']?$params['user_delete']:array();
+        $msg = '';
+        $status = false;
+        $count_false = 0;
+        if(count($users_id)){
+            foreach ($users_id as $key => $id) {
+                try {
+                    $stt = $this->user_lib->user_delete($id);
+                    if(!$stt)
+                        $count_false = $count_false +1;    
+                } catch (Exception $e) {
+                    $count_false = $count_false +1;
+                    //echo 'Caught exception: ',  $e->getMessage(), "\n";
+                }
+            }
+        } 
+        if($count_false == 0){
+            $status = true;
+            $msg = 'delete success';
+        }else{
+            $msg = 'delete false';
+        }
+        $response = array('status' => $status,'msg' => $msg);
+        $this->custom_response($response);
     }
     public function users_delete()
     {
