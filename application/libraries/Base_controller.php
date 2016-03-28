@@ -31,4 +31,17 @@ class Base_controller extends REST_Controller {
     	}
         
     }
+
+    public function get_list_action(){
+        $list_action = array(
+            'user/user',
+            'user/user_group',
+            'user/login',
+            'user/logout',
+            'user/forgotten',
+            'user/reset',         
+            'dashboard/index'
+        );
+        return $list_action;
+    }
 }

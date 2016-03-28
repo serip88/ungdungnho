@@ -310,6 +310,7 @@ angular.module('app')
                       deps: ['uiLoad',
                         function( uiLoad ){
                           return uiLoad.load( [baseUrl+'js/app/user/user.js',
+                                              baseUrl+'js/app/user/user_groups.js',
                                               baseUrl+'vendor/libs/moment.min.js'] );
                       }]
                   }

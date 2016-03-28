@@ -1,10 +1,7 @@
 /**
  * Created by Rain on 23/02/2016.
  */
-(function(window, angular, $, undefined){
-    'use strict';
-
-  var userApi = {
+var userApi = {
     baseUrl: baseConfig.apiUrl,
     getUserGroup: 'user/user_group',
     getUserList: 'user/user_list',
@@ -12,7 +9,10 @@
     userSave: 'user/user_save',
     userEdit: 'user/user_edit',
     userDelete: 'user/user_delete',
+    getPermissions: 'user_group/permissions'
   };
+(function(window, angular, $, undefined){
+    'use strict';
 
   app.factory("userService", ["$http", "$q", function ($http, $q) {
     var userObject = {};
