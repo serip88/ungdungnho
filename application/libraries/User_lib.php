@@ -182,15 +182,7 @@ class User_lib extends Common_lib {
     }
     
   }
-  function generateRandomString($length = 9) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
-  }
+  
   function user_delete($user_id){
     $where = array("user_id"=>$user_id);
     $stt = $this->CI->User_Model->delete_data($where);
@@ -208,5 +200,38 @@ class User_lib extends Common_lib {
   }
   function unset_user_session(){
     $_SESSION['user_data'] = '';
+  }
+
+  function validate_save_user_group($param){
+    $requite = array('user_group_name');
+    $param['user_group_name'] = isset($param['user_group_name']) && $param['user_group_name'] ?$param['user_group_name']: null;
+    foreach ($requite as $key => $value) {
+      if(!$param[$value]){
+        return 0;
+      }
+    }
+    if(!isset($param['access_selected']) || !isset($param['modify_selected']) ){
+      return 0;
+    }
+    return $param;
+  }
+  function save_user_group($param){
+    $data =array();
+    $permission = array('access'=>$param['access_selected'],'modify'=>$param['modify_selected'] );
+    $data['name'] = $param['user_group_name'];
+    $data['permission'] = json_encode($permission);
+    $id = $this->CI->User_Group_Model->insert_data($data);
+    return $id;
+  }
+  function get_user_group_detail($group_id){
+
+    $select="user_group_id as id,name,permission";
+    $where = array('user_group_id'=>$group_id);
+    $data = $this->CI->User_Group_Model->get_data($select,$where);
+    if($data){
+      return $data[0];
+    }else{
+      return 0;  
+    }
   }
 }

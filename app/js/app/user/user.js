@@ -9,7 +9,10 @@ var userApi = {
     userSave: 'user/user_save',
     userEdit: 'user/user_edit',
     userDelete: 'user/user_delete',
-    getPermissions: 'user_group/permissions'
+    getPermissions: 'user_group/permissions',
+    userGroupSave: 'user_group/save',
+    groupDetail: 'user_group/detail',
+    groupEdit: 'user_group/edit'
   };
 (function(window, angular, $, undefined){
     'use strict';

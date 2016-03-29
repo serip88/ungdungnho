@@ -22,7 +22,7 @@ class Base_controller extends REST_Controller {
         // Construct the parent class
         parent::__construct();
     }
-
+    
     public function custom_response($arr_reponse){
     	if(isset($arr_reponse['status']) && $arr_reponse['status']){
     		$this->set_response($arr_reponse, REST_Controller::HTTP_OK);

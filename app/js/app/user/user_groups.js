@@ -51,16 +51,24 @@
         controller: ['$scope', '$modalInstance', function(scope, $modalInstance){
           scope.newuser = {};
           scope.newuser.list_permissions = list_permissions;
-          $scope.usergroup = {access_selected:[],roles:[],access_check_all:false};
+          scope.usergroup = {access_selected:[],roles:[],access_check_all:false,modify_selected:[]};
             angular.forEach( scope.newuser.list_permissions, function(value, key) {
-              $scope.user.roles.push({id:key,name:value});
+              scope.usergroup.roles.push(value);
             });
-          $scope.checkAllAc = function() {
-            $scope.usergroup.access_selected = $scope.usergroup.roles.map(function(item) { return item.id; });
+          scope.checkAllAc = function() {
+            //$scope.usergroup.access_selected = $scope.usergroup.roles.map(function(item) { return item.id; });
+            scope.usergroup.access_selected = angular.copy(scope.usergroup.roles);
           };
-          $scope.uncheckAllAc = function() {
-            $scope.usergroup.access_selected = [];
+          scope.uncheckAllAc = function() {
+            scope.usergroup.access_selected = [];
           };  
+          scope.checkAllMo = function() {
+            //$scope.usergroup.access_selected = $scope.usergroup.roles.map(function(item) { return item.id; });
+            scope.usergroup.modify_selected = angular.copy(scope.usergroup.roles);
+          };
+          scope.uncheckAllMo = function() {
+            scope.usergroup.modify_selected = [];
+          };
           scope.cancel = function(){
             $modalInstance.close();
           };
@@ -68,25 +76,92 @@
             if(!validateAddUser() && invalid){
               return;
             }       
-
-            userService.httpPost(userApi.userSave,scope.newuser).then(function(responseData) {
+            scope.newuser.access_selected = scope.usergroup.access_selected;
+            scope.newuser.modify_selected = scope.usergroup.modify_selected;
+            userService.httpPost(userApi.userGroupSave,scope.newuser).then(function(responseData) {
                 if (responseData.status) {
                  SweetAlert.swal("Add success!", "", "success");
-                 userList();
+                 userGroupList();
                  $modalInstance.close();
                 }
             });
           };
           function validateAddUser() {
-            if(typeof(scope.newuser.user_group_id)=='undefined' || typeof(scope.newuser.username == 'undefined') ){
+            if(typeof(scope.newuser.user_group_name == 'undefined') ){
               return 0;
             }else{
               return 1;
             } 
           };
-          scope.formAllGood = function () {
-              return (scope.usernameGood && scope.passwordGood && scope.passwordCGood && scope.selectGood && scope.nameGood)
+
+        }]
+      };
+      openModal.custom(modalObj);
+    }
+
+    $scope.userGroupEdit = function (item) {
+      userService.httpGet(userApi.groupDetail,item).then(function(responseData) {
+          if (responseData.status) {
+            modalEditUser('lg',responseData.data);
           }
+      });
+    }
+    function modalEditUser(size,data) {
+       var modalObj = {
+        templateUrl: adBaseUrl +'modal/user/add_group_user.html',
+        size: size,
+        controller: ['$scope', '$modalInstance', function(scope, $modalInstance){
+          scope.newuser = {};
+          scope.usergroup = {access_selected:[],roles:[],access_check_all:false,modify_selected:[]};
+          scope.newuser.id = data.id;
+          scope.newuser.user_group_name = data.name;
+          scope.usergroup.roles = scope.newuser.list_permissions = data.list_permissions;
+
+            angular.forEach( data.permission.access, function(value, key) {
+              scope.usergroup.access_selected.push(value);
+            });
+            angular.forEach( data.permission.modify, function(value, key) {
+              scope.usergroup.modify_selected.push(value);
+            });
+          scope.checkAllAc = function() {
+            //$scope.usergroup.access_selected = $scope.usergroup.roles.map(function(item) { return item.id; });
+            scope.usergroup.access_selected = angular.copy(scope.usergroup.roles);
+          };
+          scope.uncheckAllAc = function() {
+            scope.usergroup.access_selected = [];
+          };  
+          scope.checkAllMo = function() {
+            //$scope.usergroup.access_selected = $scope.usergroup.roles.map(function(item) { return item.id; });
+            scope.usergroup.modify_selected = angular.copy(scope.usergroup.roles);
+          };
+          scope.uncheckAllMo = function() {
+            scope.usergroup.modify_selected = [];
+          };
+          scope.cancel = function(){
+            $modalInstance.close();
+          };
+          scope.ok = function(invalid){
+            if(!validateAddUser() && invalid){
+              return;
+            }       
+            scope.newuser.access_selected = scope.usergroup.access_selected;
+            scope.newuser.modify_selected = scope.usergroup.modify_selected;
+            userService.httpPost(userApi.userGroupSave,scope.newuser).then(function(responseData) {
+                if (responseData.status) {
+                 SweetAlert.swal("Add success!", "", "success");
+                 userGroupList();
+                 $modalInstance.close();
+                }
+            });
+          };
+          function validateAddUser() {
+            if(typeof(scope.newuser.user_group_name == 'undefined') ){
+              return 0;
+            }else{
+              return 1;
+            } 
+          };
+
         }]
       };
       openModal.custom(modalObj);
