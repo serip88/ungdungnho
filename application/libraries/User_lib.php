@@ -184,9 +184,13 @@ class User_lib extends Common_lib {
   }
   
   function user_delete($user_id){
-    $where = array("user_id"=>$user_id);
-    $stt = $this->CI->User_Model->delete_data($where);
-    return $stt;
+    if($user_id){
+      $where = array("user_id"=>$user_id);
+      $stt = $this->CI->User_Model->delete_data($where);
+      return $stt;
+    }else
+      return false;
+      
   }
   function set_user_session($user_data){      
       $_SESSION['user_data'] = $user_data;
@@ -233,5 +237,43 @@ class User_lib extends Common_lib {
     }else{
       return 0;  
     }
+  }
+
+  function validate_edit_user_group($param){
+    $requite = array('user_group_name','id');
+    $param['user_group_name'] = isset($param['user_group_name']) && $param['user_group_name'] ?$param['user_group_name']: null;
+    $param['id'] = isset($param['id']) && $param['id'] ?$param['id']: 0;
+    foreach ($requite as $key => $value) {
+      if(!$param[$value]){
+        return 0;
+      }
+    }
+    if(!isset($param['access_selected']) || !isset($param['modify_selected']) ){
+      return 0;
+    }
+
+    return $param;
+  }
+  function edit_user_group($param){
+    if(isset($param['id']) && $param['id']){
+      $data =array();
+      $permission = array('access'=>$param['access_selected'],'modify'=>$param['modify_selected'] );
+      $data['name'] = $param['user_group_name'];
+      $data['permission'] = json_encode($permission);
+      $where = array("user_group_id"=> $param['id']);
+      $stt = $this->CI->User_Group_Model->update_data($data,$where); 
+      return $stt;
+    }else{
+      return false;
+    }
+
+  }
+  function user_group_delete($group_id){
+    if($group_id){
+      $where = array("user_group_id"=>$group_id);
+      $stt = $this->CI->User_Group_Model->delete_data($where);
+      return $stt;
+    }else
+      return false;
   }
 }

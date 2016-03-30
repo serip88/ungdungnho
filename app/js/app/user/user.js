@@ -3,16 +3,17 @@
  */
 var userApi = {
     baseUrl: baseConfig.apiUrl,
-    getUserGroup: 'user/user_group',
-    getUserList: 'user/user_list',
+    userGroup: 'user/user_group',
+    userList: 'user/user_list',
     userDetail: 'user/user_detail',
     userSave: 'user/user_save',
     userEdit: 'user/user_edit',
     userDelete: 'user/user_delete',
-    getPermissions: 'user_group/permissions',
-    userGroupSave: 'user_group/save',
+    groupPermissions: 'user_group/permissions',
+    groupSave: 'user_group/save',
     groupDetail: 'user_group/detail',
-    groupEdit: 'user_group/edit'
+    groupEdit: 'user_group/edit',
+    groupDelete: 'user_group/delete'
   };
 (function(window, angular, $, undefined){
     'use strict';
@@ -132,7 +133,7 @@ var userApi = {
     };
     openModal.custom(modalObj);
   }
-  function deletUserAction(){
+  function deleteUserAction(){
     userService.httpPost(userApi.userDelete,{'user_delete':$scope.user.selected} ).then(function(responseData) {
         if (responseData.status) {
          SweetAlert.swal("Delete success!", "", "success");
@@ -174,7 +175,7 @@ var userApi = {
       //openModal.confirm(modalObj); 
       SweetAlert.swal({
          title: "Are you sure?",
-         text: "Your will not be able to recover this imaginary file!",
+         text: "Your will not be able to recover this users!",
          type: "warning",
          showCancelButton: true,
          confirmButtonColor: "#DD6B55",
@@ -182,7 +183,7 @@ var userApi = {
          closeOnConfirm: false}, 
       function(isConfirm){ 
           if(isConfirm){
-            deletUserAction();
+            deleteUserAction();
           }
       });
     }else{
@@ -196,7 +197,7 @@ var userApi = {
   }
   
   $scope.openAddUser = function (size) {
-    userService.httpGet(userApi.getUserGroup).then(function(responseData) {
+    userService.httpGet(userApi.userGroup).then(function(responseData) {
         if (responseData.status) {
           modalAddUser(size,responseData.rows);
         }
@@ -211,7 +212,7 @@ var userApi = {
     });
   }
   $scope.userEdit = function (item) {
-     userService.httpGet(userApi.getUserGroup).then(function(responseData) {
+     userService.httpGet(userApi.userGroup).then(function(responseData) {
         if (responseData.status) {
           modalEditUser('lg',responseData.rows,item);
         }
@@ -256,7 +257,7 @@ var userApi = {
   }
   function userList() {
       $scope.userList = {};
-      userService.httpGet(userApi.getUserList).then(function(responseData) {
+      userService.httpGet(userApi.userList).then(function(responseData) {
         if (responseData.status) {
             $scope.userList = responseData.rows;
             $scope.user = {selected:[],roles:[],is_check_all:false};
@@ -305,7 +306,7 @@ var userApi = {
     /*$scope.newuser = ['newuser1', 'newuser2', 'newuser3'];
     function userList() {
         $scope.userList = {};
-      userService.httpGet(userApi.getUserList).then(function(responseData) {
+      userService.httpGet(userApi.userList).then(function(responseData) {
         if (responseData.status) {
             $scope.userList = responseData.rows;
         }

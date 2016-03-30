@@ -81,7 +81,11 @@ angular.module('app')
           .then(function(response) {
             if (response.status) {
               angular.copy(response.user_data, loginService.syn.user_data);  
-              $state.go('app.dashboard');
+              var current_url = document.URL;
+              if(current_url.indexOf('access/signin') > 0){
+                $state.go('app.dashboard');
+              }
+              
             }
           }
         );  

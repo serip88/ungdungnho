@@ -42,6 +42,7 @@ class User_group extends Base_controller {
         $response = array('status' => $stt,'msg'=> $param);
         $this->custom_response($response);
 	}
+
 	public function detail_get(){
 		$param = $this->get();
         $group_id = isset($param['id']) && $param['id'] ? $param['id'] : 0;
@@ -49,8 +50,10 @@ class User_group extends Base_controller {
         $list_action = $this->get_list_action();
         if($data_group && $list_action){
             $stt=TRUE;
-            $data_group['permission']=  json_decode($data_group['permission']);
+            $data_group['permission']=  json_decode($data_group['permission'],true);
             $data_group['list_permissions'] = $list_action;
+            $data_group['permission']['access'] = array_uintersect($data_group['permission']['access'],$list_action,array($this,'array_matches'));
+            $data_group['permission']['modify'] = array_uintersect($data_group['permission']['modify'],$list_action,array($this,'array_matches'));
         }
         else 
             $stt=FALSE;
@@ -58,22 +61,45 @@ class User_group extends Base_controller {
         $this->custom_response($response);
 	}
 	public function edit_post(){
-        /*$param = $this->post();
-        $param = $this->user_lib->validate_edit_user($param);
-        
+        $param = $this->post();
+        $param = $this->user_lib->validate_edit_user_group($param);
+        $stt = FALSE;
+        $msg ='';
         if($param){
-            $id = $this->user_lib->edit_user($param);
+            $stt = $this->user_lib->edit_user_group($param);
+            $msg = 'Edit success!';
         }else{
-            $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST);// BAD_REQUEST (400) being the HTTP response code
+            $msg = 'Edit not success!';
         }
             
-        if($id)
-            $stt=TRUE;
-        else 
-            $stt=FALSE;
-        $this->set_response([
-            'status' => $stt,
-            'rows' => $id
-        ], REST_Controller::HTTP_OK);*/
+        $response = array('status' => $stt,'msg'=> $msg);
+        $this->custom_response($response);
+    }
+    public function delete_post(){
+        $params = $this->post();
+        $group_id = isset($params['group_delete']) && $params['group_delete']?$params['group_delete']:array();
+        $msg = '';
+        $status = false;
+        $count_false = 0;
+        if(count($group_id)){
+            foreach ($group_id as $key => $id) {
+                try {
+                    $stt = $this->user_lib->user_group_delete($id);
+                    if(!$stt)
+                        $count_false = $count_false +1;    
+                } catch (Exception $e) {
+                    $count_false = $count_false +1;
+                    //echo 'Caught exception: ',  $e->getMessage(), "\n";
+                }
+            }
+        } 
+        if($count_false == 0){
+            $status = true;
+            $msg = 'delete success';
+        }else{
+            $msg = 'delete false';
+        }
+        $response = array('status' => $status,'msg' => $msg);
+        $this->custom_response($response);
     }
 }

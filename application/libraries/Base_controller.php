@@ -44,4 +44,13 @@ class Base_controller extends REST_Controller {
         );
         return $list_action;
     }
+
+    public function array_matches($a,$b)
+    {
+    if ($a===$b)
+       {
+       return 0;
+       }
+       return ($a>$b)?1:-1;
+    }
 }

@@ -8,28 +8,28 @@
   app.controller('UserGroupCtrl', ['$scope', '$modal', '$log', 'openModal', 'userService', 'SweetAlert', function($scope, $modal, $log, openModal, userService, SweetAlert) {
 
     function userGroupList() {
-        userService.httpGet(userApi.getUserGroup).then(function(responseData) {
+        userService.httpGet(userApi.userGroup).then(function(responseData) {
             if (responseData.status) {
               $scope.userGroupList = responseData.rows;
-              $scope.user = {selected:[],roles:[],is_check_all:false};
+              $scope.user_group = {selected:[],roles:[],is_check_all:false};
               angular.forEach( $scope.userGroupList, function(value, key) {
                 $scope.userGroupList[key]['id'] = parseInt(value.id) ;
                 //$scope.user.roles[value.user_id]= value.username ;
-                $scope.user.roles.push({id:value.id,name:value.name});
+                $scope.user_group.roles.push({id:value.id,name:value.name});
               });
             }
         });
     }
     userGroupList();
     $scope.checkAll = function() {
-    $scope.user.selected = $scope.user.roles.map(function(item) { return item.id; });
+    $scope.user_group.selected = $scope.user_group.roles.map(function(item) { return item.id; });
     };
     $scope.uncheckAll = function() {
-      $scope.user.selected = [];
+      $scope.user_group.selected = [];
     };
     $scope.isCheckAll = function() {
-      $scope.user.is_check_all = !$scope.user.is_check_all;
-      if($scope.user.is_check_all){
+      $scope.user_group.is_check_all = !$scope.user_group.is_check_all;
+      if($scope.user_group.is_check_all){
         $scope.checkAll();
       }else{
         $scope.uncheckAll();
@@ -37,7 +37,7 @@
     };     
 
     $scope.openAddGroupUser = function (size) {
-      userService.httpGet(userApi.getPermissions).then(function(responseData) {
+      userService.httpGet(userApi.groupPermissions).then(function(responseData) {
           if (responseData.status) {
             modalAddUser(size,responseData.rows);
           }
@@ -78,7 +78,7 @@
             }       
             scope.newuser.access_selected = scope.usergroup.access_selected;
             scope.newuser.modify_selected = scope.usergroup.modify_selected;
-            userService.httpPost(userApi.userGroupSave,scope.newuser).then(function(responseData) {
+            userService.httpPost(userApi.groupSave,scope.newuser).then(function(responseData) {
                 if (responseData.status) {
                  SweetAlert.swal("Add success!", "", "success");
                  userGroupList();
@@ -146,11 +146,18 @@
             }       
             scope.newuser.access_selected = scope.usergroup.access_selected;
             scope.newuser.modify_selected = scope.usergroup.modify_selected;
-            userService.httpPost(userApi.userGroupSave,scope.newuser).then(function(responseData) {
+            userService.httpPost(userApi.groupEdit,scope.newuser).then(function(responseData) {
                 if (responseData.status) {
-                 SweetAlert.swal("Add success!", "", "success");
+                 SweetAlert.swal("Edit success!", "", "success");
                  userGroupList();
                  $modalInstance.close();
+                }else{
+                  SweetAlert.swal({
+                    title: "Edit unsuccess!",
+                    text: "",
+                    type: "warning",
+                    confirmButtonText: "Ok"
+                  });
                 }
             });
           };
@@ -166,6 +173,46 @@
       };
       openModal.custom(modalObj);
     }
+
+    function deleteUserGroupAction(){
+      userService.httpPost(userApi.groupDelete,{'group_delete':$scope.user_group.selected} ).then(function(responseData) {
+          if (responseData.status) {
+           SweetAlert.swal("Delete success!", "", "success");
+           userGroupList();
+          }else{
+            SweetAlert.swal({
+              title: "Have problem when delete group!",
+              text: "",
+              type: "warning",
+              confirmButtonText: "Ok"
+            });
+          }
+      });
+    }
+    $scope.deleteUserGroup = function () {
+    if($scope.user_group.selected.length){
+      SweetAlert.swal({
+         title: "Are you sure?",
+         text: "Your will not be able to recover this group!",
+         type: "warning",
+         showCancelButton: true,
+         confirmButtonColor: "#DD6B55",
+         confirmButtonText: "Yes, delete it!",
+         closeOnConfirm: false}, 
+      function(isConfirm){ 
+          if(isConfirm){
+            deleteUserGroupAction();
+          }
+      });
+    }else{
+      SweetAlert.swal({
+         title: "Please select group!",
+         text: "",
+         type: "warning",
+         confirmButtonText: "Ok"
+       });
+    }
+  }
 
   }]);
 
