@@ -17,14 +17,42 @@ angular.module('app')
       function ($stateProvider,   $urlRouterProvider) {
           
           $urlRouterProvider
-              .otherwise('/app/dashboard');
+              .otherwise('/access/signin');
           $stateProvider
-              .state('app', {
+              .state('root', {
+                  url: '',
+                  templateUrl: adBaseUrl+'app_ctrl.html',
+                  resolve: {
+                    promiseObj:  function($http,loginService){
+                      // $http returns a promise for the url data
+                      $http({method: 'GET', url: [baseConfig.apiUrl, 'user/user_ss'].join('/')})
+                        .success(function (data) {
+                          if(typeof(data.user_data)){
+                            angular.copy(data.user_data, loginService.syn.user_data);
+                          }
+                      });
+                    }
+                  },
+                  controller: 'AppCtrl'
+              })
+              .state('root.app', {
                   abstract: true,
                   url: '/app',
-                  templateUrl: adBaseUrl+'app.html'
+                  templateUrl: adBaseUrl+'app.html'/*,
+                  resolve: {
+                    promiseObj:  function($http,loginService){
+                      // $http returns a promise for the url data
+                      $http({method: 'GET', url: [baseConfig.apiUrl, 'user/user_ss'].join('/')})
+                        .success(function (data) {
+                          if(typeof(data.user_data)){
+                            angular.copy(data.user_data, loginService.syn.user_data);
+                          }
+                      });
+                    }
+                  },
+                  controller: 'AppCtrl'*/
               })
-              .state('app.dashboard', {
+              .state('root.app.dashboard', {
                   url: '/dashboard',
                   templateUrl: adBaseUrl+'app_dashboard_v1.html',
                   resolve: {
@@ -303,7 +331,7 @@ angular.module('app')
                   templateUrl: 'tpl/docs.html'
               })
               // system
-              .state('app.system', {
+              .state('root.app.system', {
                   url: '/system',
                   template: '<div ui-view class="fade-in-down"></div>',
                   resolve: {
@@ -315,11 +343,11 @@ angular.module('app')
                       }]
                   }
               })
-              .state('app.system.users', {
+              .state('root.app.system.users', {
                   url: '/users',
                   templateUrl: adBaseUrl+'system_users.html'
               })
-              .state('app.system.user_groups', {
+              .state('root.app.system.user_groups', {
                   url: '/user_groups',
                   templateUrl: adBaseUrl+'system_user_groups.html'
               })
@@ -328,11 +356,24 @@ angular.module('app')
                   url: '/lockme',
                   templateUrl: 'tpl/page_lockme.html'
               })
-              .state('access', {
+              .state('root.access', {
                   url: '/access',
-                  template: '<div ui-view class="fade-in-right-big smooth"></div>'
+                  template: '<div ui-view class="fade-in-right-big smooth"></div>',
+                  /*  resolve: {
+                    promiseObj:  function($http,loginService){
+                      // $http returns a promise for the url data
+                      alert(222);
+                      $http({method: 'GET', url: [baseConfig.apiUrl, 'user/user_ss'].join('/')})
+                        .success(function (data) {
+                          if(typeof(data.user_data)){
+                            angular.copy(data.user_data, loginService.syn.user_data);
+                          }
+                      });
+                    }
+                  },
+                  controller: 'AppCtrl'*/
               })
-              .state('access.signin', {
+              .state('root.access.signin', {
                   url: '/signin',
                   templateUrl: adBaseUrl+'page_signin.html',
                   resolve: {

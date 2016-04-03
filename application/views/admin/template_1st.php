@@ -12,9 +12,9 @@
   <link rel="stylesheet" href="<?php echo base_url();?>app/css/font.css" type="text/css" />
   <link rel="stylesheet" href="<?php echo base_url();?>app/css/app.css" type="text/css" />
 </head>
-<body ng-controller="AppCtrl">
-  <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view></div>
-
+<body>
+<div  ui-view>
+</div>
 
   <!-- jQuery -->
   <script src="<?php echo base_url();?>app/vendor/jquery/jquery.min.js"></script>
@@ -70,6 +70,6 @@
   <script src="<?php echo base_url();?>app/js/directives/SweetAlert.min.js"></script>
   <script src="<?php echo base_url();?>app/js/directives/checklist-model.js"></script>
   <script src="<?php echo base_url();?>app/js/controllers/bootstrap.js"></script>
-  <!-- Lazy loading -->
+  <!-- Lazy loading -->  
 </body>
 </html>

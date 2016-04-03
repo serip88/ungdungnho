@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('app')
-  .factory("loginService", ["$http", "$q", function ($http, $q) {
+  .factory("loginService", ["$http", "$q", "$state", function ($http, $q, $state) {
     var userObject = {};    
     userObject.syn = {user_data:{}};
     userObject.httpGet = function (path, params, block) {
@@ -37,10 +37,11 @@ angular.module('app')
             });
         return deferred.promise;
     }
+
     return userObject;
   }])
-  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', '$state', 'loginService', 
-    function(              $scope,   $translate,   $localStorage, $window, $state, loginService ) {
+  .controller('AppCtrl', ['$scope', '$rootScope', '$translate', '$localStorage', '$window', '$state', 'loginService', 
+    function(              $scope, $rootScope,  $translate,   $localStorage, $window, $state, loginService ) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -76,20 +77,15 @@ angular.module('app')
         },
         user_data: loginService.syn.user_data
       }
-      if(isEmpty(loginService.syn.user_data)){
-        loginService.httpGet('user/user_ss')
-          .then(function(response) {
+      function getUserInfor(){
+        loginService.httpGet('user/user_ss').then(function(response) {
             if (response.status) {
               angular.copy(response.user_data, loginService.syn.user_data);  
-              var current_url = document.URL;
-              if(current_url.indexOf('access/signin') > 0){
-                $state.go('app.dashboard');
-              }
               
             }
-          }
-        );  
+          });
       }
+      //getUserInfor();
       // save settings to local storage
       if ( angular.isDefined($localStorage.settings) ) {
         $scope.app.settings = $localStorage.settings;
@@ -109,6 +105,18 @@ angular.module('app')
       $scope.lang = { isopen: false };
       $scope.langs = {en:'English', de_DE:'German', it_IT:'Italian'};
       $scope.selectLang = $scope.langs[$translate.proposedLanguage()] || "English";
+      $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
+          if(isEmpty(loginService.syn.user_data) && toState.name != 'access.signin' ){
+            event.preventDefault();
+            //$state.current.name = 'access.signin';
+            $state.go('access.signin');
+          }
+          if(!isEmpty(loginService.syn.user_data) && toState.name == 'access.signin'){
+            event.preventDefault();
+            //$state.current.name = 'app.dashboard'
+            //$state.go('app.dashboard');
+          }
+      })
       $scope.setLang = function(langKey, $event) {
         // set the current lang
         $scope.selectLang = $scope.langs[langKey];
