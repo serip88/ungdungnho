@@ -28,6 +28,7 @@ class User extends Base_controller {
         $this->methods['user_get']['limit'] = 500; // 500 requests per hour per user/key
         $this->methods['user_post']['limit'] = 100; // 100 requests per hour per user/key
         $this->methods['user_delete']['limit'] = 50; // 50 requests per hour per user/key
+        
     }
 
     public function user_get()
@@ -118,7 +119,6 @@ class User extends Base_controller {
     public function user_edit_post(){
         $param = $this->post();
         $param = $this->user_lib->validate_edit_user($param);
-        
         if($param){
             $id = $this->user_lib->edit_user($param);
         }else{

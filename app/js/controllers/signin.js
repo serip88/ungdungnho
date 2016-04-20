@@ -20,7 +20,7 @@ app.controller('SigninFormController', ['$scope', '$http', '$state', 'loginServi
         if ( !response.status ) {
           $scope.authError = response.msg ? response.msg : 'Email or Password not is wrong!';
         }else{          
-          $state.go('app.dashboard');
+          $state.go('root.app.dashboard');
         }
       }/*, function(x) {
         $scope.authError = 'Server Error';

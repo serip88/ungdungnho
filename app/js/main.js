@@ -81,11 +81,15 @@ angular.module('app')
         loginService.httpGet('user/user_ss').then(function(response) {
             if (response.status) {
               angular.copy(response.user_data, loginService.syn.user_data);  
-              
+              if($state.current.name == 'root.access.signin'){
+                $state.go('root.app.dashboard');
+              }
+            }else{
+               $state.go('root.access.signin');
             }
           });
       }
-      //getUserInfor();
+      getUserInfor();
       // save settings to local storage
       if ( angular.isDefined($localStorage.settings) ) {
         $scope.app.settings = $localStorage.settings;
@@ -106,12 +110,12 @@ angular.module('app')
       $scope.langs = {en:'English', de_DE:'German', it_IT:'Italian'};
       $scope.selectLang = $scope.langs[$translate.proposedLanguage()] || "English";
       $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
-          if(isEmpty(loginService.syn.user_data) && toState.name != 'access.signin' ){
+          if(isEmpty(loginService.syn.user_data) && toState.name != 'root.access.signin' ){
             event.preventDefault();
             //$state.current.name = 'access.signin';
-            $state.go('access.signin');
+            $state.go('root.access.signin');
           }
-          if(!isEmpty(loginService.syn.user_data) && toState.name == 'access.signin'){
+          if(!isEmpty(loginService.syn.user_data) && toState.name == 'root.access.signin'){
             event.preventDefault();
             //$state.current.name = 'app.dashboard'
             //$state.go('app.dashboard');
@@ -126,11 +130,11 @@ angular.module('app')
       };
 
       $scope.logout = function() {
-        loginService.httpPost('login/login_out')
+        loginService.httpPost('login/logout')
           .then(function(response) {
             if (response.status) {
               angular.copy({}, loginService.syn.user_data);  
-              $state.go('access.signin');
+              $state.go('root.access.signin');
             }
           }
         );  

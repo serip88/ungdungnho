@@ -21,7 +21,7 @@ angular.module('app')
           $stateProvider
               .state('root', {
                   url: '',
-                  templateUrl: adBaseUrl+'app_ctrl.html',
+                  templateUrl: adBaseUrl+'app_ctrl.html'/*,
                   resolve: {
                     promiseObj:  function($http,loginService){
                       // $http returns a promise for the url data
@@ -33,7 +33,7 @@ angular.module('app')
                       });
                     }
                   },
-                  controller: 'AppCtrl'
+                  controller: 'AppCtrl'*/
               })
               .state('root.app', {
                   abstract: true,
@@ -403,7 +403,7 @@ angular.module('app')
               })
 
               // fullCalendar
-              .state('app.calendar', {
+              .state('root.app.calendar', {
                   url: '/calendar',
                   templateUrl: adBaseUrl+'app_calendar.html',
                   // use resolve to load other dependences

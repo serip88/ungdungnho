@@ -56,7 +56,7 @@ class Login extends Base_controller {
         $this->custom_response($response);
         
     }
-    public function login_out_post(){
+    public function logout_post(){
         $this->user_lib->unset_user_session();
         $status = false;
         if(!$_SESSION['user_data']){
