@@ -1,18 +1,49 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+/* Smarty version 3.1.29, created on 2016-05-02 13:05:38
+  from "C:\xampp\htdocs\ungdungnho\application\views\index.tpl" */
+
+if ($_smarty_tpl->smarty->ext->_validateCompiled->decodeProperties($_smarty_tpl, array (
+  'has_nocache_code' => false,
+  'version' => '3.1.29',
+  'unifunc' => 'content_57273482660369_73663337',
+  'file_dependency' => 
+  array (
+    'b65126191bbe6ff2247cc9f0ddbc5c08ae955f71' => 
+    array (
+      0 => 'C:\\xampp\\htdocs\\ungdungnho\\application\\views\\index.tpl',
+      1 => 1462187135,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+),false)) {
+function content_57273482660369_73663337 ($_smarty_tpl) {
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Đầm dạ hội đẹp</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>public/bt-3.3.5-dist/css/bootstrap.css" />
-<link rel="stylesheet" href="<?php echo base_url();?>public/ace/font-awesome.min.css" />
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>public/ace/css/ace.min.css" />
-<script src="<?php echo base_url();?>public/js/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="<?php echo base_url();?>public/bt-3.3.5-dist/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>public/style.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $_smarty_tpl->tpl_vars['config']->value['base_url'];?>
+public/bt-3.3.5-dist/css/bootstrap.css" />
+<link rel="stylesheet" href="<?php echo $_smarty_tpl->tpl_vars['config']->value['base_url'];?>
+public/ace/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $_smarty_tpl->tpl_vars['config']->value['base_url'];?>
+public/ace/css/ace.min.css" />
+<?php echo '<script'; ?>
+ src="<?php echo $_smarty_tpl->tpl_vars['config']->value['base_url'];?>
+public/js/libs/jquery/1.11.3/jquery.min.js"><?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ src="<?php echo $_smarty_tpl->tpl_vars['config']->value['base_url'];?>
+public/bt-3.3.5-dist/js/bootstrap.min.js"><?php echo '</script'; ?>
+>
+<link rel="stylesheet" type="text/css" href="<?php echo $_smarty_tpl->tpl_vars['config']->value['base_url'];?>
+public/style.css" />
 </head>
 
 <body>
@@ -72,3 +103,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </div>
 </body>
 </html>
+<?php }
+}
