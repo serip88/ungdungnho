@@ -34,7 +34,7 @@ class Page_lib {
 		$strIdPage=$this->menu_filter_id_page($dt);
 		$data_category=$this->CI->post_model->get_data('title_vn,title_en,id_post,options,slug',"id_post IN($strIdPage) AND enabled=1",'',0,"FIELD(id_post, $strIdPage)");
 		$count_cate= count($data_category);
-		
+		$main_menu = array();
 		for($i=0; $i<$count_cate; $i++){
 			$options= json_decode($dt[$i]['options']);
 			//$total_child= get_total_table($tableName,"WHERE id_parent=".$data_category[$i]['id_post']." AND enabled=1");
@@ -64,7 +64,15 @@ class Page_lib {
 			}else
 				$active='';
 			
-			$template->assign_block_vars("MAIN_MENU", array(
+			$sub_menu= array();
+			for($j=0; $j<$total_child; $j++){
+				$sub_menu[]= array(
+					'ID'			=> $data_child[$j]['id_post'],
+					'TITLE'			=> $data_child[$j]['title_'.$language],
+					'HREF'			=> $head.'/'.$data_category[$i]['slug'].'/'.$data_child[$j]['slug'].$tail,
+				);
+			}
+			$main_menu[]= array(
 					'ID'			=> $data_category[$i]['id_post'],
 					'TITLE'			=> $data_category[$i]['title_'.$language],
 					'HREF'			=> $head.$href,
@@ -72,15 +80,10 @@ class Page_lib {
 					'ACTIVE'		=> $active,
 					'ARROW_DOWN'	=> $arrowdow,
 					'CLASS_LIST'	=> $class_list,
-			));
-			for($j=0; $j<$total_child; $j++){
-				$template->assign_block_vars("MAIN_MENU.SUB", array(
-						'ID'			=> $data_child[$j]['id_post'],
-						'TITLE'			=> $data_child[$j]['title_'.$language],
-						'HREF'			=> $head.'/'.$data_category[$i]['slug'].'/'.$data_child[$j]['slug'].$tail,
-				));
-			}
+					'SUB'			=> $sub_menu
+			);
 		}
+		return $main_menu;
 	}
 
 	function menu_filter_id_page($dt){
