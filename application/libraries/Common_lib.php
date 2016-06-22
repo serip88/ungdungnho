@@ -1,10 +1,10 @@
 <?php
 /*
   +------------------------------------------------------------------------+
-  | Copyright (C) 2016 Toigiaitri.                                        |
+  | Copyright (C) 2016 Toigiaitri.                                         |
   |                                                                        |
   | This program is free software; you can redistribute it and/or          |
-  | modify it under the terms of the Toigiaitri  License                      |
+  | modify it under the terms of the Toigiaitri  License                   |
   |                                                                        |
   +------------------------------------------------------------------------+
   | o Developer : Rain                                                     |
@@ -35,5 +35,15 @@ class Common_lib {
         $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
     return $randomString;
+  }
+  function rz_debug() {
+      $trace = debug_backtrace();
+      $rootPath = dirname(dirname(__FILE__));
+      $file = str_replace($rootPath, '', $trace[0]['file']);
+      $line = $trace[0]['line'];
+      $var = $trace[0]['args'][0];
+      $lineInfo = sprintf('<div><strong>%s</strong> (line <strong>%s</strong>)</div>', $file, $line);
+      $debugInfo = sprintf('<pre>%s</pre>', print_r($var, true));
+      print_r($lineInfo.$debugInfo);
   }
 }

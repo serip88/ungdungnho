@@ -53,7 +53,7 @@ $('#shipping-address-checkbox').on('ifUnchecked', function() {
 
 
 $('.owl-carousel').each(function(){
-  $(this).owlCarousel();
+  $(this).owlCarousel({"items":5,"loop":true,"nav":true});
 });
 
 

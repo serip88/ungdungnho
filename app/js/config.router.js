@@ -21,7 +21,7 @@ angular.module('app')
           $stateProvider
               .state('root', {
                   url: '',
-                  templateUrl: adBaseUrl+'app_ctrl.html'/*,
+                  templateUrl: adBaseUrl+'app_ctrl.html',/*
                   resolve: {
                     promiseObj:  function($http,loginService){
                       // $http returns a promise for the url data
@@ -29,6 +29,8 @@ angular.module('app')
                         .success(function (data) {
                           if(typeof(data.user_data)){
                             angular.copy(data.user_data, loginService.syn.user_data);
+                          }else{
+                            $state.go('root.access.signin');
                           }
                       });
                     }
@@ -350,6 +352,31 @@ angular.module('app')
               .state('root.app.system.user_groups', {
                   url: '/user_groups',
                   templateUrl: adBaseUrl+'system_user_groups.html'
+              })
+              //category
+              .state('root.app.catalog', {
+                  url: '/catalog',
+                  template: '<div ui-view class="fade-in-down"></div>'
+              })
+              .state('root.app.catalog.category', {
+                  url: '/category',
+                  templateUrl: adBaseUrl+'catalog_category.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( [baseUrl+'js/controllers/category.js'] );
+                      }]
+                  }
+              })
+              .state('root.app.catalog.product', {
+                  url: '/product',
+                  templateUrl: adBaseUrl+'catalog_product.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( [baseUrl+'js/controllers/product.js'] );
+                      }]
+                  }
               })
               // others
               .state('lockme', {

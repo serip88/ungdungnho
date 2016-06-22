@@ -120,7 +120,7 @@ var userApi = {
           });
         };
         function validateAddUser() {
-          if(typeof(scope.newuser.user_group_id)=='undefined' || typeof(scope.newuser.username == 'undefined') ){
+          if(typeof(scope.newuser.user_group_id)=='undefined' || typeof(scope.newuser.username) == 'undefined' ){
             return 0;
           }else{
             return 1;

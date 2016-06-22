@@ -363,6 +363,33 @@
       </li>
     </ul>
   </li>
+  <li ng-class="{active:$state.includes('app.category')}">
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-cog"></i>
+      <span translate="aside.nav.components.rz_category.CATALOG">Category</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li  ui-sref-active="active"><!--class="nav-sub-header"-->
+        <a ui-sref="root.app.catalog.category">
+          <span translate="aside.nav.components.rz_category.CATEGORY">Category</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="root.app.catalog.product">
+          <span translate="aside.nav.components.rz_category.PRODUCT">Product</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="root.app.category.attribute">
+          <span translate="aside.nav.components.rz_category.ATTRIBUTE">Attribute</span>
+        </a>
+      </li>
+    </ul>
+  </li>
   <li ng-class="{active:$state.includes('app.system')}">
     <a href class="auto">
       <span class="pull-right text-muted">
@@ -370,22 +397,22 @@
         <i class="fa fa-fw fa-angle-down text-active"></i>
       </span>
       <i class="glyphicon glyphicon-cog"></i>
-      <span translate="aside.nav.components.system.SYSTEM">System</span>
+      <span translate="aside.nav.components.rz_system.SYSTEM">System</span>
     </a>
     <ul class="nav nav-sub dk">
       <li class="nav-sub-header">
         <a href>
-          <span translate="aside.nav.components.system.SYSTEM">System</span>
+          <span translate="aside.nav.components.rz_system.SYSTEM">System</span>
         </a>
       </li>
       <li ui-sref-active="active">
         <a ui-sref="root.app.system.users">
-          <span translate="aside.nav.components.system.USERS">Users</span>
+          <span translate="aside.nav.components.rz_system.USERS">Users</span>
         </a>
       </li>
       <li ui-sref-active="active">
         <a ui-sref="root.app.system.user_groups">
-          <span translate="aside.nav.components.system.USER_GROUPS">User Groups</span>
+          <span translate="aside.nav.components.rz_system.USER_GROUPS">User Groups</span>
         </a>
       </li>
     </ul>

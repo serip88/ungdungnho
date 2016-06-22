@@ -1,0 +1,84 @@
+<?php
+/*
+  +------------------------------------------------------------------------+
+  | Copyright (C) 2016 Toigiaitri.                                        |
+  |                                                                        |
+  | This program is free software; you can redistribute it and/or          |
+  | modify it under the terms of the Toigiaitri  License                      |
+  |                                                                        |
+  +------------------------------------------------------------------------+
+  | o Developer : Rain                                                     |
+  | o HomePage  : http://www.toigiaitri.net/                               |
+  | o Email     : serip88@gmail.com                                        |
+  +------------------------------------------------------------------------+
+ */
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class Product_lib extends Common_lib {
+  protected $CI = null;
+  function __construct()
+  {
+    $this->CI =& get_instance();
+    $this->CI->load->database('default');
+    $this->CI->load->model(array(
+        'product/Product_Model',
+    ));
+      
+  }
+  function validate_save_product($param){
+      $requite = array('name_vn','name_en','parent_id');//description_vn,description_en,status,parent_id
+      $param['name_vn']   = isset($param['name_vn']) && $param['name_vn'] ?$param['name_vn']: '';
+      $param['name_vn']   = str_replace('/', '-', $param['name_vn']);
+      $param['name_en']   = isset($param['name_en']) && $param['name_en'] ?$param['name_en']: '';  
+      $param['name_en']   = str_replace('/', '-', $param['name_en']);
+      $param['status']    = isset($param['status']) && $param['status'] ? $param['status']: 0;   
+      $param['parent_id']   = isset($param['parent_id']) && $param['parent_id'] ? $param['parent_id']: 0;   
+      $param['description_vn'] = isset($param['description_vn']) && $param['description_vn'] ? $param['description_vn']: '';   
+      $param['description_en'] = isset($param['description_en']) && $param['description_en'] ? $param['description_en']: '';   
+      foreach ($requite as $key => $value) {
+        if(!$param[$value]){
+          return 0;
+        }
+      }
+      return $param;
+  }
+
+  function handle_save_product($param){
+    //path_parent_id
+    $this->CI->load->library(array('category_lib'));
+    $param['path_category_id']=0;
+    $param['level']=0;
+    if($param['parent_id']){
+      $category = $this->CI->category_lib->get_category($param['parent_id']);
+      if($category['path_parent']){
+        $param['path_category_id'] = $category['path_parent'].','.$param['parent_id'];
+      }else{
+        $param['path_category_id'] = $param['parent_id'];
+      }
+    }
+    return $param;
+  }
+  function save_product($param){ 
+    $data = array();
+    $data['title_vn']  = $param['name_vn'];
+    $data['title_en']  = $param['name_en'];
+    $data['slug']     = $param['name_vn'];
+    $data['parent_id']  = $param['parent_id'];
+    $data['description_vn'] = $param['description_vn'];
+    $data['description_en'] = $param['description_en'];
+    $data['path_category_id'] = $param['path_category_id'];
+    $data['level']    = 0;
+    $data['order']    = 0;
+    $data['posted_date'] = time();
+    $data['enabled']  = $param['status']; 
+    $id = $this->CI->Product_Model->insert_data($data);
+    return $id;
+  }
+  function get_product_list(){
+      $select="product_id,title_vn,title_en,description_en,description_vn,enabled as status,parent_id";
+      $where = array();
+      $data = $this->CI->Product_Model->get_data($select,$where);      
+      return $data;
+  }
+}

@@ -20,7 +20,7 @@ class CI_Smarty extends Smarty {
 		parent::__construct();
 		//$config =& get_config();
 		$this->compile_dir = APPPATH . "views/templates_c";
-		$this->template_dir = APPPATH . "views/templates";
+		$this->template_dir = APPPATH . "views";
 
 		$this->assign( 'APPPATH', APPPATH );
 		$this->assign( 'BASEPATH', BASEPATH );

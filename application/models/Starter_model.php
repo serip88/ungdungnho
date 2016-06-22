@@ -65,7 +65,10 @@ class Starter_Model extends CI_Model
     }
     public function get_total($where)
     {
+      if(is_array($where))
         $this->db->where($where);
+      else
+        $this->db->where($where, NULL, FALSE);
         return $this->db->count_all_results($this->_tb_name);  
     }
      public function delete_data($where) {

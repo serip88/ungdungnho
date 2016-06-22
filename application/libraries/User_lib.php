@@ -55,7 +55,7 @@ class User_lib extends Common_lib {
 
     $select="A.user_id,A.user_group_id,A.username,A.salt,A.firstname,A.lastname,A.email,A.image,A.date_added,B.name";
     $tb_join = array();
-    $tb_join[] = array('table_name'=>'user_group as B','condition'=>"A.user_group_id =B.user_group_id", 'type'=>'left');
+    $tb_join[] = array('table_name'=>'rz_user_group as B','condition'=>"A.user_group_id =B.user_group_id", 'type'=>'left');
     $where = array("A.user_id"=>$user_id);
     $data = $this->CI->User_Model->get_data_join($select,$where,$tb_join,1);
     if($data){
@@ -67,7 +67,7 @@ class User_lib extends Common_lib {
   function get_user_by_email($user_email){
     $select="A.user_id,A.user_group_id,A.username,A.salt,A.firstname,A.lastname,A.email,A.image,A.date_added,A.status,B.name";
     $tb_join = array();
-    $tb_join[] = array('table_name'=>'user_group as B','condition'=>"A.user_group_id =B.user_group_id", 'type'=>'left');
+    $tb_join[] = array('table_name'=>'rz_user_group as B','condition'=>"A.user_group_id =B.user_group_id", 'type'=>'left');
     $where = array("A.email"=>$user_email);
     $data = $this->CI->User_Model->get_data_join($select,$where,$tb_join,1);
     if($data){
