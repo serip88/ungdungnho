@@ -18,7 +18,7 @@
         <div class="container-fluid">
             <div class="pull-right"><a  data-ng-click="openAddProduct('lg')"  data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Add New"><i class="fa fa-plus"></i></a>
                 <button type="button" data-toggle="tooltip" title="" class="btn btn-default" onclick="$('#form-product').attr('action', 'http://dm-opencart.localhost/admin/index.php?route=catalog/product/copy&amp;token=uZjtoy6xZkuycXl16LqlMbbCre2vKmt4').submit()" data-original-title="Copy"><i class="fa fa-copy"></i></button>
-                <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" onclick="confirm('Are you sure?') ? $('#form-product').submit() : false;" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+                <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" data-ng-click="deleteProduct()" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
             </div>
             <h1>Products</h1>
             <ul class="breadcrumb">
@@ -98,13 +98,13 @@
                                     </td>
                                     <td class="text-center"> <img src="http://dm-opencart.localhost/image/cache/catalog/demo/sony_vaio_1-40x40.jpg" alt="Sony VAIO" class="img-thumbnail">
                                     </td>
-                                    <td class="text-left">{{value.title_vn}}</td>
+                                    <td class="text-left">{{value.name_vn}}</td>
                                     <td class="text-left">Product 19</td>
-                                    <td class="text-right"> 1000.0000 </td>
+                                    <td class="text-right"> {{value.price}} </td>
                                     <td class="text-right"> <span class="label label-success">1000</span>
                                     </td>
                                     <td class="text-left">{{value.status}}</td>
-                                    <td class="text-right"><a href="http://dm-opencart.localhost/admin/index.php?route=catalog/product/edit&amp;token=uZjtoy6xZkuycXl16LqlMbbCre2vKmt4&amp;product_id=46" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Edit"><i class="fa fa-pencil"></i></a></td>
+                                    <td class="text-right"><a data-ng-click="productEdit(value)" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Edit"><i class="fa fa-pencil"></i></a></td>
                                 </tr>
                             </tbody>
                         </table>

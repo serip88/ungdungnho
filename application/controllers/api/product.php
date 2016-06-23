@@ -57,5 +57,47 @@ class Product extends Base_controller {
             'rows' => $data
         ], REST_Controller::HTTP_OK);
     }
-
+    public function edit_post(){
+        $param = $this->post();
+        $stt=FALSE;
+        $msg='';
+        $param = $this->product_lib->validate_edit_product($param);
+        if($param){
+            $param = $this->product_lib->handle_save_product($param);
+            $stt = $this->product_lib->edit_product($param);
+            if(!$stt){
+                $msg = 'Error! Cannot save product.';
+            }
+        }
+        $response = array('status' => $stt,'msg'=> $msg);
+        $this->custom_response($response);
+    }
+    public function delete_post(){
+        $params = $this->post();
+        $product_ids = isset($params['product_delete']) && $params['product_delete']?$params['product_delete']:array();
+        $msg = '';
+        $status = false;
+        $count_false = 0;
+        if(count($product_ids)){
+            foreach ($product_ids as $key => $id) {
+                try {
+                    $stt = $this->product_lib->product_delete($id);
+                    if(!$stt)
+                        $count_false = $count_false +1;    
+                    
+                } catch (Exception $e) {
+                    $count_false = $count_false +1;
+                    //echo 'Caught exception: ',  $e->getMessage(), "\n";
+                }
+            }
+        } 
+        if($count_false == 0){
+            $status = true;
+            $msg = 'delete success';
+        }else{
+            $msg = "product cannot delete";
+        }
+        $response = array('status' => $status,'msg' => $msg);
+        $this->custom_response($response);
+    }
 }

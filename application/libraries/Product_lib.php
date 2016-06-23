@@ -32,6 +32,7 @@ class Product_lib extends Common_lib {
       $param['name_vn']   = str_replace('/', '-', $param['name_vn']);
       $param['name_en']   = isset($param['name_en']) && $param['name_en'] ?$param['name_en']: '';  
       $param['name_en']   = str_replace('/', '-', $param['name_en']);
+      $param['price']   = isset($param['price']) && $param['price'] ?intval($param['price']): 0;
       $param['status']    = isset($param['status']) && $param['status'] ? $param['status']: 0;   
       $param['parent_id']   = isset($param['parent_id']) && $param['parent_id'] ? $param['parent_id']: 0;   
       $param['description_vn'] = isset($param['description_vn']) && $param['description_vn'] ? $param['description_vn']: '';   
@@ -61,8 +62,9 @@ class Product_lib extends Common_lib {
   }
   function save_product($param){ 
     $data = array();
-    $data['title_vn']  = $param['name_vn'];
-    $data['title_en']  = $param['name_en'];
+    $data['name_vn']  = $param['name_vn'];
+    $data['name_en']  = $param['name_en'];
+    $data['price']  = $param['price'];
     $data['slug']     = $param['name_vn'];
     $data['parent_id']  = $param['parent_id'];
     $data['description_vn'] = $param['description_vn'];
@@ -76,9 +78,62 @@ class Product_lib extends Common_lib {
     return $id;
   }
   function get_product_list(){
-      $select="product_id,title_vn,title_en,description_en,description_vn,enabled as status,parent_id";
+      $select="product_id,name_vn,name_en,description_en,description_vn,price,enabled as status,parent_id";
       $where = array();
       $data = $this->CI->Product_Model->get_data($select,$where);      
+      if($data){
+        $data = $this->format_product_list($data);
+      }
       return $data;
   }
+  function validate_edit_product($param){
+      $param = $this->validate_save_product($param);
+      if($param){
+        $param['product_id']  = isset($param['product_id']) && $param['product_id'] ?$param['product_id']: 0;
+        if(!$param['product_id'])
+          return 0;
+      }
+      return $param;
+  }
+  function edit_product($param){ 
+      $data = array();
+      $data['name_vn']  = $param['name_vn'];
+      $data['name_en']  = $param['name_en'];
+      $data['price']  = $param['price'];
+      $data['slug']     = $param['name_vn'];
+      $data['parent_id']  = $param['parent_id'];
+      $data['description_vn'] = $param['description_vn'];
+      $data['description_en'] = $param['description_en'];
+      $data['path_category_id'] = $param['path_category_id'];
+      $data['level']    = 0;
+      $data['order']    = 0;
+      $data['posted_date'] = time();
+      $data['enabled']  = $param['status']; 
+      if(isset($param['product_id']) && $param['product_id']){
+        $where = array("product_id"=> $param['product_id']);
+        $stt = $this->CI->Product_Model->update_data($data,$where); 
+        return $stt;
+      }else{
+        return FALSE;
+      }
+  }
+  function product_delete($product_id){
+      if($product_id){
+        $where = array("product_id"=>$product_id);
+        $stt = $this->CI->Product_Model->delete_data($where);
+        return $stt;
+      }else
+        return false;
+  }
+  //SUPPORT FUNCTION
+  function format_product_list($data){
+    foreach ($data as $key => $value) {
+      if($value['price']){
+        $data[$key]['price'] = number_format($value['price'] , 0, ',', '.');
+      }
+    }
+    return $data;
+  }
+
+
 }
