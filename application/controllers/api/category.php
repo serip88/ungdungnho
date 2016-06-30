@@ -90,7 +90,9 @@ class Category extends Base_controller {
                 		$stt = $this->category_lib->categorys_delete($id);
 	                    if(!$stt)
 	                        $count_false = $count_false +1;    
-                	}
+                	}else{
+                        $count_false = $count_false +1;
+                    }
                 } catch (Exception $e) {
                     $count_false = $count_false +1;
                     //echo 'Caught exception: ',  $e->getMessage(), "\n";
@@ -101,7 +103,7 @@ class Category extends Base_controller {
             $status = true;
             $msg = 'delete success';
         }else{
-            $msg = "category cannot delete";
+            $msg = "$count_false category cannot delete";
         }
         $response = array('status' => $status,'msg' => $msg);
         $this->custom_response($response);

@@ -142,7 +142,10 @@
 	        scope.cancel = function(){
 	          $modalInstance.close();
 	        };
-	        scope.ok = function(){
+	        scope.ok = function(invalid){
+	        	if(!validateAddCategory() || invalid){
+	              return;
+	            }
 	          	scope.category.parent_id = scope.category.parent_selected?scope.category.parent_selected.id:0;;
 	          	categoryService.httpPost(categoryApi.categoryEdit,scope.category).then(function(responseData) {
 	              if (responseData.status) {
@@ -159,6 +162,13 @@
 	              }
 	          });
 	        };
+	        function validateAddCategory() {
+	            if(typeof(scope.category.name_vn) == 'undefined' || typeof(scope.category.name_en) == 'undefined' ){
+	              return 0;
+	            }else{
+	              return 1;
+	            } 
+          	};
 	        }]
 	    };
 	    modalObj.resolve = {
@@ -194,19 +204,20 @@
 	    }
 	}
 	function deleteCategoryAction(){
-      categoryService.httpPost(categoryApi.categoryDelete,{'category_delete':$scope.category.selected} ).then(function(responseData) {
-          if (responseData.status) {
-           SweetAlert.swal("Delete success!", "", "success");
-           categoryList();
-          }else{
-            SweetAlert.swal({
-              title: "Have problem when delete group!",
-              text: "",
-              type: "warning",
-              confirmButtonText: "Ok"
-            });
-          }
-      });
+      	categoryService.httpPost(categoryApi.categoryDelete,{'category_delete':$scope.category.selected} ).then(function(responseData) {
+          	if(responseData.status) {
+           		SweetAlert.swal("Delete success!", "", "success");
+           		//categoryList();
+          	}else{
+	            SweetAlert.swal({
+	              	title:  typeof(responseData.msg)?responseData.msg:"Have problem when delete group!",
+	              	text: "",
+	              	type: "warning",
+	              	confirmButtonText: "Ok"
+	            });
+          	}
+          	categoryList();
+      	});
     }
 
   	}]);

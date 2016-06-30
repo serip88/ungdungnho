@@ -32,7 +32,8 @@ class Product_lib extends Common_lib {
       $param['name_vn']   = str_replace('/', '-', $param['name_vn']);
       $param['name_en']   = isset($param['name_en']) && $param['name_en'] ?$param['name_en']: '';  
       $param['name_en']   = str_replace('/', '-', $param['name_en']);
-      $param['price']   = isset($param['price']) && $param['price'] ?intval($param['price']): 0;
+      $param['price']     = isset($param['price']) && $param['price'] ? str_replace('.','',$param['price']): 0;
+      $param['price']     = intval(str_replace(',','',$param['price'])) ;
       $param['status']    = isset($param['status']) && $param['status'] ? $param['status']: 0;   
       $param['parent_id']   = isset($param['parent_id']) && $param['parent_id'] ? $param['parent_id']: 0;   
       $param['description_vn'] = isset($param['description_vn']) && $param['description_vn'] ? $param['description_vn']: '';   

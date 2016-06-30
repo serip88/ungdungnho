@@ -134,14 +134,17 @@
 		      templateUrl: adBaseUrl +'modal/product/add_product.html',
 		      size: size,
 		      controller: ['$scope', '$modalInstance','dataInit', function(scope, $modalInstance, dataInit){
-		        scope.product = item;
+		        scope.product = angular.copy(item);
 		        scope.categoryList = dataInit;
 		        scope.categoryList.push({id:0,name_vn:'[Không danh mục]',name_en:'[No Category]'});
 		        scope.product.parent_selected = {id:item.parent_id};
 		        scope.cancel = function(){
 		          $modalInstance.close();
 		        };
-		        scope.ok = function(){
+		        scope.ok = function(invalid){
+		        	if(!validateEditProduct() || invalid){
+		              return;
+		            }
 		          	scope.product.parent_id = scope.product.parent_selected?scope.product.parent_selected.id:0;;
 		          	productService.httpPost(productApi.productEdit,scope.product).then(function(responseData) {
 		              if (responseData.status) {
@@ -158,6 +161,13 @@
 		              }
 		          });
 		        };
+		        function validateEditProduct() {
+		            if(typeof(scope.product.name_vn) == 'undefined' || typeof(scope.product.name_en) == 'undefined' ){
+		              return 0;
+		            }else{
+		              return 1;
+		            } 
+	          	};
 		        }]
 		    };
 		    modalObj.resolve = {
