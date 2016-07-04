@@ -183,12 +183,14 @@
 	    if($scope.category.selected.length){
 	      SweetAlert.swal({
 	         title: "Are you sure?",
-	         text: "Your will not be able to recover this category!",
+	         text: 'Your will not be able to recover this category!',
+	         html: true,
 	         type: "warning",
 	         showCancelButton: true,
 	         confirmButtonColor: "#DD6B55",
 	         confirmButtonText: "Yes, delete it!",
-	         closeOnConfirm: false}, 
+	         closeOnConfirm: false
+	     	}, 
 	      function(isConfirm){ 
 	          if(isConfirm){
 	            deleteCategoryAction();
@@ -210,10 +212,11 @@
            		//categoryList();
           	}else{
 	            SweetAlert.swal({
-	              	title:  typeof(responseData.msg)?responseData.msg:"Have problem when delete group!",
-	              	text: "",
+	              	title:  "Error",
+	              	text: typeof(responseData.msg) != 'undefined'? responseData.msg:"Have problem when delete group![CL]",
 	              	type: "warning",
-	              	confirmButtonText: "Ok"
+	              	confirmButtonText: "Ok",
+	              	html: true
 	            });
           	}
           	categoryList();

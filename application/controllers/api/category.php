@@ -83,10 +83,15 @@ class Category extends Base_controller {
         if(count($category_ids)){
             foreach ($category_ids as $key => $id) {
                 try {
-                	//-> check have sub category
-                	//-> check have products
-                	$total = $this->category_lib->category_check_have_child($id);
-                	if(!$total){
+                	//check have sub category
+                	$total_sub = $this->category_lib->category_check_have_child($id);
+                    if($total_sub)
+                       $msg = 'You have delete sub category first'; 
+                    //check have products
+                    $have_product = $this->category_lib->category_check_have_product($id);
+                    if($have_product)
+                        $msg = 'This category not empty, you have move all product in it'; 
+                	if(!$total_sub && !$have_product){
                 		$stt = $this->category_lib->categorys_delete($id);
 	                    if(!$stt)
 	                        $count_false = $count_false +1;    
@@ -103,7 +108,7 @@ class Category extends Base_controller {
             $status = true;
             $msg = 'delete success';
         }else{
-            $msg = "$count_false category cannot delete";
+            $msg = $msg? $msg.'<br/> $count_false category cannot delete': "$count_false category cannot delete";
         }
         $response = array('status' => $status,'msg' => $msg);
         $this->custom_response($response);

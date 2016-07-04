@@ -153,6 +153,20 @@ class Category_lib extends Common_lib {
 	    	$total = $this->CI->Tag_Model->get_total($where);	
 	      	return $total;
 	    }
+	    return 0;
+	}
+	function category_check_have_product($category_id){
+		if($category_id){
+			$select = array('table_join'=>array());
+			$select['table_join'] = array();
+			$select['table_join'][] = array('table_name'=>'rz_product as B','condition'=>"A.id =B.parent_id", 'type'=>'left');
+			$where = array('where'=> array());
+			$where['where'] = array('B.parent_id'=>$category_id);
+			$limit = array('type'=>'int','limit'=>1);
+			$have_product = $this->CI->Tag_Model->get_dt($select,$where,$limit);	
+			return $have_product;
+		}
+		return 0;
 	}
 
 	//SUPPORT FUNCTION
