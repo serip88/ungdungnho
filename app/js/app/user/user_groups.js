@@ -5,7 +5,7 @@
     'use strict';
 
   
-  app.controller('UserGroupCtrl', ['$scope', '$modal', '$log', 'openModal', 'userService', 'SweetAlert', function($scope, $modal, $log, openModal, userService, SweetAlert) {
+  app.controller('UserGroupCtrl', ['$scope', '$uibModal', '$log', 'openModal', 'userService', 'SweetAlert', function($scope, $uibModal, $log, openModal, userService, SweetAlert) {
 
     function userGroupList() {
         userService.httpGet(userApi.userGroup).then(function(responseData) {
@@ -48,7 +48,7 @@
       var modalObj = {
         templateUrl: adBaseUrl +'modal/user/add_group_user.html',
         size: size,
-        controller: ['$scope', '$modalInstance', function(scope, $modalInstance){
+        controller: ['$scope', '$uibModalInstance', function(scope, $uibModalInstance){
           scope.newuser = {};
           scope.newuser.list_permissions = list_permissions;
           scope.usergroup = {access_selected:[],roles:[],access_check_all:false,modify_selected:[]};
@@ -70,7 +70,7 @@
             scope.usergroup.modify_selected = [];
           };
           scope.cancel = function(){
-            $modalInstance.close();
+            $uibModalInstance.close();
           };
           scope.ok = function(invalid){
             if(!validateAddUser() && invalid){
@@ -82,7 +82,7 @@
                 if (responseData.status) {
                  SweetAlert.swal("Add success!", "", "success");
                  userGroupList();
-                 $modalInstance.close();
+                 $uibModalInstance.close();
                 }
             });
           };
@@ -110,7 +110,7 @@
        var modalObj = {
         templateUrl: adBaseUrl +'modal/user/add_group_user.html',
         size: size,
-        controller: ['$scope', '$modalInstance', function(scope, $modalInstance){
+        controller: ['$scope', '$uibModalInstance', function(scope, $uibModalInstance){
           scope.newuser = {};
           scope.usergroup = {access_selected:[],roles:[],access_check_all:false,modify_selected:[]};
           scope.newuser.id = data.id;
@@ -138,7 +138,7 @@
             scope.usergroup.modify_selected = [];
           };
           scope.cancel = function(){
-            $modalInstance.close();
+            $uibModalInstance.close();
           };
           scope.ok = function(invalid){
             if(!validateAddUser() && invalid){
@@ -150,7 +150,7 @@
                 if (responseData.status) {
                  SweetAlert.swal("Edit success!", "", "success");
                  userGroupList();
-                 $modalInstance.close();
+                 $uibModalInstance.close();
                 }else{
                   SweetAlert.swal({
                     title: "Edit unsuccess!",

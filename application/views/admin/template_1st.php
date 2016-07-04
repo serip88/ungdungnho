@@ -20,19 +20,30 @@
   <script src="<?php echo base_url();?>app/vendor/jquery/jquery.min.js"></script>
 
   <!-- Angular -->
-  <script src="<?php echo base_url();?>app/vendor/angular/angular.js"></script>
+  <!--<script src="<?php echo base_url();?>app/vendor/angular/angular.js"></script>-->
+  <script src="<?php echo base_url();?>app/vendor/angular/angular-1.5.7.js"></script>
   
-  <script src="<?php echo base_url();?>app/vendor/angular/angular-animate/angular-animate.js"></script>
-  <script src="<?php echo base_url();?>app/vendor/angular/angular-cookies/angular-cookies.js"></script>
-  <script src="<?php echo base_url();?>app/vendor/angular/angular-resource/angular-resource.js"></script>
-  <script src="<?php echo base_url();?>app/vendor/angular/angular-sanitize/angular-sanitize.js"></script>
+  <script src="<?php echo base_url();?>app/vendor/angular/angular-animate/angular-animate-1.5.7.js"></script>
+  <script src="<?php echo base_url();?>app/vendor/angular/angular-cookies/angular-cookies-1.5.7.js"></script>
+  <script src="<?php echo base_url();?>app/vendor/angular/angular-resource/angular-resource-1.5.7.js"></script>
+  <script src="<?php echo base_url();?>app/vendor/angular/angular-sanitize/angular-sanitize-1.5.7.js"></script>
   <script src="<?php echo base_url();?>app/vendor/angular/angular-touch/angular-touch.js"></script>
-<!-- Vendor -->
+  <!-- Vendor -->
   <script src="<?php echo base_url();?>app/vendor/angular/angular-ui-router/angular-ui-router.js"></script> 
   <script src="<?php echo base_url();?>app/vendor/angular/ngstorage/ngStorage.js"></script>
 
   <!-- bootstrap -->
-  <script src="<?php echo base_url();?>app/vendor/angular/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <!--<script src="<?php echo base_url();?>app/vendor/angular/angular-bootstrap/ui-bootstrap-tpls.js"></script>-->
+  <script src="<?php echo base_url();?>app/vendor/angular/angular-bootstrap/ui-bootstrap-tpls-1.3.3.js"></script>
+  <!-- angular-strap source: http://mgcrea.github.io/angular-strap/##popovers-->
+  <link rel="stylesheet" href="<?php echo base_url();?>app/vendor/angular/angular-strap/libs.min.css">
+  <script src="<?php echo base_url();?>app/vendor/angular/angular-strap/angular-strap.js" data-semver="v2.3.8"></script>
+  <script src="<?php echo base_url();?>app/vendor/angular/angular-strap/angular-strap.tpl.js" data-semver="v2.3.8"></script>
+  <script src="<?php echo base_url();?>app/vendor/angular/angular-strap/angular-strap.docs.tpl.js" data-semver="v2.3.8"></script>
+  <!--<link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libs.min.css">
+  <script src="//mgcrea.github.io/angular-strap/dist/angular-strap.js" data-semver="v2.3.8"></script>
+  <script src="//mgcrea.github.io/angular-strap/dist/angular-strap.tpl.js" data-semver="v2.3.8"></script>
+  <script src="//mgcrea.github.io/angular-strap/docs/angular-strap.docs.tpl.js" data-semver="v2.3.8"></script>-->
   <!-- lazyload -->
   <script src="<?php echo base_url();?>app/vendor/angular/oclazyload/ocLazyLoad.js"></script>
   <!-- translate -->

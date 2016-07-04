@@ -49,7 +49,7 @@ var userApi = {
     }
     return userObject;
   }]);
-  app.controller('UserCtrl', ['$scope', '$modal', '$log', 'openModal', 'userService', 'SweetAlert', function($scope, $modal, $log, openModal, userService, SweetAlert) {
+  app.controller('UserCtrl', ['$scope', '$uibModal', '$log', 'openModal', 'userService', 'SweetAlert', function($scope, $uibModal, $log, openModal, userService, SweetAlert) {
     $scope.folds = [
       {name: 'Inbox', filter:''},
       {name: 'Starred', filter:'starred'},
@@ -70,15 +70,15 @@ var userApi = {
 
 
     /*$scope.open = function (size) {
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         templateUrl: 'addUser.html',
-        controller: ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
           $scope.newuser= {};
           $scope.ok = function () {
-            $modalInstance.close($scope.newuser);
+            $uibModalInstance.close($scope.newuser);
           };
           $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
           };
         }],
         size: size,
@@ -100,11 +100,11 @@ var userApi = {
     var modalObj = {
       templateUrl: adBaseUrl +'modal/add_user.html',
       size: size,
-      controller: ['$scope', '$modalInstance', function(scope, $modalInstance){
+      controller: ['$scope', '$uibModalInstance', function(scope, $uibModalInstance){
         scope.newuser = {};
         scope.newuser.group_user = group_user;
         scope.cancel = function(){
-          $modalInstance.close();
+          $uibModalInstance.close();
         };
         scope.ok = function(invalid){
           if(!validateAddUser() && invalid){
@@ -115,7 +115,7 @@ var userApi = {
               if (responseData.status) {
                SweetAlert.swal("Add success!", "", "success");
                userList();
-               $modalInstance.close();
+               $uibModalInstance.close();
               }
           });
         };
@@ -222,12 +222,12 @@ var userApi = {
     var modalObj = {
       templateUrl: adBaseUrl +'modal/edit_user.html',
       size: size,
-      controller: ['$scope', '$modalInstance','dataInit', function(scope, $modalInstance, dataInit){
+      controller: ['$scope', '$uibModalInstance','dataInit', function(scope, $uibModalInstance, dataInit){
         scope.newuser = item;
         scope.newuser.group_user = dataInit;
         scope.newuser.user_group_id = {id:item.user_group_id};
         scope.cancel = function(){
-          $modalInstance.close();
+          $uibModalInstance.close();
         };
         scope.ok = function(){
           scope.newuser.user_group_id = scope.newuser.user_group_id.id;
@@ -235,7 +235,7 @@ var userApi = {
               if (responseData.status) {
                SweetAlert.swal("Edit user success!", "", "success");
                userList();
-               $modalInstance.close();
+               $uibModalInstance.close();
               }else{
                 SweetAlert.swal({
                   title: "Edit user False!",
@@ -302,7 +302,7 @@ var userApi = {
 
   }]);
 
-  app.controller('UserListCtrl', ['$scope', '$modal', 'userService', function($scope, $modal, userService) {
+  app.controller('UserListCtrl', ['$scope', '$uibModal', 'userService', function($scope, $uibModal, userService) {
     /*$scope.newuser = ['newuser1', 'newuser2', 'newuser3'];
     function userList() {
         $scope.userList = {};

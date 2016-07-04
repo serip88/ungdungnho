@@ -16,5 +16,6 @@ angular.module('app', [
     'checklist-model',
     'oitozero.ngSweetAlert',
     'oc.lazyLoad',
-    'pascalprecht.translate'
+    'pascalprecht.translate',
+    'mgcrea.ngStrap'
 ]);

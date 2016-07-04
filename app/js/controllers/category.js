@@ -44,7 +44,7 @@
 	    return categoryObject;
 	  }]);
 
-	app.controller('CategoryCtrl', ['$scope', '$modal', '$log', 'openModal', 'SweetAlert', 'categoryService', function($scope, $modal, $log, openModal, SweetAlert, categoryService) {
+	app.controller('CategoryCtrl', ['$scope', '$uibModal', '$log', 'openModal', 'SweetAlert', 'categoryService', function($scope, $uibModal, $log, openModal, SweetAlert, categoryService) {
 
 		function categoryList() {
 	        categoryService.httpGet(categoryApi.categoryList).then(function(responseData) {
@@ -87,12 +87,12 @@
 	        var modalObj = {
 		        templateUrl: adBaseUrl +'modal/category/add_category.html',
 		        size: size,
-		        controller: ['$scope', '$modalInstance', 'dataInit', function(scope, $modalInstance, dataInit){
+		        controller: ['$scope', '$uibModalInstance', 'dataInit', function(scope, $uibModalInstance, dataInit){
 		          	scope.category = {};
 		          	scope.categoryList = dataInit;
 		          	scope.categoryList.push({id:0,name_vn:'[Không danh mục]',name_en:'[No Category]'});
 		           	scope.cancel = function(){
-		            	$modalInstance.close();
+		            	$uibModalInstance.close();
 		           	};
 		          	scope.ok = function(invalid){
 			            if(!validateAddCategory() || invalid){
@@ -102,7 +102,7 @@
 			            categoryService.httpPost(categoryApi.categorySave,scope.category).then(function(responseData) {
 			                if(responseData.status) {
 			                 	SweetAlert.swal("Add success!", "", "success");
-			                 	$modalInstance.close();
+			                 	$uibModalInstance.close();
 			                 	categoryList();
 			                }
 			            });
@@ -134,13 +134,13 @@
 	    var modalObj = {
 	      templateUrl: adBaseUrl +'modal/category/add_category.html',
 	      size: size,
-	      controller: ['$scope', '$modalInstance','dataInit', function(scope, $modalInstance, dataInit){
+	      controller: ['$scope', '$uibModalInstance','dataInit', function(scope, $uibModalInstance, dataInit){
 	        scope.category = item;
 	        scope.categoryList = dataInit;
 	        scope.categoryList.push({id:0,name_vn:'[Không danh mục]',name_en:'[No Category]'});
 	        scope.category.parent_selected = {id:item.parent_id};
 	        scope.cancel = function(){
-	          $modalInstance.close();
+	          $uibModalInstance.close();
 	        };
 	        scope.ok = function(invalid){
 	        	if(!validateAddCategory() || invalid){
@@ -150,7 +150,7 @@
 	          	categoryService.httpPost(categoryApi.categoryEdit,scope.category).then(function(responseData) {
 	              if (responseData.status) {
 	               SweetAlert.swal("Edit Category success!", "", "success");
-	               $modalInstance.close();
+	               $uibModalInstance.close();
 	               categoryList();
 	              }else{
 	                SweetAlert.swal({

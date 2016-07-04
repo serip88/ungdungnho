@@ -44,7 +44,7 @@
 	    return productObject;
 	}]);
 
-	app.controller('ProductCtrl', ['$scope', '$modal', '$log', 'openModal', 'SweetAlert', 'productService', function($scope, $modal, $log, openModal, SweetAlert, productService) {
+	app.controller('ProductCtrl', ['$scope', '$log', 'openModal', 'SweetAlert', 'productService', function($scope, $log, openModal, SweetAlert, productService) {
 		$scope.checkAll = function() {
 	    	$scope.products.selected = $scope.products.roles.map(function(item) { return item.id; });
 	    };
@@ -85,12 +85,12 @@
 	        var modalObj = {
 		        templateUrl: adBaseUrl +'modal/product/add_product.html',
 		        size: size,
-		        controller: ['$scope', '$modalInstance', 'dataInit', function(scope, $modalInstance, dataInit){
+		        controller: ['$scope', '$uibModalInstance', 'dataInit', function(scope, $uibModalInstance, dataInit){
 		          	scope.product = {};
 		          	scope.categoryList = dataInit;
 		          	scope.categoryList.push({id:0,path_parent_name_vn:'[Không danh mục]',path_parent_name_en:'[No Category]'});
 		           	scope.cancel = function(){
-		            	$modalInstance.close();
+		            	$uibModalInstance.close();
 		           	};
 		          	scope.ok = function(invalid){
 			            if(!validateAddProduct() || invalid){
@@ -100,7 +100,7 @@
 			            productService.httpPost(productApi.productSave,scope.product).then(function(responseData) {
 			                if(responseData.status) {
 			                 	SweetAlert.swal("Add product success!", "", "success");
-			                 	$modalInstance.close();
+			                 	$uibModalInstance.close();
 			                 	productList();
 			                }
 			            });
@@ -133,13 +133,15 @@
 		    var modalObj = {
 		      templateUrl: adBaseUrl +'modal/product/add_product.html',
 		      size: size,
-		      controller: ['$scope', '$modalInstance','dataInit', function(scope, $modalInstance, dataInit){
+		      controller: ['$scope', '$uibModalInstance','dataInit', function(scope, $uibModalInstance, dataInit){
+				scope.popover = {title: 'Title', content: '', templateUrl: adBaseUrl +'catalog/product/popover/edit_image.html'};
+
 		        scope.product = angular.copy(item);
 		        scope.categoryList = dataInit;
 		        scope.categoryList.push({id:0,name_vn:'[Không danh mục]',name_en:'[No Category]'});
 		        scope.product.parent_selected = {id:item.parent_id};
 		        scope.cancel = function(){
-		          $modalInstance.close();
+		          $uibModalInstance.close();
 		        };
 		        scope.ok = function(invalid){
 		        	if(!validateEditProduct() || invalid){
@@ -149,7 +151,7 @@
 		          	productService.httpPost(productApi.productEdit,scope.product).then(function(responseData) {
 		              if (responseData.status) {
 		               SweetAlert.swal("Edit Product success!", "", "success");
-		               $modalInstance.close();
+		               $uibModalInstance.close();
 		               productList();
 		              }else{
 		                SweetAlert.swal({
@@ -168,7 +170,10 @@
 		              return 1;
 		            } 
 	          	};
-		        }]
+	          	scope.editImage = function(el){
+	          		alert(1);
+	          	};
+		    }]
 		    };
 		    modalObj.resolve = {
 		        dataInit: function(){
