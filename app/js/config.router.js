@@ -372,9 +372,28 @@ angular.module('app')
                   url: '/product',
                   templateUrl: adBaseUrl+'catalog_product.html',
                   resolve: {
-                      deps: ['uiLoad',
-                        function( uiLoad ){
-                          return uiLoad.load( [baseUrl+'js/controllers/product.js'] );
+                      deps: ['$ocLazyLoad',
+                        function( $ocLazyLoad ){
+                          /*return $ocLazyLoad.load('angularFileUpload').then(
+                            function(){
+                              return $ocLazyLoad.load( [baseUrl+'js/controllers/product.js', 
+                                baseUrl+'js/controllers/file-upload.js',
+                                baseUrl+'js/controllers/upload.js'
+                              ]);
+                            }
+                          );*/
+                          return $ocLazyLoad.load('ngFileUpload').then(
+                            function(){
+                              return $ocLazyLoad.load( [baseUrl+'js/controllers/product.js', 
+                                baseUrl+'js/controllers/upload.js'
+                              ]);
+                            }
+                          ),$ocLazyLoad.load('angularFileUpload').then(
+                            function(){
+                              return $ocLazyLoad.load( [baseUrl+'js/controllers/file-upload.js'
+                              ]);
+                            }
+                          )
                       }]
                   }
               })

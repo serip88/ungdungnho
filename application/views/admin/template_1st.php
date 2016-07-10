@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="<?php echo base_url();?>app/css/simple-line-icons.css" type="text/css" />
   <link rel="stylesheet" href="<?php echo base_url();?>app/css/font.css" type="text/css" />
   <link rel="stylesheet" href="<?php echo base_url();?>app/css/app.css" type="text/css" />
+  <link rel="stylesheet" href="<?php echo base_url();?>app/css/style.css" type="text/css" />
+  <!--<link rel="stylesheet" href="http://www.guriddo.net/demo/css/trirand/ui.jqgrid.css" type="text/css" />-->
 </head>
 <body>
 <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}"  ui-view>
@@ -31,6 +33,8 @@
   <!-- Vendor -->
   <script src="<?php echo base_url();?>app/vendor/angular/angular-ui-router/angular-ui-router.js"></script> 
   <script src="<?php echo base_url();?>app/vendor/angular/ngstorage/ngStorage.js"></script>
+  
+ 
 
   <!-- bootstrap -->
   <!--<script src="<?php echo base_url();?>app/vendor/angular/angular-bootstrap/ui-bootstrap-tpls.js"></script>-->

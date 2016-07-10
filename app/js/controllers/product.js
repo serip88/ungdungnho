@@ -170,9 +170,10 @@
 		              return 1;
 		            } 
 	          	};
-	          	scope.editImage = function(el){
-	          		alert(1);
-	          	};
+	          	scope.cleanInput = function(obj) {
+			    	var a = document.getElementsByClassName('bootstrap-filestyle') ;
+			    	$(a).find('input').val('');
+		    	}
 		    }]
 		    };
 		    modalObj.resolve = {
