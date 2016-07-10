@@ -382,15 +382,11 @@ angular.module('app')
                               ]);
                             }
                           );*/
-                          return $ocLazyLoad.load('ngFileUpload').then(
+                          return $ocLazyLoad.load(['ngFileUpload','angularFileUpload']).then(
                             function(){
                               return $ocLazyLoad.load( [baseUrl+'js/controllers/product.js', 
-                                baseUrl+'js/controllers/upload.js'
-                              ]);
-                            }
-                          ),$ocLazyLoad.load('angularFileUpload').then(
-                            function(){
-                              return $ocLazyLoad.load( [baseUrl+'js/controllers/file-upload.js'
+                                baseUrl+'js/controllers/upload.js',
+                                baseUrl+'js/controllers/file-upload.js'
                               ]);
                             }
                           )

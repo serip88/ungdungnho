@@ -46,13 +46,17 @@ app.controller('MyCtrl', ['$scope', '$http', '$timeout', '$compile', 'Upload', f
 
   $scope.upload = function(file, resumable) {
     $scope.errorMsg = null;
-    if ($scope.howToSend === 1) {
-      uploadUsingUpload(file, resumable);
-    } else if ($scope.howToSend == 2) {
-      uploadUsing$http(file);
-    } else {
-      uploadUsingUpload(file, resumable);
-      //uploadS3(file);
+    if(file.size <= $scope.chunkSize){
+      if ($scope.howToSend === 1) {
+        uploadUsingUpload(file, resumable);
+      } else if ($scope.howToSend == 2) {
+        uploadUsing$http(file);
+      } else {
+        uploadUsingUpload(file, resumable);
+        //uploadS3(file);
+      }
+    }else{
+      $scope.errorMsg = 'Size overload';
     }
   };
 
@@ -68,7 +72,7 @@ app.controller('MyCtrl', ['$scope', '$http', '$timeout', '$compile', 'Upload', f
     }
   };
 
-  $scope.chunkSize = 100000;
+  $scope.chunkSize = 200000;
   function uploadUsingUpload(file, resumable) {
     file.upload = Upload.upload({
       url: 'http://ungdungnho.localhost/app/js/controllers/upload.php' + $scope.getReqParams(),
