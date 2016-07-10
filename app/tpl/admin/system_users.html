@@ -17,12 +17,13 @@
         <div class="container-fluid">
           <div class="pull-right"  >
               <a ng-click="openAddUser('lg')" data-toggle="tooltip" title="Add user" class="btn btn-primary" data-original-title="Add New"><i class="fa fa-plus"></i></a>
-              <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" onClick="confirm('Are you sure?') ? $('#form-user').submit() : false;" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+              <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" data-ng-click="deleteUser()" data-original-title="Delete"><i class="fa fa-trash-o"></i></button> 
+              <!-- onClick="confirm('Are you sure?') ? $('#myform').submit() : false;"  -->
           </div>
           <h1 class="pull-left">Users</h1>
           <ul class="breadcrumb pull-left">
-            <li><a href="http://dm-opencart.localhost/admin/index.php?route=common/dashboard&amp;token=2ZTnUtHITXGsI7HquT095oijzDUvgDgy">Home</a></li>
-            <li><a href="http://dm-opencart.localhost/admin/index.php?route=user/user&amp;token=2ZTnUtHITXGsI7HquT095oijzDUvgDgy">Users</a></li>
+            <li><a >Home</a></li>
+            <li><a >Users</a></li>
           </ul>
         </div>
       </div>
@@ -32,21 +33,32 @@
             <h3 class="panel-title"><i class="fa fa-list"></i> User List</h3>
           </div>
           <div class="panel-body">
-            <form action="http://dm-opencart.localhost/admin/index.php?route=user/user/delete&amp;token=2ZTnUtHITXGsI7HquT095oijzDUvgDgy" method="post" enctype="multipart/form-data" id="form-user">
+            <form  method="post" enctype="multipart/form-data" id="form-user">
               <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <td style="width: 1px;" class="text-center"><input type="checkbox" onClick="$('input[name*=\'selected\']').prop('checked', this.checked);"></td>
-                      <td class="text-left"><a href="http://dm-opencart.localhost/admin/index.php?route=user/user&amp;token=2ZTnUtHITXGsI7HquT095oijzDUvgDgy&amp;sort=username&amp;order=DESC" class="asc">Username</a></td>
-                      <td class="text-left"><a href="http://dm-opencart.localhost/admin/index.php?route=user/user&amp;token=2ZTnUtHITXGsI7HquT095oijzDUvgDgy&amp;sort=status&amp;order=DESC">Status</a></td>
-                      <td class="text-left"><a href="http://dm-opencart.localhost/admin/index.php?route=user/user&amp;token=2ZTnUtHITXGsI7HquT095oijzDUvgDgy&amp;sort=date_added&amp;order=DESC">Date Added</a></td>
+                      <td style="width: 1px;" class="text-center"> 
+                        <a data-ng-click="checkAll()"><i class="fa fa-check text-success hide"></i></a>
+                        <a data-ng-click="uncheckAll()"><i class="fa fa-times text-danger hide"></i></a>
+                        <label class="i-checks m-b-none">
+                        <input type="checkbox" onClick="$('input[name*=\'selected\']').prop('checked', this.checked);" data-ng-click="isCheckAll();">
+                        <i></i></label>
+                      </td>
+                      <td class="text-left"> 
+                        <a class="asc"> {{user.selected}}  Username</a></td>
+                      <td class="text-left"><a >Status</a></td>
+                      <td class="text-left"><a >Date Added</a></td>
                       <td class="text-right">Action</td>
                     </tr>
                   </thead>
                   <tbody>
                     <tr ng-repeat="(key, value) in userList">
-                      <td class="text-center"><input type="checkbox" name="selected[]" value="1"></td>
+                      <td class="text-center">
+                        <label class="i-checks m-b-none" data-ng-click="myform.selected.click()">
+                        <input type="checkbox" checklist-model="user.selected" name="selected[]"  checklist-value="value.user_id">
+                        <i></i></label>
+                      </td>
                       <td class="text-left">{{value.username}}</td>
                       <td class="text-left">{{value.ui_status}}</td>
                       <td class="text-left">{{value.ui_date_added}}</td>

@@ -13,6 +13,9 @@ angular.module('app', [
     'ui.load',
     'ui.jq',
     'ui.validate',
+    'checklist-model',
+    'oitozero.ngSweetAlert',
     'oc.lazyLoad',
-    'pascalprecht.translate'
+    'pascalprecht.translate',
+    'mgcrea.ngStrap'
 ]);

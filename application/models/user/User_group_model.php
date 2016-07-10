@@ -7,7 +7,7 @@ class User_Group_Model extends Starter_Model{
     public function __construct() {
         parent::__construct();
         $this->load->helper('url');
-        $this->_tb_name="user_group";
+        $this->_tb_name="rz_user_group";
     }
     
     

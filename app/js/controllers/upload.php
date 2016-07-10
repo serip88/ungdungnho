@@ -1,5 +1,5 @@
 <?php
-
+//header('Access-Control-Allow-Origin: *'); 
 if ( !empty( $_FILES ) ) {
 
     $tempPath = $_FILES[ 'file' ][ 'tmp_name' ];

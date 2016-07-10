@@ -1,6 +1,6 @@
 app.controller('FileUploadCtrl', ['$scope', 'FileUploader', function($scope, FileUploader) {
     var uploader = $scope.uploader = new FileUploader({
-        url: 'js/controllers/upload.php'
+        url: baseUrl+'js/controllers/upload.php'
     });
 
     // FILTERS
@@ -8,7 +8,7 @@ app.controller('FileUploadCtrl', ['$scope', 'FileUploader', function($scope, Fil
     uploader.filters.push({
         name: 'customFilter',
         fn: function(item /*{File|FileLikeObject}*/, options) {
-            return this.queue.length < 10;
+            return this.queue.length < 1;
         }
     });
 

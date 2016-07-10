@@ -1,0 +1,4 @@
+.txt-o-flow{
+	text-overflow: ellipsis;	
+	overflow: hidden;
+}

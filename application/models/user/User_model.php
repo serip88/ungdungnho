@@ -7,7 +7,7 @@ class User_Model extends Starter_Model{
     public function __construct() {
         parent::__construct();
         $this->load->helper('url');
-        $this->_tb_name="user";
+        $this->_tb_name="rz_user";
     }
     
 }
