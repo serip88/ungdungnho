@@ -19,12 +19,42 @@ angular.module('app')
           $urlRouterProvider
               .otherwise('/access/signin');
           $stateProvider
-              .state('app', {
+              .state('root', {
+                  url: '',
+                  templateUrl: adBaseUrl+'app_ctrl.html',/*
+                  resolve: {
+                    promiseObj:  function($http,loginService){
+                      // $http returns a promise for the url data
+                      $http({method: 'GET', url: [baseConfig.apiUrl, 'user/user_ss'].join('/')})
+                        .success(function (data) {
+                          if(typeof(data.user_data)){
+                            angular.copy(data.user_data, loginService.syn.user_data);
+                          }else{
+                            $state.go('root.access.signin');
+                          }
+                      });
+                    }
+                  },
+                  controller: 'AppCtrl'*/
+              })
+              .state('root.app', {
                   abstract: true,
                   url: '/app',
-                  templateUrl: adBaseUrl+'app.html'
+                  templateUrl: adBaseUrl+'app.html'/*,
+                  resolve: {
+                    promiseObj:  function($http,loginService){
+                      // $http returns a promise for the url data
+                      $http({method: 'GET', url: [baseConfig.apiUrl, 'user/user_ss'].join('/')})
+                        .success(function (data) {
+                          if(typeof(data.user_data)){
+                            angular.copy(data.user_data, loginService.syn.user_data);
+                          }
+                      });
+                    }
+                  },
+                  controller: 'AppCtrl'*/
               })
-              .state('app.dashboard', {
+              .state('root.app.dashboard', {
                   url: '/dashboard',
                   templateUrl: adBaseUrl+'app_dashboard_v1.html',
                   resolve: {
@@ -184,7 +214,7 @@ angular.module('app')
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad){
-                          return uiLoad.load('js/controllers/form.js');
+                          return uiLoad.load(baseUrl+'js/controllers/form.js');
                       }]
                   }
               })
@@ -194,7 +224,7 @@ angular.module('app')
               })
               .state('app.form.validation', {
                   url: '/validation',
-                  templateUrl: 'tpl/form_validation.html'
+                  templateUrl: adBaseUrl+'form_validation.html'
               })
               .state('app.form.wizard', {
                   url: '/wizard',
@@ -303,35 +333,93 @@ angular.module('app')
                   templateUrl: 'tpl/docs.html'
               })
               // system
-              .state('app.system', {
+              .state('root.app.system', {
                   url: '/system',
                   template: '<div ui-view class="fade-in-down"></div>',
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad ){
                           return uiLoad.load( [baseUrl+'js/app/user/user.js',
+                                              baseUrl+'js/app/user/user_groups.js',
                                               baseUrl+'vendor/libs/moment.min.js'] );
                       }]
                   }
               })
-              .state('app.system.users', {
+              .state('root.app.system.users', {
                   url: '/users',
                   templateUrl: adBaseUrl+'system_users.html'
               })
-              .state('app.system.user_groups', {
+              .state('root.app.system.user_groups', {
                   url: '/user_groups',
                   templateUrl: adBaseUrl+'system_user_groups.html'
+              })
+              //category
+              .state('root.app.catalog', {
+                  url: '/catalog',
+                  template: '<div ui-view class="fade-in-down"></div>'
+              })
+              .state('root.app.catalog.category', {
+                  url: '/category',
+                  templateUrl: adBaseUrl+'catalog_category.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( [baseUrl+'js/controllers/category.js'] );
+                      }]
+                  }
+              })
+              .state('root.app.catalog.product', {
+                  url: '/product',
+                  templateUrl: adBaseUrl+'catalog_product.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                        function( $ocLazyLoad ){
+                          /*return $ocLazyLoad.load('angularFileUpload').then(
+                            function(){
+                              return $ocLazyLoad.load( [baseUrl+'js/controllers/product.js', 
+                                baseUrl+'js/controllers/file-upload.js',
+                                baseUrl+'js/controllers/upload.js'
+                              ]);
+                            }
+                          );*/
+                          return $ocLazyLoad.load('ngFileUpload').then(
+                            function(){
+                              return $ocLazyLoad.load( [baseUrl+'js/controllers/product.js', 
+                                baseUrl+'js/controllers/upload.js'
+                              ]);
+                            }
+                          ),$ocLazyLoad.load('angularFileUpload').then(
+                            function(){
+                              return $ocLazyLoad.load( [baseUrl+'js/controllers/file-upload.js'
+                              ]);
+                            }
+                          )
+                      }]
+                  }
               })
               // others
               .state('lockme', {
                   url: '/lockme',
                   templateUrl: 'tpl/page_lockme.html'
               })
-              .state('access', {
+              .state('root.access', {
                   url: '/access',
-                  template: '<div ui-view class="fade-in-right-big smooth"></div>'
+                  template: '<div ui-view class="fade-in-right-big smooth"></div>',
+                  /*  resolve: {
+                    promiseObj:  function($http,loginService){
+                      // $http returns a promise for the url data
+                      alert(222);
+                      $http({method: 'GET', url: [baseConfig.apiUrl, 'user/user_ss'].join('/')})
+                        .success(function (data) {
+                          if(typeof(data.user_data)){
+                            angular.copy(data.user_data, loginService.syn.user_data);
+                          }
+                      });
+                    }
+                  },
+                  controller: 'AppCtrl'*/
               })
-              .state('access.signin', {
+              .state('root.access.signin', {
                   url: '/signin',
                   templateUrl: adBaseUrl+'page_signin.html',
                   resolve: {
@@ -361,7 +449,7 @@ angular.module('app')
               })
 
               // fullCalendar
-              .state('app.calendar', {
+              .state('root.app.calendar', {
                   url: '/calendar',
                   templateUrl: adBaseUrl+'app_calendar.html',
                   // use resolve to load other dependences

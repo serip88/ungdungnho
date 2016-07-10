@@ -64,7 +64,15 @@ angular.module('app')
               {
                   name:'angularFileUpload',
                   files: [
-                    'vendor/modules/angular-file-upload/angular-file-upload.min.js'
+                      baseUrl+'vendor/modules/angular-file-upload/2.3.4/angular-file-upload.min.js'
+                  ]
+              },
+              {
+                  name:'ngFileUpload',
+                  files: [
+                      baseUrl+'vendor/modules/ng-file-upload/12.0.4/common.css',
+                      baseUrl+'vendor/modules/ng-file-upload/12.0.4/ng-file-upload-shim.js',
+                      baseUrl+'vendor/modules/ng-file-upload/12.0.4/ng-file-upload.js'
                   ]
               },
               {

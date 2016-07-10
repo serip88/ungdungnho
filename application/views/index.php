@@ -7,12 +7,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Đầm dạ hội đẹp</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>public/css/bt-3.3.5-dist/css/bootstrap.css" />
-<link rel="stylesheet" href="<?php echo base_url();?>public/css/ace/font-awesome.min.css" />
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>public/css/ace/css/ace.min.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>public/bt-3.3.5-dist/css/bootstrap.css" />
+<link rel="stylesheet" href="<?php echo base_url();?>public/ace/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>public/ace/css/ace.min.css" />
 <script src="<?php echo base_url();?>public/js/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="<?php echo base_url();?>public/css/bt-3.3.5-dist/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>public/css/style.css" />
+<script src="<?php echo base_url();?>public/bt-3.3.5-dist/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>public/style.css" />
 </head>
 
 <body>

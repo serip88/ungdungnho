@@ -58,10 +58,16 @@
         "FORGOT_PASSWORD" : "Forgot password",
         "404" : "404"
       },
-      "system" : {
+      "rz_system" : {
         "SYSTEM" : "System",
         "USERS" : "Users",
         "USER_GROUPS" : "User Groups"
+      },
+      "rz_category" : {
+        "CATALOG" : "Catalog",
+        "CATEGORY" : "Category",
+        "PRODUCT" : "Product",
+        "ATTRIBUTE" : "Attribute"
       }
     },
     "your_stuff" : {

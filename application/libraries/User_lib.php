@@ -1,20 +1,21 @@
 <?php
 /*
   +------------------------------------------------------------------------+
-  | Copyright (C) 2015 Hanbiro Inc.                                        |
+  | Copyright (C) 2016 Toigiaitri.                                        |
   |                                                                        |
   | This program is free software; you can redistribute it and/or          |
-  | modify it under the terms of the Hanbiro  License                      |
+  | modify it under the terms of the Toigiaitri  License                      |
   |                                                                        |
   +------------------------------------------------------------------------+
   | o Developer : Rain                                                     |
-  | o HomePage  : http://www.hanbiro.com/                                  |
-  | o Email     : vu.nguyen@hanbiro.com                                    |
+  | o HomePage  : http://www.toigiaitri.net/                               |
+  | o Email     : serip88@gmail.com                                        |
   +------------------------------------------------------------------------+
  */
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-class User_lib {
+require APPPATH . '/libraries/Common_lib.php';
+class User_lib extends Common_lib {
   protected $CI = null ;
   protected $_lang ;
 
@@ -43,7 +44,8 @@ class User_lib {
   }
   function format_user_list($data){
     foreach ($data as $key => $value) {
-      list($date, $time) = explode(' ',$value['date_added']);
+      //list($date, $time) = explode(' ',$value['date_added']);
+      $date = date("Y-m-d H:i", time());
       $data[$key]['ui_date_added'] = $date;
       $data[$key]['ui_status'] =  $value['status']?$this->_lang['user_status_enabled']:$this->_lang['user_status_disabled'];
     }
@@ -53,7 +55,7 @@ class User_lib {
 
     $select="A.user_id,A.user_group_id,A.username,A.salt,A.firstname,A.lastname,A.email,A.image,A.date_added,B.name";
     $tb_join = array();
-    $tb_join[] = array('table_name'=>'user_group as B','condition'=>"A.user_group_id =B.user_group_id", 'type'=>'left');
+    $tb_join[] = array('table_name'=>'rz_user_group as B','condition'=>"A.user_group_id =B.user_group_id", 'type'=>'left');
     $where = array("A.user_id"=>$user_id);
     $data = $this->CI->User_Model->get_data_join($select,$where,$tb_join,1);
     if($data){
@@ -61,6 +63,26 @@ class User_lib {
     }else{
       return 0;  
     }
+  }
+  function get_user_by_email($user_email){
+    $select="A.user_id,A.user_group_id,A.username,A.salt,A.firstname,A.lastname,A.email,A.image,A.date_added,A.status,B.name";
+    $tb_join = array();
+    $tb_join[] = array('table_name'=>'rz_user_group as B','condition'=>"A.user_group_id =B.user_group_id", 'type'=>'left');
+    $where = array("A.email"=>$user_email);
+    $data = $this->CI->User_Model->get_data_join($select,$where,$tb_join,1);
+    if($data){
+      return $data[0];
+    }else{
+      return 0;  
+    }
+  }
+  function check_user($where = array()){
+    if($where){
+      $data = $this->CI->User_Model->get_total($where);
+      return $data;
+    }else
+      return 1;
+      
   }
   function get_user_group(){
 
@@ -100,8 +122,8 @@ class User_lib {
     $data['salt'] = $this->generateRandomString();
     $data['password'] = md5($data['salt'].$param['password']);
     $data['code'] = '';
-    $data['ip']   = '127.0.0.1';//$param['ip'];
-    $data['date_added'] = date ( "Y-m-d H:i:s", time());
+    $data['ip']   = $_SERVER["REMOTE_ADDR"];//$param['ip'];
+    $data['date_added'] = time();
     $data['status'] = $param['status'];
     $id = $this->CI->User_Model->insert_data($data);
     return $id;
@@ -148,26 +170,110 @@ class User_lib {
       }
     }
     $data['code'] = 'code';
-    $data['ip']   = '127.0.0.1';//$param['ip'];
-    $data['updated_date'] = date ( "Y-m-d H:i:s", time());
+    $data['ip']   = $_SERVER["REMOTE_ADDR"];//$param['ip'];
+    $data['updated_date'] = time();
     $data['status'] = $param['status'];
     if(isset($param['user_id']) && $param['user_id']){
       $where = array("user_id"=> $param['user_id']);
-      $stt = $this->CI->User_Model->update_data($data,$where);
+      $stt = $this->CI->User_Model->update_data($data,$where); 
       return $stt;
     }else{
       return FALSE;
     }
     
   }
-  function generateRandomString($length = 9) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
-  }
   
+  function user_delete($user_id){
+    if($user_id){
+      $where = array("user_id"=>$user_id);
+      $stt = $this->CI->User_Model->delete_data($where);
+      return $stt;
+    }else
+      return false;
+      
+  }
+  function set_user_session($user_data){      
+      $_SESSION['user_data'] = $user_data;
+  }
+  function get_user_session(){  
+      if(isset($_SESSION['user_data']) && $_SESSION['user_data']){
+        return $_SESSION['user_data'];
+      }else{
+        return '';
+      }   
+  }
+  function unset_user_session(){
+    $_SESSION['user_data'] = '';
+  }
+
+  function validate_save_user_group($param){
+    $requite = array('user_group_name');
+    $param['user_group_name'] = isset($param['user_group_name']) && $param['user_group_name'] ?$param['user_group_name']: null;
+    foreach ($requite as $key => $value) {
+      if(!$param[$value]){
+        return 0;
+      }
+    }
+    if(!isset($param['access_selected']) || !isset($param['modify_selected']) ){
+      return 0;
+    }
+    return $param;
+  }
+  function save_user_group($param){
+    $data =array();
+    $permission = array('access'=>$param['access_selected'],'modify'=>$param['modify_selected'] );
+    $data['name'] = $param['user_group_name'];
+    $data['permission'] = json_encode($permission);
+    $id = $this->CI->User_Group_Model->insert_data($data);
+    return $id;
+  }
+  function get_user_group_detail($group_id){
+
+    $select="user_group_id as id,name,permission";
+    $where = array('user_group_id'=>$group_id);
+    $data = $this->CI->User_Group_Model->get_data($select,$where);
+    if($data){
+      return $data[0];
+    }else{
+      return 0;  
+    }
+  }
+
+  function validate_edit_user_group($param){
+    $requite = array('user_group_name','id');
+    $param['user_group_name'] = isset($param['user_group_name']) && $param['user_group_name'] ?$param['user_group_name']: null;
+    $param['id'] = isset($param['id']) && $param['id'] ?$param['id']: 0;
+    foreach ($requite as $key => $value) {
+      if(!$param[$value]){
+        return 0;
+      }
+    }
+    if(!isset($param['access_selected']) || !isset($param['modify_selected']) ){
+      return 0;
+    }
+
+    return $param;
+  }
+  function edit_user_group($param){
+    if(isset($param['id']) && $param['id']){
+      $data =array();
+      $permission = array('access'=>$param['access_selected'],'modify'=>$param['modify_selected'] );
+      $data['name'] = $param['user_group_name'];
+      $data['permission'] = json_encode($permission);
+      $where = array("user_group_id"=> $param['id']);
+      $stt = $this->CI->User_Group_Model->update_data($data,$where); 
+      return $stt;
+    }else{
+      return false;
+    }
+
+  }
+  function user_group_delete($group_id){
+    if($group_id){
+      $where = array("user_group_id"=>$group_id);
+      $stt = $this->CI->User_Group_Model->delete_data($where);
+      return $stt;
+    }else
+      return false;
+  }
 }

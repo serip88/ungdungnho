@@ -5,6 +5,7 @@ application/cache/*
 !application/cache/.htaccess
 
 application/logs/*
+application/views/templates_c/*
 !application/logs/index.html
 !application/logs/.htaccess
 
@@ -12,7 +13,8 @@ user_guide_src/build/*
 user_guide_src/cilexer/build/*
 user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
-/vendor/
+app/vendor/
+app/js/controllers/uploads/
 
 # IDE Files
 #-------------------------
@@ -26,3 +28,4 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-workspace
 *.sublime-project
 app/js/lib/Validation-Engine
+_backup

@@ -3,7 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
-require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . '/libraries/Base_controller.php';
 
 /**
  * This is an example of a few basic user interaction methods you could use
@@ -16,7 +16,7 @@ require APPPATH . '/libraries/REST_Controller.php';
  * @license         MIT
  * @link            https://github.com/chriskacerguis/codeigniter-restserver
  */
-class User extends REST_Controller {
+class User extends Base_controller {
 
     function __construct()
     {
@@ -28,6 +28,7 @@ class User extends REST_Controller {
         $this->methods['user_get']['limit'] = 500; // 500 requests per hour per user/key
         $this->methods['user_post']['limit'] = 100; // 100 requests per hour per user/key
         $this->methods['user_delete']['limit'] = 50; // 50 requests per hour per user/key
+        
     }
 
     public function user_get()
@@ -77,7 +78,17 @@ class User extends REST_Controller {
             'user_group' => $data_group,
         ], REST_Controller::HTTP_OK);
     }
-    
+    public function user_ss_get()
+    {
+        $status = false;
+        $data_user = $this->user_lib->get_user_session();
+        if($data_user){
+            $status = true;
+        }
+        $response = array('status' => $status, 'user_data'=> $data_user);
+        $this->custom_response($response);
+    }
+
     public function user_group_get()
     {
         $data = $this->user_lib->get_user_group();
@@ -93,25 +104,21 @@ class User extends REST_Controller {
     }
     public function user_save_post(){
         $param = $this->post();
+        $stt=FALSE;
+        $msg='';
         $param = $this->user_lib->validate_save_user($param);
         if($param){
-            $id = $this->user_lib->save_user($param);
-        }else{
-            $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST);// BAD_REQUEST (400) being the HTTP response code
+            $stt = $this->user_lib->save_user($param);
+            if(!$stt){
+                $msg = 'Error! Cannot create user.';
+            }
         }
-        if($id)
-            $stt=TRUE;
-        else 
-            $stt=FALSE;
-        $this->set_response([
-            'status' => $stt,
-            'rows' => $id
-        ], REST_Controller::HTTP_OK);
+        $response = array('status' => $stt,'msg'=> $msg);
+        $this->custom_response($response);
     }
     public function user_edit_post(){
         $param = $this->post();
         $param = $this->user_lib->validate_edit_user($param);
-        
         if($param){
             $id = $this->user_lib->edit_user($param);
         }else{
@@ -140,7 +147,33 @@ class User extends REST_Controller {
 
         $this->set_response($message, REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
     }*/
-
+    public function user_delete_post(){
+        $params = $this->post();
+        $users_id = isset($params['user_delete']) && $params['user_delete']?$params['user_delete']:array();
+        $msg = '';
+        $status = false;
+        $count_false = 0;
+        if(count($users_id)){
+            foreach ($users_id as $key => $id) {
+                try {
+                    $stt = $this->user_lib->user_delete($id);
+                    if(!$stt)
+                        $count_false = $count_false +1;    
+                } catch (Exception $e) {
+                    $count_false = $count_false +1;
+                    //echo 'Caught exception: ',  $e->getMessage(), "\n";
+                }
+            }
+        } 
+        if($count_false == 0){
+            $status = true;
+            $msg = 'delete success';
+        }else{
+            $msg = 'delete false';
+        }
+        $response = array('status' => $status,'msg' => $msg);
+        $this->custom_response($response);
+    }
     public function users_delete()
     {
         $id = (int) $this->get('id');
@@ -160,5 +193,5 @@ class User extends REST_Controller {
 
         $this->set_response($message, REST_Controller::HTTP_NO_CONTENT); // NO_CONTENT (204) being the HTTP response code
     }
-
+   
 }

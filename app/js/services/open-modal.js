@@ -1,5 +1,5 @@
 
-app.service('openModal', ['$modal', '$rootScope', '$document', '$timeout', function ($modal, $rootScope, $document, $timeout) {
+app.service('openModal', ['$uibModal', '$rootScope', '$document', '$timeout', function ($uibModal, $rootScope, $document, $timeout) {
     var windowSize = 'small';
     function resetWindowSize() {
         windowSize = 'small';
@@ -40,7 +40,7 @@ app.service('openModal', ['$modal', '$rootScope', '$document', '$timeout', funct
         return template;
     }
     var getController = function (obj) {
-        return ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+        return ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
           if (isObject(obj.ok)) {
               $scope.ok = function () {
                   if (obj.ok.hasOwnProperty('fn') && isFunction(obj.ok.fn)) {
@@ -58,7 +58,7 @@ app.service('openModal', ['$modal', '$rootScope', '$document', '$timeout', funct
               };
           }
           $scope.cancel = function (yesno) {
-              $modalInstance.close(yesno);
+              $uibModalInstance.close(yesno);
               if (obj.hasOwnProperty('callback') && isFunction(obj.callback))
               {
                   obj.callback();
@@ -71,7 +71,7 @@ app.service('openModal', ['$modal', '$rootScope', '$document', '$timeout', funct
             windowClass: 'modal-type1 ' + windowSize,
             backdrop : 'static'
         }
-        var modal = $modal.open(extend(defaultOptions, obj));
+        var modal = $uibModal.open(extend(defaultOptions, obj));
         resetWindowSize();
         // to keep modal-open class for parent modal
          modal.result.then(function () {

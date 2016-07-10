@@ -20,7 +20,11 @@ angular.module('app')
         app.constant   = $provide.constant;
         app.value      = $provide.value;
     }
-  ])
+  ]).config(function($popoverProvider) {
+    angular.extend($popoverProvider.defaults, {
+      html: true
+    });
+  })
   .config(['$translateProvider', function($translateProvider){
     // Register a loader for the static files
     // So, the module will search missing translation tables under the specified urls.
