@@ -129,6 +129,8 @@ class Base_controller extends REST_Controller {
             'product/delete'        =>['api'=>'product/delete','deny_guest'=>1,'deny_user'=>0],
             'product/product_list'  =>['api'=>'product/product_list','deny_guest'=>1,'deny_user'=>0],
 
+            'upload/upload_img_user'=>['api'=>'upload/upload_img_user','deny_guest'=>1,'deny_user'=>0],
+
         );
         return $api;
     }

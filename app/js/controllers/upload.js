@@ -72,14 +72,16 @@ app.controller('MyCtrl', ['$scope', '$http', '$timeout', '$compile', 'Upload', f
     }
   };
 
-  $scope.chunkSize = 200000;
+  $scope.chunkSize = 2000000;
   function uploadUsingUpload(file, resumable) {
     file.upload = Upload.upload({
-      url: 'http://ungdungnho.localhost/app/js/controllers/upload.php' + $scope.getReqParams(),
+      //url: 'http://ungdungnho.localhost/app/js/controllers/upload.php' + $scope.getReqParams(),
+      url: baseConfig.host+'api/upload/upload_img_user' + $scope.getReqParams(),
       //resumeSizeUrl: resumable ? 'https://angular-file-upload-cors-srv.appspot.com/upload?name=' + encodeURIComponent(file.name) : null,
-      resumeChunkSize: resumable ? $scope.chunkSize : null,
+      //resumeChunkSize: resumable ? $scope.chunkSize : null,
+      method: 'POST',
       headers: {
-        'Content-Type': 'undefined'
+        'Content-Type': file.type
       },
       data: {username: $scope.username, file: file}
     });
@@ -103,7 +105,8 @@ app.controller('MyCtrl', ['$scope', '$http', '$timeout', '$compile', 'Upload', f
 
   function uploadUsing$http(file) {
     file.upload = Upload.http({
-      url: 'http://ungdungnho.localhost/app/js/controllers/upload.php' + $scope.getReqParams(),
+      url: baseConfig.host+'api/upload/upload_img_user' + $scope.getReqParams(),
+      //url: 'http://ungdungnho.localhost/app/js/controllers/upload.php' + $scope.getReqParams(),
       method: 'POST',
       headers: {
         'Content-Type': file.type

@@ -5,6 +5,7 @@ var baseConfig = {};
     baseConfig.apiUrl = 'http://ungdungnho.localhost/api/';
     baseConfig.adminBaseUrl = 'http://ungdungnho.localhost/app/tpl/admin/';
     baseConfig.baseUrl = 'http://ungdungnho.localhost/app/';
+    baseConfig.host = 'http://ungdungnho.localhost/';
 var app =  
 angular.module('app')
   .config(
