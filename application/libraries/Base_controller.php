@@ -106,6 +106,7 @@ class Base_controller extends REST_Controller {
     }
     public function get_all_api(){
         $api = array(
+            'user/user_save'        =>['api'=>'user/user_save','deny_guest'=>1,'deny_user'=>0],
             'user/user_ss'          =>['api'=>'user/user_ss','deny_guest'=>0,'deny_user'=>0],
             'login/login'           =>['api'=>'login/login','deny_guest'=>0,'deny_user'=>1],
             'login/logout'          =>['api'=>'login/logout','deny_guest'=>1,'deny_user'=>0],
@@ -142,4 +143,12 @@ class Base_controller extends REST_Controller {
         }
         return ($a>$b)?1:-1;
     }
+    public function get_user_session(){  
+      if(isset($_SESSION['user_data']) && $_SESSION['user_data']){
+        return $_SESSION['user_data'];
+      }else{
+        return '';
+      }   
+    }
+   
 }

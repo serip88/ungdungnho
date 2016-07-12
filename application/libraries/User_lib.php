@@ -174,7 +174,7 @@ class User_lib extends Common_lib {
     $data['updated_date'] = time();
     $data['status'] = $param['status'];
     if(isset($param['user_id']) && $param['user_id']){
-      $where = array("user_id"=> $param['user_id']);
+      $where = array("user_id"=> $param['user_id'],"email"=> $param['email']);
       $stt = $this->CI->User_Model->update_data($data,$where); 
       return $stt;
     }else{

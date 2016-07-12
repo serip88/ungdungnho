@@ -52,7 +52,7 @@
             <div class="col-sm-10">
                 <div class="alert alert-danger" ng-show="errorMsg">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Danger!</strong> File too large max {{chunkSize / 1000000|number:1}}M.
+                    <strong>Danger!</strong> Have Problem or file too large max: {{chunkSize / 1000000|number:1}}M.
                 </div>
                 <div ngf-select ngf-drop ng-model="files" ngf-model-invalid="invalidFiles"
                      ng-model-options="modelOptionsObj"
