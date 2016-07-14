@@ -147,7 +147,7 @@
 		        	if(!validateEditProduct() || invalid){
 		              return;
 		            }
-		          	scope.product.parent_id = scope.product.parent_selected?scope.product.parent_selected.id:0;;
+		          	scope.product.parent_id = scope.product.parent_selected?scope.product.parent_selected.id:0;
 		          	productService.httpPost(productApi.productEdit,scope.product).then(function(responseData) {
 		              if (responseData.status) {
 		               SweetAlert.swal("Edit Product success!", "", "success");

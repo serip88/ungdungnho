@@ -107,7 +107,7 @@ var userApi = {
           $uibModalInstance.close();
         };
         scope.ok = function(invalid){
-          if(!validateAddUser() && invalid){
+          if(!validateAddUser() || invalid){
             return;
           }       
 
@@ -116,6 +116,13 @@ var userApi = {
                SweetAlert.swal("Add success!", "", "success");
                userList();
                $uibModalInstance.close();
+              }else{
+                SweetAlert.swal({
+                  title: responseData.msg,
+                  text: "",
+                  type: "warning",
+                  confirmButtonText: "Ok"
+                });
               }
           });
         };
@@ -225,12 +232,12 @@ var userApi = {
       controller: ['$scope', '$uibModalInstance','dataInit', function(scope, $uibModalInstance, dataInit){
         scope.newuser = item;
         scope.newuser.group_user = dataInit;
-        scope.newuser.user_group_id = {id:item.user_group_id};
+        scope.newuser.user_group_selected = {id:item.user_group_id};
         scope.cancel = function(){
           $uibModalInstance.close();
         };
         scope.ok = function(){
-          scope.newuser.user_group_id = scope.newuser.user_group_id.id;
+          scope.newuser.user_group_id = scope.newuser.user_group_selected?scope.newuser.user_group_selected.id:0;
           userService.httpPost(userApi.userEdit,scope.newuser).then(function(responseData) {
               if (responseData.status) {
                SweetAlert.swal("Edit user success!", "", "success");

@@ -108,9 +108,12 @@ class User extends Base_controller {
         $msg='';
         $param = $this->user_lib->validate_save_user($param);
         if($param){
-            $stt = $this->user_lib->save_user($param);
-            if(!$stt){
-                $msg = 'Error! Cannot create user.';
+            $res = $this->user_lib->save_user($param);
+            if(!$res['stt']){
+                $msg = $res['msg'];
+            }else{
+                $msg = 'Add User Success';
+                $stt = true;
             }
         }
         $response = array('status' => $stt,'msg'=> $msg);

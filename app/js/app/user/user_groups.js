@@ -73,7 +73,7 @@
             $uibModalInstance.close();
           };
           scope.ok = function(invalid){
-            if(!validateAddUser() && invalid){
+            if(!validateAddUser() || invalid){
               return;
             }       
             scope.newuser.access_selected = scope.usergroup.access_selected;
@@ -141,7 +141,7 @@
             $uibModalInstance.close();
           };
           scope.ok = function(invalid){
-            if(!validateAddUser() && invalid){
+            if(!validateAddUser() || invalid){
               return;
             }       
             scope.newuser.access_selected = scope.usergroup.access_selected;

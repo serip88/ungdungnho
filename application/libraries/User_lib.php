@@ -113,6 +113,9 @@ class User_lib extends Common_lib {
   }
 
   function save_user($param){
+    $stt = false;
+    $msg = "";
+    $res = array();
     $data =array();
     $data['user_group_id'] = $param['user_group_id'];
     $data['username'] = $param['username'];
@@ -125,8 +128,30 @@ class User_lib extends Common_lib {
     $data['ip']   = $_SERVER["REMOTE_ADDR"];//$param['ip'];
     $data['date_added'] = time();
     $data['status'] = $param['status'];
-    $id = $this->CI->User_Model->insert_data($data);
-    return $id;
+    //B check username,email
+      $select = array('select'=>'user_id,username,email');
+      $where = array('where'=> array(),'or_where'=> array());
+      $where['where'] = array('username'=>$param['username']);
+      $where['or_where'] = array('email'=>$param['email']);
+      $limit = array('type'=>'rows','limit'=>1);
+      $u_data = $this->CI->User_Model->get_dt($select,$where,$limit);  
+    //E check username,email
+      if(!$u_data){
+        $stt = $this->CI->User_Model->insert_data($data);
+      }else{
+        foreach ($u_data as $key => $value) {
+          if($value['username']==$param['username']){
+            $msg = 'This username not available';
+            break;
+          }elseif ($value['email']==$param['email']) {
+            $msg = 'This email already register';
+            break;
+          }
+        }
+      }
+      $res['stt']= $stt;
+      $res['msg']= $msg;
+    return $res;
   }
 
   function validate_edit_user($param){
@@ -173,8 +198,15 @@ class User_lib extends Common_lib {
     $data['ip']   = $_SERVER["REMOTE_ADDR"];//$param['ip'];
     $data['updated_date'] = time();
     $data['status'] = $param['status'];
-    if(isset($param['user_id']) && $param['user_id']){
-      $where = array("user_id"=> $param['user_id'],"email"=> $param['email']);
+    //B check email
+      $select = array('select'=>'user_id');
+      $where = array('where'=> array());
+      $where['where'] = array('email'=>$param['email']);
+      $limit = array('type'=>'int','limit'=>1);
+      $not_valid = $this->CI->User_Model->get_dt($select,$where,$limit);  
+    //E check email
+    if(isset($param['user_id']) && $param['user_id'] && $not_valid<=1){
+      $where = array("user_id"=> $param['user_id']);
       $stt = $this->CI->User_Model->update_data($data,$where); 
       return $stt;
     }else{
