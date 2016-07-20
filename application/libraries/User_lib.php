@@ -27,7 +27,7 @@ class User_lib extends Common_lib {
           'user/User_Model',
           ));
       $this->_config =  $this->CI->config;
-     $this->init_lang();
+      $this->init_lang();
   }
 
   function init_lang(){
@@ -151,6 +151,7 @@ class User_lib extends Common_lib {
       }
       $res['stt']= $stt;
       $res['msg']= $msg;
+      $res['user_id']= $stt;
     return $res;
   }
 

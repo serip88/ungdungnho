@@ -17,8 +17,6 @@ class Upload extends Base_controller {
         $this->load->library('upload_lib');
     }
 
-    
-    
     public function upload_img_user_post(){
         $msg = '';
         $status = false;

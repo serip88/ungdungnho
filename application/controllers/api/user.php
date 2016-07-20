@@ -114,27 +114,32 @@ class User extends Base_controller {
             }else{
                 $msg = 'Add User Success';
                 $stt = true;
+                $option_key = array('max_in_a_group','max_group','current_group','group_full_add_more');
+                $option = $this->get_option_key($option_key);
+                $response = $this->init_user_category($res['user_id'],$option);
             }
         }
         $response = array('status' => $stt,'msg'=> $msg);
         $this->custom_response($response);
     }
     public function user_edit_post(){
+        $stt=FALSE;
         $param = $this->post();
         $param = $this->user_lib->validate_edit_user($param);
         if($param){
-            $id = $this->user_lib->edit_user($param);
+            $stt = $this->user_lib->edit_user($param);
+            $have_option = $this->check_option_user($param['user_id']);
+            //init_user_category
+            if($stt && !$have_option){
+                $option_key = array('max_in_a_group','max_group','current_group','group_full_add_more');
+                $option = $this->get_option_key($option_key);
+                $response = $this->init_user_category($param['user_id'],$option);
+            }
         }else{
             $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST);// BAD_REQUEST (400) being the HTTP response code
         }
-            
-        if($id)
-            $stt=TRUE;
-        else 
-            $stt=FALSE;
         $this->set_response([
-            'status' => $stt,
-            'rows' => $id
+            'status' => $stt
         ], REST_Controller::HTTP_OK);
     }
 
