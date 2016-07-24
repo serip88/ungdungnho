@@ -304,15 +304,15 @@ angular.module('app')
                   }
               })
               // pages
-              .state('app.page', {
+              .state('root.app.page', {
                   url: '/page',
                   template: '<div ui-view class="fade-in-down"></div>'
               })
-              .state('app.page.profile', {
+              .state('root.app.page.profile', {
                   url: '/profile',
                   templateUrl: adBaseUrl+'page_profile.html'
               })
-              .state('app.page.post', {
+              .state('root.app.page.post', {
                   url: '/post',
                   templateUrl: adBaseUrl+'page_post.html'
               })
