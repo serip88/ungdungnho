@@ -24,6 +24,35 @@ class Upload extends Base_controller {
         $data_user = $this->get_user_session();
         if( !empty($_FILES) && $data_user && $data_user['username']) {
             try {
+                $option = $this->handle_get_option_post_folder();
+                $this->handle_check_option_folder_is_created($this->dir_path_post,$option);
+                $path_image = $this->dir_path_post.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'];
+                $tempPath = $_FILES[ 'file' ][ 'tmp_name' ];
+                $file_name = $this->upload_lib->validate_file_in_path($path_image, $_FILES[ 'file' ][ 'name' ]);
+                $uploadPath = $path_image . '/' . $file_name;
+                $stt = move_uploaded_file( $tempPath, $uploadPath );
+                if($stt){
+                    $this->handle_check_folder_is_over_load($this->dir_path_post,$option);
+                }
+                $answer = array( 'name'=>$file_name,'path'=>$uploadPath );
+                //$json = json_encode( $answer );
+                $msg = 'File transfer completed';
+                $status = true;
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage();
+            }
+        }
+        $response = array_merge(array('status' => $status,'msg' => $msg),$answer) ;
+        $this->custom_response($response);
+    }
+    /*
+    public function upload_img_user_post(){
+        $msg = '';
+        $status = false;
+        $answer = array();
+        $data_user = $this->get_user_session();
+        if( !empty($_FILES) && $data_user && $data_user['username']) {
+            try {
                 if(!file_exists($this->dir_tmp . '/' . $data_user['username'])) {
                     mkdir($this->dir_tmp . '/' . $data_user['username'], 0777);
                 }
@@ -42,6 +71,7 @@ class Upload extends Base_controller {
         $response = array_merge(array('status' => $status,'msg' => $msg),$answer) ;
         $this->custom_response($response);
     }
+    */
 
     
 }

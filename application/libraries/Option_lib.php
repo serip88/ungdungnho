@@ -36,4 +36,11 @@ class Option_lib extends Common_lib {
     return $stt;
   }
 
+  function update_option($name,$value){
+    $where = array("name"=> $name);
+    $data = array('value'=>$value);
+    $stt = $this->CI->Option_Model->update_data($data,$where); 
+    return $stt;
+  }
+
 }

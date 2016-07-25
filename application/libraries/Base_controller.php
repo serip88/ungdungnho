@@ -19,7 +19,9 @@ require APPPATH . '/libraries/REST_Controller.php';
 class Base_controller extends REST_Controller {
     
     protected $_is_login = false;
-    private $dir_path_user="";
+    private $dir_path_user="./app/images/user";
+    protected $dir_path_post="./app/images/post";
+    private $dir_path_user_tmp="tmp";
     protected $CI = '';
 	function __construct()
     {
@@ -29,8 +31,6 @@ class Base_controller extends REST_Controller {
         $this->load->library('user_lib');
         $this->is_login();
         $this->htaccess_emulator();
-        $this->dir_path_user='./app/images/user';
-        
     }
 
    
@@ -154,6 +154,9 @@ class Base_controller extends REST_Controller {
         return '';
       }   
     }
+
+    
+
     public function get_option_key($option_key){
         $this->load->model(array('option/Option_Model'));
         $select = array();
@@ -211,6 +214,7 @@ class Base_controller extends REST_Controller {
                 $stt_current_folder_of_user = false;
                 if(!$have_option){
                     $stt_current_folder_of_user = mkdir($this->dir_path_user.'/'.$option['current_group'].'/'.$user_id.'/1', 0777);
+                    $stt_current_folder_of_user = mkdir($this->dir_path_user.'/'.$option['current_group'].'/'.$user_id.'/'.$this->dir_path_user_tmp, 0777);
                 }
                 if($stt_current_folder_of_user){
                     $this->CI->db->trans_start();
@@ -278,10 +282,82 @@ class Base_controller extends REST_Controller {
         $fi = new FilesystemIterator($path, FilesystemIterator::SKIP_DOTS);
         return iterator_count($fi);
     }
+    //bỏ
     public function check_create_user_detail_cate($user_id){
         $option_key = array('max_in_a_group','max_group','current_group','group_full_add_more');
         $option = $this->get_option_key($option_key);
 
+    }
+    public function handle_get_option_post_folder(){
+        $option_key = array('max_in_a_group','max_group','group_full_add_more','current_store_post','current_group_post','current_child_post');
+        $option = $this->get_option_key($option_key);
+        if($option){
+            foreach ($option_key as $order => $key) {
+                if (!isset($option[$key])) {
+                    return array();
+                }
+            }
+            $option['store_key'] = 'current_store_post';
+            $option['store_value'] = $option['current_store_post'];
+            $option['group_key'] = 'current_group_post';
+            $option['group_value'] = $option['current_group_post'];
+            $option['child_key'] = 'current_child_post';
+            $option['child_value'] = $option['current_child_post'];
+            return $option;
+        }else{
+            return array();
+        }
+    }
+   
+    //$option = array(store_value=>1,store_key=>'',group_value=>1,group_key=>'',child_value=>1,child_key=>'');
+    //sử dụng mắc định thông số trong db là luôn đúng, nếu init theo tham số truyền vào, ko init theo số lượng trên thư mục
+    // chỉ sử dụng hàm count file là đếm trên server thôi
+    //=>before add image
+    public function handle_check_option_folder_is_created($root_path,$option){
+        $root_path = $root_path ? $root_path : $this->dir_path_post;
+        $this->check_and_create_folder($root_path,$option['store_value']);
+        $this->check_and_create_folder($root_path.'/'.$option['store_value'],$option['group_value']);
+        $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'],$option['child_value']);
+    }
+    //$option = array(store_value=>1,store_key=>'',group_value=>1,group_key=>'',child_value=>1,child_key=>'',max_group_value=>'',max_group_key=>'');
+    //after add image
+    public function handle_check_folder_is_over_load($root_path,$option){
+        //check child
+        $num_file = $this->count_files_in_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value']);
+        if($num_file>=$option['max_group']){
+            $option['child_value'] = $option['child_value'] +1;
+            mkdir($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'], 0777);
+            $this->update_option($option['child_key'],$option['child_value']);
+            return $this->handle_check_folder_is_over_load($root_path,$option);
+
+            //check group
+            $num_file = $this->count_files_in_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value']);
+            if($num_file>=$option['max_group']){
+                $option['group_value'] = $option['group_value'] +1;
+                mkdir($root_path.'/'.$option['store_value'].'/'.$option['group_value'], 0777);
+                $this->update_option($option['group_key'],$option['group_value']);
+                return $this->handle_check_folder_is_over_load($root_path,$option);
+
+                //check store
+                $num_file = $this->count_files_in_folder($root_path.'/'.$option['store_value']);
+                if($num_file>=$option['max_group']){
+                    $option['store_value'] = $option['store_value'] +1;
+                    mkdir($root_path.'/'.$option['store_value'], 0777);
+                    $this->update_option($option['store_key'],$option['store_value']);
+                }
+            }
+        }
+        return $option;
+    }
+    //return 1 if folder created before
+    public function check_and_create_folder($path,$foldername){
+        $stt = 0;
+        if (!file_exists($path."/".$foldername)) {
+            mkdir($path."/".$foldername, 0777);
+        }else{
+            $stt = 1;
+        }
+        return $stt;
     }
    
 }
