@@ -133,7 +133,7 @@
 		    var modalObj = {
 		      templateUrl: adBaseUrl +'modal/product/add_product.html',
 		      size: size,
-		      controller: ['$scope', '$uibModalInstance','dataInit', function(scope, $uibModalInstance, dataInit){
+		      controller: ['$scope', '$uibModalInstance','Upload','$timeout','dataInit', function(scope, $uibModalInstance,Upload, $timeout, dataInit){
 				scope.popover = {title: 'Title', content: '', templateUrl: adBaseUrl +'catalog/product/popover/edit_image.html'};
 
 		        scope.product = angular.copy(item);
@@ -163,6 +163,35 @@
 		              }
 		          });
 		        };
+		        scope.uploadFiles = function(file, errFiles) {
+		        	if(file){
+		        		scope.f = file;	
+		        	}
+			        scope.errFile = errFiles && errFiles[0];
+			        if (file) {
+			            file.upload = Upload.upload({
+			                url: baseConfig.host+'api/upload/upload_img_user',
+			                method: 'POST',
+						    headers: {
+						        'Content-Type': file.type
+						    },
+			                data: {file: file}
+			            });
+
+			            file.upload.then(function (response) {
+			                $timeout(function () {
+			                    file.result = response.data;
+			                    scope.product.file = response.data;
+
+			                });
+			            }, function (response) {
+			                if (response.status > 0)
+			                    scope.errorMsg = response.status + ': ' + response.data;
+			            }, function (evt) {
+			                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+			            });
+			        }   
+			    }
 		        function validateEditProduct() {
 		            if(typeof(scope.product.name_vn) == 'undefined' || typeof(scope.product.name_en) == 'undefined' ){
 		              return 0;
