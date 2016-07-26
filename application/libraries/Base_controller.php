@@ -19,9 +19,9 @@ require APPPATH . '/libraries/REST_Controller.php';
 class Base_controller extends REST_Controller {
     
     protected $_is_login = false;
-    private $dir_path_user="./app/images/user";
+    protected $dir_path_user="./app/images/user";
     protected $dir_path_post="./app/images/post";
-    private $dir_path_user_tmp="tmp";
+    protected $dir_path_user_tmp="tmp";
     protected $CI = '';
 	function __construct()
     {
@@ -172,38 +172,37 @@ class Base_controller extends REST_Controller {
         }
         return $option_format;
     }
-    
     public function init_user_category($user_id,$option){
         $this->load->library('model_option_user_lib','option_lib');
         $msg = '';
         $stt = true;
         $stt_user_group = false;
-        $stt_current_group = false;
+        $stt_current_store = false;
         try {
-            //check if folder dir_path_user is empty set default current_group (this is the fist time when init new website)
+            //check if folder dir_path_user is empty set default current_store_user (this is the fist time when init new website)
             $num_file = $this->count_files_in_folder($this->dir_path_user);
             if($num_file==0){
-                $option['current_group'] =1;
+                $option['current_store_user'] =1;
                 $this->update_option_folder(1,$option);
             }
-            //check current_group is over max_in_a_group (update current_group, max_in_a_group)
-            list($option,$stt_option)  = $this->check_update_current_folder($num_file,$option,'all');
+            //check current_store_user is over max_in_a_group (update current_store_user, max_in_a_group)
+            list($option,$stt_option)  = $this->check_update_current_store($num_file,$option,'all');
             if($stt_option)
                 $this->update_option_folder($stt_option,$option);
-            //check current_group is available if not create
-            if (!file_exists($this->dir_path_user.'/'.$option['current_group'])) {
-                $stt_current_group = mkdir($this->dir_path_user.'/'.$option['current_group'], 0777);
+            //check current_store_user is available if not create
+            if (!file_exists($this->dir_path_user.'/'.$option['current_store_user'])) {
+                $stt_current_store = mkdir($this->dir_path_user.'/'.$option['current_store_user'], 0777);
                 
             }else{
-                $stt_current_group = true;
+                $stt_current_store = true;
             }
             // check user_category if not create by id
-            if ($stt_current_group && !file_exists($this->dir_path_user.'/'.$option['current_group'].'/'.$user_id)) {
-                $num_file_current_folder = $this->count_files_in_folder($this->dir_path_user.'/'.$option['current_group']);
-                list($option,$stt_option_folder)  = $this->check_update_current_folder($num_file_current_folder,$option,'all');
+            if ($stt_current_store && !file_exists($this->dir_path_user.'/'.$option['current_store_user'].'/'.$user_id)) {
+                $num_file_current_folder = $this->count_files_in_folder($this->dir_path_user.'/'.$option['current_store_user']);
+                list($option,$stt_option_folder)  = $this->check_update_current_store($num_file_current_folder,$option,'all');
                 if($stt_option_folder)
                     $this->update_option_folder($stt_option_folder,$option);
-                $stt_user_group = mkdir($this->dir_path_user.'/'.$option['current_group'].'/'.$user_id, 0777);
+                $stt_user_group = mkdir($this->dir_path_user.'/'.$option['current_store_user'].'/'.$user_id, 0777);
                 
             }else{
                 $stt_user_group = true;
@@ -213,12 +212,12 @@ class Base_controller extends REST_Controller {
                 $have_option = $this->check_option_user($user_id);
                 $stt_current_folder_of_user = false;
                 if(!$have_option){
-                    $stt_current_folder_of_user = mkdir($this->dir_path_user.'/'.$option['current_group'].'/'.$user_id.'/1', 0777);
-                    $stt_current_folder_of_user = mkdir($this->dir_path_user.'/'.$option['current_group'].'/'.$user_id.'/'.$this->dir_path_user_tmp, 0777);
+                    $stt_current_folder_of_user = mkdir($this->dir_path_user.'/'.$option['current_store_user'].'/'.$user_id.'/1', 0777);
+                    $stt_current_folder_of_user = mkdir($this->dir_path_user.'/'.$option['current_store_user'].'/'.$user_id.'/'.$this->dir_path_user_tmp, 0777);
                 }
                 if($stt_current_folder_of_user){
                     $this->CI->db->trans_start();
-                    $this->model_option_user_lib->insert_option_user($user_id,$option['current_group']);
+                    $this->model_option_user_lib->insert_option_user($user_id,$option['current_store_user']);
                     $this->CI->db->trans_complete();
                     $stt_option_user = $this->db->trans_status();
                     if(!$stt_option_user){
@@ -232,12 +231,12 @@ class Base_controller extends REST_Controller {
         }
         return array('stt'=>$stt,'msg'=>$msg);
     }
-    //current_group, max_in_a_group
+    //current_store_user, max_in_a_group
     function update_option_folder($stt,$option){
         $this->load->library('option_lib');
         if($stt){
-            $data = array('value'=>$option['current_group']);
-            $this->option_lib->update_option_folder('current_group',$data);
+            $data = array('value'=>$option['current_store_user']);
+            $this->option_lib->update_option_folder('current_store_user',$data);
             if($stt==2){
                 $data = array('value'=>$option['max_in_a_group']);
                 $this->option_lib->update_option_folder('max_in_a_group',$data);
@@ -245,18 +244,18 @@ class Base_controller extends REST_Controller {
         }
     }
     //$return = option|stt|all
-    function check_update_current_folder($num_file,$option,$return){
+    function check_update_current_store($num_file,$option,$return){
         $stt = 0;
         if($num_file>=$option['max_in_a_group']){
-            $option['current_group'] = intval($option['current_group']) + 1;
+            $option['current_store_user'] = intval($option['current_store_user']) + 1;
             $stt=1;
-            if($option['current_group'] > $option['max_group']){
-                $option['current_group'] = 1;
+            if($option['current_store_user'] > $option['max_group']){
+                $option['current_store_user'] = 1;
                 $option['max_in_a_group']=intval($option['max_in_a_group'])+intval($option['group_full_add_more']);
                 $stt=2;
             }
-            if (!file_exists($this->dir_path_user.'/'.$option['current_group']))
-                mkdir($this->dir_path_user.'/'.$option['current_group'], 0777);
+            if (!file_exists($this->dir_path_user.'/'.$option['current_store_user']))
+                mkdir($this->dir_path_user.'/'.$option['current_store_user'], 0777);
         }
         if($return == 'stt'){
             return $stt;
@@ -308,7 +307,22 @@ class Base_controller extends REST_Controller {
             return array();
         }
     }
-   
+    public function handle_get_option_user_folder(){
+        $option_key = array('max_in_a_group','max_group','group_full_add_more','current_store_user');
+        $option = $this->get_option_key($option_key);
+        if($option){
+            foreach ($option_key as $order => $key) {
+                if (!isset($option[$key])) {
+                    return array();
+                }
+            }
+            $option['store_key'] = 'current_store_user';
+            $option['store_value'] = $option['current_store_user'];
+            return $option;
+        }else{
+            return array();
+        }
+    }
     //$option = array(store_value=>1,store_key=>'',group_value=>1,group_key=>'',child_value=>1,child_key=>'');
     //sử dụng mắc định thông số trong db là luôn đúng, nếu init theo tham số truyền vào, ko init theo số lượng trên thư mục
     // chỉ sử dụng hàm count file là đếm trên server thôi
@@ -334,16 +348,22 @@ class Base_controller extends REST_Controller {
             $num_file = $this->count_files_in_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value']);
             if($num_file>=$option['max_group']){
                 $option['group_value'] = $option['group_value'] +1;
+                $option['child_value'] = 1;
                 mkdir($root_path.'/'.$option['store_value'].'/'.$option['group_value'], 0777);
                 $this->update_option($option['group_key'],$option['group_value']);
+                $this->update_option($option['child_key'],$option['child_value']);
                 return $this->handle_check_folder_is_over_load($root_path,$option);
 
                 //check store
                 $num_file = $this->count_files_in_folder($root_path.'/'.$option['store_value']);
                 if($num_file>=$option['max_group']){
                     $option['store_value'] = $option['store_value'] +1;
+                    $option['group_value'] = 1;
+                    $option['child_value'] = 1;
                     mkdir($root_path.'/'.$option['store_value'], 0777);
                     $this->update_option($option['store_key'],$option['store_value']);
+                    $this->update_option($option['group_key'],$option['group_value']);
+                    $this->update_option($option['child_key'],$option['child_value']);
                 }
             }
         }
@@ -358,6 +378,12 @@ class Base_controller extends REST_Controller {
             $stt = 1;
         }
         return $stt;
+    }
+    public function handle_check_user_folder_tmp($root_path,$option,$user_id){
+        $root_path = $root_path ? $root_path : $this->dir_path_user;
+        $this->check_and_create_folder($root_path,$option['store_value']);
+        $this->check_and_create_folder($root_path.'/'.$option['store_value'],$user_id);
+        $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$user_id,$this->dir_path_user_tmp);
     }
    
 }

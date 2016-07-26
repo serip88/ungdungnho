@@ -17,7 +17,7 @@ class Upload extends Base_controller {
         $this->load->library('upload_lib');
     }
 
-    public function upload_img_user_post(){
+    /*public function upload_img_user_post(){
         $msg = '';
         $status = false;
         $answer = array();
@@ -44,8 +44,8 @@ class Upload extends Base_controller {
         }
         $response = array_merge(array('status' => $status,'msg' => $msg),$answer) ;
         $this->custom_response($response);
-    }
-    /*
+    }*/
+
     public function upload_img_user_post(){
         $msg = '';
         $status = false;
@@ -53,12 +53,12 @@ class Upload extends Base_controller {
         $data_user = $this->get_user_session();
         if( !empty($_FILES) && $data_user && $data_user['username']) {
             try {
-                if(!file_exists($this->dir_tmp . '/' . $data_user['username'])) {
-                    mkdir($this->dir_tmp . '/' . $data_user['username'], 0777);
-                }
+                $option = $this->handle_get_option_user_folder();
+                $this->handle_check_user_folder_tmp('',$option,$data_user['user_id']);
                 $tempPath = $_FILES[ 'file' ][ 'tmp_name' ];
-                $file_name = $this->upload_lib->validate_file_in_path($this->dir_tmp . '/' . $data_user['username'], $_FILES[ 'file' ][ 'name' ]);
-                $uploadPath = $this->dir_tmp . '/' . $data_user['username'] . '/' . $file_name;
+                $child_folder_user = $this->dir_path_user .'/'.$option['current_store_user'].'/'.$data_user['user_id'].'/'.$this->dir_path_user_tmp;
+                $file_name = $this->upload_lib->validate_file_in_path($child_folder_user, $_FILES[ 'file' ][ 'name' ]);
+                $uploadPath = $child_folder_user . '/' . $file_name;
                 move_uploaded_file( $tempPath, $uploadPath );
                 $answer = array( 'name'=>$file_name,'path'=>$uploadPath );
                 //$json = json_encode( $answer );
@@ -71,7 +71,6 @@ class Upload extends Base_controller {
         $response = array_merge(array('status' => $status,'msg' => $msg),$answer) ;
         $this->custom_response($response);
     }
-    */
 
     
 }

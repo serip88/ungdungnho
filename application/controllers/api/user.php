@@ -114,7 +114,7 @@ class User extends Base_controller {
             }else{
                 $msg = 'Add User Success';
                 $stt = true;
-                $option_key = array('max_in_a_group','max_group','current_group','group_full_add_more');
+                $option_key = array('max_in_a_group','max_group','current_store_user','group_full_add_more');
                 $option = $this->get_option_key($option_key);
                 $response = $this->init_user_category($res['user_id'],$option);
             }
@@ -131,7 +131,7 @@ class User extends Base_controller {
             $have_option = $this->check_option_user($param['user_id']);
             //init_user_category
             if($stt && !$have_option){
-                $option_key = array('max_in_a_group','max_group','current_group','group_full_add_more');
+                $option_key = array('max_in_a_group','max_group','current_store_user','group_full_add_more');
                 $option = $this->get_option_key($option_key);
                 $response = $this->init_user_category($param['user_id'],$option);
             }
