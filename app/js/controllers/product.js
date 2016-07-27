@@ -133,7 +133,7 @@
 		    var modalObj = {
 		      templateUrl: adBaseUrl +'modal/product/add_product.html',
 		      size: size,
-		      controller: ['$scope', '$uibModalInstance','Upload','$timeout','dataInit', function(scope, $uibModalInstance,Upload, $timeout, dataInit){
+		      controller: ['$scope','commonService', '$uibModalInstance','Upload','$timeout','dataInit', function(scope, commonService, $uibModalInstance,Upload, $timeout, dataInit){
 				scope.popover = {title: 'Title', content: '', templateUrl: adBaseUrl +'catalog/product/popover/edit_image.html'};
 
 		        scope.product = angular.copy(item);
@@ -169,6 +169,18 @@
 		        	}
 			        scope.errFile = errFiles && errFiles[0];
 			        if (file) {
+			        	var file_is_valid = commonService.sup_check_file_info(file);
+			        	if(!file_is_valid){
+			        		SweetAlert.swal({
+					         	title: "Error",
+					        	text: "Image file invalid",
+					         	type: "warning",
+					         	confirmButtonText: "Ok"
+					        });
+					        file = null;
+					        scope.f = null;
+			        		return;
+			        	}
 			            file.upload = Upload.upload({
 			                url: baseConfig.host+'api/upload/upload_img_user',
 			                method: 'POST',

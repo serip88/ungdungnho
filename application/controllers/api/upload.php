@@ -51,11 +51,14 @@ class Upload extends Base_controller {
         $status = false;
         $answer = array();
         $data_user = $this->get_user_session();
-        if( !empty($_FILES) && $data_user && $data_user['username']) {
+        $tempPath = $_FILES[ 'file' ][ 'tmp_name' ];
+        $file_is_valid =  $this->sup_check_file_info($tempPath);
+        if(!$file_is_valid)
+            $msg = 'invalid file';
+        if( !empty($_FILES) && $data_user && $file_is_valid ) {
             try {
                 $option = $this->handle_get_option_user_folder();
                 $this->handle_check_user_folder_tmp('',$option,$data_user['user_id']);
-                $tempPath = $_FILES[ 'file' ][ 'tmp_name' ];
                 $child_folder_user = $this->dir_path_user .'/'.$option['current_store_user'].'/'.$data_user['user_id'].'/'.$this->dir_path_user_tmp;
                 $file_name = $this->upload_lib->validate_file_in_path($child_folder_user, $_FILES[ 'file' ][ 'name' ]);
                 $uploadPath = $child_folder_user . '/' . $file_name;
@@ -70,6 +73,20 @@ class Upload extends Base_controller {
         }
         $response = array_merge(array('status' => $status,'msg' => $msg),$answer) ;
         $this->custom_response($response);
+    }
+
+    public function sup_check_file_info($tmp_name){
+        $stt = false;
+        $valid_ext = array('jpg','jpeg','png');
+        $image_info = getimagesize($tmp_name);
+        if($image_info){
+            $type = $ext = false;
+            list($type,$ext) = explode("/", $image_info['mime']);
+            if($type=='image' && in_array($ext, $valid_ext)){
+                $stt = true;
+            }
+        }
+        return $stt;
     }
 
     

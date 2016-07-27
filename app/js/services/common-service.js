@@ -42,5 +42,18 @@ app.factory("commonService", ["$http", "$q", function ($http, $q) {
             });
         return deferred.promise;
     }
+
+    commonObject.sup_check_file_info = function (file) {
+        var stt = false;
+        var valid_ext = ['jpg','jpeg','png'];
+        if(file){
+            var type = false; var ext = false;
+            var mine = file.type.split('/');
+            if(mine[0]=='image' && valid_ext.indexOf(mine[1]) != -1 ){
+                stt = true;
+            }
+        }
+        return stt;
+    }
     return commonObject;
 }]);
