@@ -110,6 +110,11 @@ class Product_lib extends Common_lib {
       $data['order']    = 0;
       $data['posted_date'] = time();
       $data['enabled']  = $param['status']; 
+      if(isset($param['file_name_mb']) && $param['file_name_mb'] && isset($param['file_path_mb']) && $param['file_path_mb'] ){
+        $data['pic_full']  = $param['file_name_mb']; 
+        $data['pic_thumb'] = $param['file_path_mb']; 
+      }
+
       if(isset($param['product_id']) && $param['product_id']){
         $where = array("product_id"=> $param['product_id']);
         $stt = $this->CI->Product_Model->update_data($data,$where); 
@@ -135,6 +140,20 @@ class Product_lib extends Common_lib {
     }
     return $data;
   }
-
+  //$file = array('name'=>'','path'=>'');
+  function check_file_exit($file){
+    $requite = array('name','path');
+    foreach ($requite as $key => $value) {
+      if(! isset($file[$value])){
+        return 0;
+      }
+    }
+    if(file_exists($file['path'])){
+      return 1;
+    }else{
+      return 0;
+    }
+  }
+  
 
 }

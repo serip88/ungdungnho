@@ -138,7 +138,7 @@
 
 		        scope.product = angular.copy(item);
 		        scope.categoryList = dataInit;
-		        scope.categoryList.push({id:0,name_vn:'[Không danh mục]',name_en:'[No Category]'});
+		        scope.categoryList.push({id:0,path_parent_name_vn:'[Không danh mục]',path_parent_name_en:'[No Category]'});
 		        scope.product.parent_selected = {id:item.parent_id};
 		        scope.cancel = function(){
 		          $uibModalInstance.close();

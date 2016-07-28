@@ -58,19 +58,56 @@ class Product extends Base_controller {
         ], REST_Controller::HTTP_OK);
     }
     public function edit_post(){
-        $param = $this->post();
+        $upload_image = false;
         $stt=FALSE;
         $msg='';
+        $param = $this->post();
         $param = $this->product_lib->validate_edit_product($param);
         if($param){
             $param = $this->product_lib->handle_save_product($param);
             $stt = $this->product_lib->edit_product($param);
-            if(!$stt){
+            if($stt){
+                //upload file
+                if(isset($param['file']) ){
+                    $file_exit = $this->product_lib->check_file_exit($param['file']);
+                    if($file_exit){
+                        $param['new_file'] = $this->move_file_to_product_folder($param['file']['name'],$param['file']['path']);
+                        if($param['new_file']){
+                            $upload_image = true;
+                        }
+                    }
+                }
+                if($upload_image){
+                    $param['file_name_mb']= $param['new_file']['name'];
+                    $param['file_path_mb']= $param['new_file']['path'];
+                    $stt = $this->product_lib->edit_product($param);
+                }
+            }else{
                 $msg = 'Error! Cannot save product.';
             }
         }
         $response = array('status' => $stt,'msg'=> $msg);
         $this->custom_response($response);
+    }
+
+    //return file to new location
+    public function move_file_to_product_folder($file_name, $file_path){
+        $this->load->library('upload_lib');
+        $option = $this->handle_get_option_post_folder();
+        //Importance check folder before upload
+        $this->handle_check_option_folder_is_created($this->dir_path_post,$option);
+        $path_image = $this->dir_path_post.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'];
+        $file_name = $this->upload_lib->validate_file_in_path($path_image, $file_name);
+        $uploadPath = $path_image . '/' . $file_name;
+        //move file to new location
+        $stt = rename( $file_path, $uploadPath );
+        if($stt){
+            //Importance check full folder before upload
+            $this->handle_check_folder_is_over_load($this->dir_path_post,$option);
+            return array( 'name'=>$file_name,'path'=>$uploadPath );
+        }else{
+            return false;
+        }
     }
     public function delete_post(){
         $params = $this->post();
