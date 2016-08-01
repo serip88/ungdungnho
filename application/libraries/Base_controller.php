@@ -385,5 +385,17 @@ class Base_controller extends REST_Controller {
         $this->check_and_create_folder($root_path.'/'.$option['store_value'],$user_id);
         $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$user_id,$this->dir_path_user_tmp);
     }
-   
+    public function get_dir_path_user_tmp(){
+        $data_user = $this->get_user_session();
+        $option = $this->handle_get_option_user_folder();
+        $folder_user_tmp = $this->dir_path_user .'/'.$option['current_store_user'].'/'.$data_user['user_id'].'/'.$this->dir_path_user_tmp;
+        return $folder_user_tmp;
+    }
+    public function remove_all_files_in_folder($path){
+        $files = glob($path.'/*'); // get all file names
+        foreach($files as $file){ // iterate files
+          if(is_file($file))
+            unlink($file); // delete file
+        }
+    }
 }

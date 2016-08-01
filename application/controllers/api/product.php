@@ -67,16 +67,23 @@ class Product extends Base_controller {
             $param = $this->product_lib->handle_save_product($param);
             $stt = $this->product_lib->edit_product($param);
             if($stt){
-                //upload file
+                //B upload file
                 if(isset($param['file']) ){
                     $file_exit = $this->product_lib->check_file_exit($param['file']);
                     if($file_exit){
                         $param['new_file'] = $this->move_file_to_product_folder($param['file']['name'],$param['file']['path']);
                         if($param['new_file']){
+                            //remove old image if it have
+                            if($param['image_path']){
+                                unlink($param['image_path']);
+                            }
                             $upload_image = true;
+                            $dir_path_user_tmp = $this->get_dir_path_user_tmp();
+                            $this->remove_all_files_in_folder($dir_path_user_tmp);
                         }
                     }
                 }
+                //E upload file
                 if($upload_image){
                     $param['file_name_mb']= $param['new_file']['name'];
                     $param['file_path_mb']= $param['new_file']['path'];

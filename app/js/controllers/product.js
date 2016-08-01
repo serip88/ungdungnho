@@ -164,8 +164,12 @@
 		          });
 		        };
 		        scope.uploadFiles = function(file, errFiles) {
+		        	scope.f = file;
 		        	if(file){
-		        		scope.f = file;	
+		        		//scope.f = file;	
+		        	}else{
+		        		//not update image name, image path if not select image
+		        		scope.product.file = null;
 		        	}
 			        scope.errFile = errFiles && errFiles[0];
 			        if (file) {

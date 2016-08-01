@@ -79,7 +79,7 @@ class Product_lib extends Common_lib {
     return $id;
   }
   function get_product_list(){
-      $select="product_id,name_vn,name_en,description_en,description_vn,price,enabled as status,parent_id";
+      $select="product_id,name_vn,name_en,description_en,description_vn,image_name,image_path,price,enabled as status,parent_id";
       $where = array();
       $data = $this->CI->Product_Model->get_data($select,$where);      
       if($data){
@@ -111,8 +111,8 @@ class Product_lib extends Common_lib {
       $data['posted_date'] = time();
       $data['enabled']  = $param['status']; 
       if(isset($param['file_name_mb']) && $param['file_name_mb'] && isset($param['file_path_mb']) && $param['file_path_mb'] ){
-        $data['pic_full']  = $param['file_name_mb']; 
-        $data['pic_thumb'] = $param['file_path_mb']; 
+        $data['image_name']  = $param['file_name_mb']; 
+        $data['image_path'] = $param['file_path_mb']; 
       }
 
       if(isset($param['product_id']) && $param['product_id']){
