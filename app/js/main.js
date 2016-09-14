@@ -72,7 +72,7 @@ angular.module('app')
           asideFolded: false,
           asideDock: false,
           container: false,
-          adBaseUrl: baseUrl,
+          baseUrl: baseUrl,
           adBaseUrl: adBaseUrl,
         },
         user_data: loginService.syn.user_data

@@ -22,10 +22,7 @@ class User_lib extends Common_lib {
   function __construct() {
       $this->CI =& get_instance();
       $this->CI->load->database('default');
-      $this->CI->load->model(array(
-          'user/User_Group_Model',
-          'user/User_Model',
-          ));
+      $this->CI->load->model(array('user/user_group_model','user/user_model'));
       $this->_config =  $this->CI->config;
       $this->init_lang();
   }
@@ -39,7 +36,7 @@ class User_lib extends Common_lib {
   function get_user_list(){
     $select="user_id,username,status,date_added,user_group_id,firstname,lastname,email";
     $where = array();
-    $data = $this->CI->User_Model->get_data($select,$where);
+    $data = $this->CI->user_model->get_data($select,$where);
     return $data;
   }
   function format_user_list($data){
@@ -57,7 +54,7 @@ class User_lib extends Common_lib {
     $tb_join = array();
     $tb_join[] = array('table_name'=>'rz_user_group as B','condition'=>"A.user_group_id =B.user_group_id", 'type'=>'left');
     $where = array("A.user_id"=>$user_id);
-    $data = $this->CI->User_Model->get_data_join($select,$where,$tb_join,1);
+    $data = $this->CI->user_model->get_data_join($select,$where,$tb_join,1);
     if($data){
       return $data[0];
     }else{
@@ -69,7 +66,7 @@ class User_lib extends Common_lib {
     $tb_join = array();
     $tb_join[] = array('table_name'=>'rz_user_group as B','condition'=>"A.user_group_id =B.user_group_id", 'type'=>'left');
     $where = array("A.email"=>$user_email);
-    $data = $this->CI->User_Model->get_data_join($select,$where,$tb_join,1);
+    $data = $this->CI->user_model->get_data_join($select,$where,$tb_join,1);
     if($data){
       return $data[0];
     }else{
@@ -78,7 +75,7 @@ class User_lib extends Common_lib {
   }
   function check_user($where = array()){
     if($where){
-      $data = $this->CI->User_Model->get_total($where);
+      $data = $this->CI->user_model->get_total($where);
       return $data;
     }else
       return 1;
@@ -134,10 +131,10 @@ class User_lib extends Common_lib {
       $where['where'] = array('username'=>$param['username']);
       $where['or_where'] = array('email'=>$param['email']);
       $limit = array('type'=>'rows','limit'=>1);
-      $u_data = $this->CI->User_Model->get_dt($select,$where,$limit);  
+      $u_data = $this->CI->user_model->get_dt($select,$where,$limit);  
     //E check username,email
       if(!$u_data){
-        $stt = $this->CI->User_Model->insert_data($data);
+        $stt = $this->CI->user_model->insert_data($data);
       }else{
         foreach ($u_data as $key => $value) {
           if($value['username']==$param['username']){
@@ -204,11 +201,11 @@ class User_lib extends Common_lib {
       $where = array('where'=> array());
       $where['where'] = array('email'=>$param['email']);
       $limit = array('type'=>'int','limit'=>1);
-      $not_valid = $this->CI->User_Model->get_dt($select,$where,$limit);  
+      $not_valid = $this->CI->user_model->get_dt($select,$where,$limit);  
     //E check email
     if(isset($param['user_id']) && $param['user_id'] && $not_valid<=1){
       $where = array("user_id"=> $param['user_id']);
-      $stt = $this->CI->User_Model->update_data($data,$where); 
+      $stt = $this->CI->user_model->update_data($data,$where); 
       return $stt;
     }else{
       return FALSE;
@@ -219,7 +216,7 @@ class User_lib extends Common_lib {
   function user_delete($user_id){
     if($user_id){
       $where = array("user_id"=>$user_id);
-      $stt = $this->CI->User_Model->delete_data($where);
+      $stt = $this->CI->user_model->delete_data($where);
       return $stt;
     }else
       return false;
