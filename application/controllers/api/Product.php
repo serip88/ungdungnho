@@ -75,6 +75,7 @@ class Product extends Base_controller {
                         if($param['new_file']){
                             //remove old image if it have
                             if($param['image_path']){
+                                $param['image_path'] = strpos($param['image_path'], ".") == 0 ? $param['image_path'] : ".".$param['image_path'];
                                 @unlink($param['image_path']);
                             }
                             $upload_image = true;
