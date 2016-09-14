@@ -158,12 +158,12 @@ class Base_controller extends REST_Controller {
     
 
     public function get_option_key($option_key){
-        $this->load->model(array('option/Option_Model'));
+        $this->load->model(array('option/option_model'));
         $select = array();
         $where = array('where_in'=>array('key'=>'name','value'=>array()));
         $where['where_in']['value']=$option_key;
         $filter = array('type'=>'rows','limit'=>0);
-        $options = $this->Option_Model->get_dt($select,$where,$filter);    
+        $options = $this->option_model->get_dt($select,$where,$filter);    
         $option_format = array();
         if(count($option_key) == count($options) && $options){
             foreach ($options as $key => $value) {

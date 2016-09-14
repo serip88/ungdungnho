@@ -14,7 +14,9 @@ user_guide_src/cilexer/build/*
 user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
 #app/vendor/
-app/images/*
+app/images/post/*
+app/images/user/*
+app/images/tmp/*
 app/js/controllers/uploads/
 
 # IDE Files

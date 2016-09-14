@@ -75,7 +75,7 @@ class Product extends Base_controller {
                         if($param['new_file']){
                             //remove old image if it have
                             if($param['image_path']){
-                                unlink($param['image_path']);
+                                @unlink($param['image_path']);
                             }
                             $upload_image = true;
                             $dir_path_user_tmp = $this->get_dir_path_user_tmp();

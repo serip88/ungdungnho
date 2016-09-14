@@ -61,7 +61,7 @@ class Category_lib extends Common_lib {
 	    $data['order'] 		= 0;
 	    $data['count'] 		= 0;
 	    $data['enabled'] 	= $param['status']; 
-	    $id = $this->CI->Tag_Model->insert_data($data);
+	    $id = $this->CI->tag_model->insert_data($data);
 	    return $id;
 	}
 
@@ -113,7 +113,7 @@ class Category_lib extends Common_lib {
 	    $data['enabled'] 	= $param['status']; 
 	    if(isset($param['id']) && $param['id']){
 	      $where = array("id"=> $param['id']);
-	      $stt = $this->CI->Tag_Model->update_data($data,$where); 
+	      $stt = $this->CI->tag_model->update_data($data,$where); 
 	      return $stt;
 	    }else{
 	      return FALSE;
@@ -122,7 +122,7 @@ class Category_lib extends Common_lib {
 	function get_category($id){
 	    $select="id,name_vn,name_en,description_en,description_vn,enabled as status,path_parent,level,path_parent_name_vn,path_parent_name_en";
 	    $where = array('id'=>$id, 'type'=>$this->_tag_type);
-	    $data = $this->CI->Tag_Model->get_data($select,$where,1);
+	    $data = $this->CI->tag_model->get_data($select,$where,1);
 	    if($data){
 	    	return $data[0];
 	    }else{
@@ -141,7 +141,7 @@ class Category_lib extends Common_lib {
 	function categorys_delete($category_id){
 	    if($category_id){
 	      $where = array("id"=>$category_id,'type'=>$this->_tag_type);
-	      $stt = $this->CI->Tag_Model->delete_data($where);
+	      $stt = $this->CI->tag_model->delete_data($where);
 	      return $stt;
 	    }else
 	      return false;
@@ -150,7 +150,7 @@ class Category_lib extends Common_lib {
 		if($category_id){
 	    	//$where = array('path_parent'=>$category_id,'type'=>$this->_tag_type);
 	    	$where = "FIND_IN_SET($category_id,path_parent) limit 1";
-	    	$total = $this->CI->Tag_Model->get_total($where);	
+	    	$total = $this->CI->tag_model->get_total($where);	
 	      	return $total;
 	    }
 	    return 0;
@@ -163,7 +163,7 @@ class Category_lib extends Common_lib {
 			$where = array('where'=> array());
 			$where['where'] = array('B.parent_id'=>$category_id);
 			$limit = array('type'=>'int','limit'=>1);
-			$have_product = $this->CI->Tag_Model->get_dt($select,$where,$limit);	
+			$have_product = $this->CI->tag_model->get_dt($select,$where,$limit);	
 			return $have_product;
 		}
 		return 0;

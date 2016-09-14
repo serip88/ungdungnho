@@ -112,7 +112,7 @@ class Product_lib extends Common_lib {
       $data['enabled']  = $param['status']; 
       if(isset($param['file_name_mb']) && $param['file_name_mb'] && isset($param['file_path_mb']) && $param['file_path_mb'] ){
         $data['image_name']  = $param['file_name_mb']; 
-        $data['image_path'] = $param['file_path_mb']; 
+        $data['image_path'] = trim($param['file_path_mb'],".") ; 
       }
 
       if(isset($param['product_id']) && $param['product_id']){
