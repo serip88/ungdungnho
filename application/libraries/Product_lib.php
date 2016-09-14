@@ -22,7 +22,7 @@ class Product_lib extends Common_lib {
     $this->CI =& get_instance();
     $this->CI->load->database('default');
     $this->CI->load->model(array(
-        'product/Product_Model',
+        'product/product_model',
     ));
       
   }
@@ -75,13 +75,13 @@ class Product_lib extends Common_lib {
     $data['order']    = 0;
     $data['posted_date'] = time();
     $data['enabled']  = $param['status']; 
-    $id = $this->CI->Product_Model->insert_data($data);
+    $id = $this->CI->product_model->insert_data($data);
     return $id;
   }
   function get_product_list(){
       $select="product_id,name_vn,name_en,description_en,description_vn,image_name,image_path,price,enabled as status,parent_id";
       $where = array();
-      $data = $this->CI->Product_Model->get_data($select,$where);      
+      $data = $this->CI->product_model->get_data($select,$where);      
       if($data){
         $data = $this->format_product_list($data);
       }
@@ -117,7 +117,7 @@ class Product_lib extends Common_lib {
 
       if(isset($param['product_id']) && $param['product_id']){
         $where = array("product_id"=> $param['product_id']);
-        $stt = $this->CI->Product_Model->update_data($data,$where); 
+        $stt = $this->CI->product_model->update_data($data,$where); 
         return $stt;
       }else{
         return FALSE;
@@ -126,7 +126,7 @@ class Product_lib extends Common_lib {
   function product_delete($product_id){
       if($product_id){
         $where = array("product_id"=>$product_id);
-        $stt = $this->CI->Product_Model->delete_data($where);
+        $stt = $this->CI->product_model->delete_data($where);
         return $stt;
       }else
         return false;

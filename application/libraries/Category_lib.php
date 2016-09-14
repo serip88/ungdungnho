@@ -23,7 +23,7 @@ class Category_lib extends Common_lib {
       	$this->CI =& get_instance();
       	$this->CI->load->database('default');
       	$this->CI->load->model(array(
-          	'tag/Tag_Model',
+          	'tag/tag_model',
         ));
       	$this->_config =  $this->CI->config;
   	}
@@ -132,7 +132,7 @@ class Category_lib extends Common_lib {
 	function get_category_list(){
 	    $select="id,parent_id,name_vn,name_en,description_en,description_vn,enabled as status,path_parent,level,path_parent_name_vn,path_parent_name_en";
 	    $where = array('type'=>$this->_tag_type);
-	    $data = $this->CI->Tag_Model->get_data($select,$where);
+	    $data = $this->CI->tag_model->get_data($select,$where);
 	    /*if($data){
 	    	$data = $this->format_path_parent($data);
 	    }*/
