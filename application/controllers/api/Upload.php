@@ -62,7 +62,7 @@ class Upload extends Base_controller {
                 $child_folder_user = $this->dir_path_user .'/'.$option['current_store_user'].'/'.$data_user['user_id'].'/'.$this->dir_path_user_tmp;
                 $file_name = $this->upload_lib->validate_file_in_path($child_folder_user, $_FILES[ 'file' ][ 'name' ]);
                 $uploadPath = $child_folder_user . '/' . $file_name;
-                move_uploaded_file( $tempPath, $uploadPath );
+                move_uploaded_file( $tempPath, FCPATH.$uploadPath );
                 $answer = array( 'name'=>$file_name,'path'=>$uploadPath );
                 //$json = json_encode( $answer );
                 $msg = 'File transfer completed';

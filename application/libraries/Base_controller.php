@@ -4,23 +4,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 session_start();
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
 require APPPATH . '/libraries/REST_Controller.php';
+require_once(APPPATH . '/third_party/phpThumb/phpthumb.class.php') ;
+define('IMAGE_SMALL', 'small');
+define('IMAGE_LARGE', 'large');
+define('IMAGE_BIG', 'big');
+define('IMAGE_SMALL_SIZE', 320);
+define('IMAGE_LARGE_SIZE', 700);
+define('IMAGE_BIG_SIZE', 1600);
 
-/**
- * This is an example of a few basic user interaction methods you could use
- * all done with a hardcoded array
- *
- * @package         CodeIgniter
- * @subpackage      Rest Server
- * @category        Controller
- * @author          Phil Sturgeon, Chris Kacerguis
- * @license         MIT
- * @link            https://github.com/chriskacerguis/codeigniter-restserver
- */
 class Base_controller extends REST_Controller {
     
     protected $_is_login = false;
-    protected $dir_path_user="./app/images/user";
-    protected $dir_path_post="./app/images/post";
+    protected $dir_path_user="/app/images/user";
+    protected $dir_path_post="/app/images/post";
     protected $dir_path_user_tmp="tmp";
     protected $CI = '';
 	function __construct()
@@ -190,19 +186,19 @@ class Base_controller extends REST_Controller {
             if($stt_option)
                 $this->update_option_folder($stt_option,$option);
             //check current_store_user is available if not create
-            if (!file_exists($this->dir_path_user.'/'.$option['current_store_user'])) {
-                $stt_current_store = mkdir($this->dir_path_user.'/'.$option['current_store_user'], 0777);
+            if (!file_exists(FCPATH.$this->dir_path_user.'/'.$option['current_store_user'])) {
+                $stt_current_store = mkdir(FCPATH.$this->dir_path_user.'/'.$option['current_store_user'], 0777);
                 
             }else{
                 $stt_current_store = true;
             }
             // check user_category if not create by id
-            if ($stt_current_store && !file_exists($this->dir_path_user.'/'.$option['current_store_user'].'/'.$user_id)) {
+            if ($stt_current_store && !file_exists(FCPATH.$this->dir_path_user.'/'.$option['current_store_user'].'/'.$user_id)) {
                 $num_file_current_folder = $this->count_files_in_folder($this->dir_path_user.'/'.$option['current_store_user']);
                 list($option,$stt_option_folder)  = $this->check_update_current_store($num_file_current_folder,$option,'all');
                 if($stt_option_folder)
                     $this->update_option_folder($stt_option_folder,$option);
-                $stt_user_group = mkdir($this->dir_path_user.'/'.$option['current_store_user'].'/'.$user_id, 0777);
+                $stt_user_group = mkdir(FCPATH.$this->dir_path_user.'/'.$option['current_store_user'].'/'.$user_id, 0777);
                 
             }else{
                 $stt_user_group = true;
@@ -212,8 +208,8 @@ class Base_controller extends REST_Controller {
                 $have_option = $this->check_option_user($user_id);
                 $stt_current_folder_of_user = false;
                 if(!$have_option){
-                    $stt_current_folder_of_user = mkdir($this->dir_path_user.'/'.$option['current_store_user'].'/'.$user_id.'/1', 0777);
-                    $stt_current_folder_of_user = mkdir($this->dir_path_user.'/'.$option['current_store_user'].'/'.$user_id.'/'.$this->dir_path_user_tmp, 0777);
+                    $stt_current_folder_of_user = mkdir(FCPATH.$this->dir_path_user.'/'.$option['current_store_user'].'/'.$user_id.'/1', 0777);
+                    $stt_current_folder_of_user = mkdir(FCPATH.$this->dir_path_user.'/'.$option['current_store_user'].'/'.$user_id.'/'.$this->dir_path_user_tmp, 0777);
                 }
                 if($stt_current_folder_of_user){
                     $this->CI->db->trans_start();
@@ -254,8 +250,8 @@ class Base_controller extends REST_Controller {
                 $option['max_in_a_group']=intval($option['max_in_a_group'])+intval($option['group_full_add_more']);
                 $stt=2;
             }
-            if (!file_exists($this->dir_path_user.'/'.$option['current_store_user']))
-                mkdir($this->dir_path_user.'/'.$option['current_store_user'], 0777);
+            if (!file_exists(FCPATH.$this->dir_path_user.'/'.$option['current_store_user']))
+                mkdir(FCPATH.$this->dir_path_user.'/'.$option['current_store_user'], 0777);
         }
         if($return == 'stt'){
             return $stt;
@@ -278,7 +274,7 @@ class Base_controller extends REST_Controller {
     }
     //count files in group current
     function count_files_in_folder($path){
-        $fi = new FilesystemIterator($path, FilesystemIterator::SKIP_DOTS);
+        $fi = new FilesystemIterator(FCPATH.$path, FilesystemIterator::SKIP_DOTS);
         return iterator_count($fi);
     }
     //bỏ
@@ -332,6 +328,9 @@ class Base_controller extends REST_Controller {
         $this->check_and_create_folder($root_path,$option['store_value']);
         $this->check_and_create_folder($root_path.'/'.$option['store_value'],$option['group_value']);
         $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'],$option['child_value']);
+        $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'],IMAGE_SMALL);
+        $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'],IMAGE_LARGE);
+        $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'],IMAGE_BIG);
     }
     //$option = array(store_value=>1,store_key=>'',group_value=>1,group_key=>'',child_value=>1,child_key=>'',max_group_value=>'',max_group_key=>'');
     //after add image
@@ -340,7 +339,7 @@ class Base_controller extends REST_Controller {
         $num_file = $this->count_files_in_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value']);
         if($num_file>=$option['max_group']){
             $option['child_value'] = $option['child_value'] +1;
-            mkdir($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'], 0777);
+            mkdir(FCPATH.$root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'], 0777);
             $this->update_option($option['child_key'],$option['child_value']);
             return $this->handle_check_folder_is_over_load($root_path,$option);
 
@@ -349,7 +348,7 @@ class Base_controller extends REST_Controller {
             if($num_file>=$option['max_group']){
                 $option['group_value'] = $option['group_value'] +1;
                 $option['child_value'] = 1;
-                mkdir($root_path.'/'.$option['store_value'].'/'.$option['group_value'], 0777);
+                mkdir(FCPATH.$root_path.'/'.$option['store_value'].'/'.$option['group_value'], 0777);
                 $this->update_option($option['group_key'],$option['group_value']);
                 $this->update_option($option['child_key'],$option['child_value']);
                 return $this->handle_check_folder_is_over_load($root_path,$option);
@@ -360,7 +359,7 @@ class Base_controller extends REST_Controller {
                     $option['store_value'] = $option['store_value'] +1;
                     $option['group_value'] = 1;
                     $option['child_value'] = 1;
-                    mkdir($root_path.'/'.$option['store_value'], 0777);
+                    mkdir(FCPATH.$root_path.'/'.$option['store_value'], 0777);
                     $this->update_option($option['store_key'],$option['store_value']);
                     $this->update_option($option['group_key'],$option['group_value']);
                     $this->update_option($option['child_key'],$option['child_value']);
@@ -372,8 +371,8 @@ class Base_controller extends REST_Controller {
     //return 1 if folder created before
     public function check_and_create_folder($path,$foldername){
         $stt = 0;
-        if (!file_exists($path."/".$foldername)) {
-            mkdir($path."/".$foldername, 0777);
+        if (!file_exists(FCPATH.$path."/".$foldername)) {
+            mkdir(FCPATH.$path."/".$foldername, 0777);
         }else{
             $stt = 1;
         }
@@ -392,10 +391,10 @@ class Base_controller extends REST_Controller {
         return $folder_user_tmp;
     }
     public function remove_all_files_in_folder($path){
-        $files = glob($path.'/*'); // get all file names
+        $files = glob(FCPATH.$path.'/*'); // get all file names
         foreach($files as $file){ // iterate files
-          if(is_file($file))
-            unlink($file); // delete file
+          if(is_file(FCPATH.$file))
+            unlink(FCPATH.$file); // delete file
         }
     }
 }

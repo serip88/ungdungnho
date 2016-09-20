@@ -151,7 +151,7 @@ class Product_lib extends Common_lib {
         return 0;
       }
     }
-    if(file_exists($file['path'])){
+    if(file_exists(FCPATH.$file['path'])){
       return 1;
     }else{
       return 0;

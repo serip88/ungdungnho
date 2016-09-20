@@ -76,7 +76,8 @@ class Product extends Base_controller {
                             //remove old image if it have
                             if($param['image_path']){
                                 $param['image_path'] = strpos($param['image_path'], ".") == 0 ? $param['image_path'] : ".".$param['image_path'];
-                                @unlink($param['image_path']);
+                                @unlink(FCPATH.$param['image_path']);
+
                             }
                             $upload_image = true;
                             $dir_path_user_tmp = $this->get_dir_path_user_tmp();
@@ -106,13 +107,28 @@ class Product extends Base_controller {
         $this->handle_check_option_folder_is_created($this->dir_path_post,$option);
         $path_image = $this->dir_path_post.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'];
         $file_name = $this->upload_lib->validate_file_in_path($path_image, $file_name);
-        $uploadPath = $path_image . '/' . $file_name;
+        //$uploadPath = $path_image . '/' . $file_name;
+        $uploadPath = $path_image .'/'.IMAGE_BIG . '/' . $file_name;
         //move file to new location
-        $stt = rename( $file_path, $uploadPath );
+        $stt = rename( FCPATH.$file_path, FCPATH.$uploadPath );
         if($stt){
-            //Importance check full folder before upload
-            $this->handle_check_folder_is_over_load($this->dir_path_post,$option);
-            return array( 'name'=>$file_name,'path'=>$uploadPath );
+            try {
+                $phpThumb = new phpThumb();
+                $phpThumb->setSourceFilename(FCPATH.$uploadPath);
+                $phpThumb->setParameter('w', IMAGE_LARGE_SIZE);
+                if($phpThumb->GenerateThumbnail()){
+                    if(!$phpThumb->RenderToFile(FCPATH.$path_image .'/'.IMAGE_LARGE . '/' . $file_name)){
+                        return false;
+                    }
+                }else{
+                    return false;
+                }
+                //Importance check full folder before upload
+                $this->handle_check_folder_is_over_load($this->dir_path_post,$option);
+                return array( 'name'=>$file_name,'path'=>$uploadPath );
+            } catch (Exception $e) {
+                return false;
+            }
         }else{
             return false;
         }
