@@ -5,7 +5,7 @@
 angular.module('app')
   .factory("loginService", ["$http", "$q", "$state", function ($http, $q, $state) {
     var userObject = {};    
-    userObject.syn = {user_data:{}};
+    userObject.syn = {user_data:{},is_requested:0};
     userObject.httpGet = function (path, params, block) {
         if(typeof block == 'undefined'){
             block = true;
@@ -88,19 +88,39 @@ angular.module('app')
             $scope.app.version = response.data.site_version;
           }
       });
-      function getUserInfor(){
+      function getUserInfor(init){
         loginService.httpGet('user/user_ss').then(function(response) {
+            if(init==1){
+                stateChange();
+            }
             if (response.status) {
               angular.copy(response.user_data, loginService.syn.user_data);  
-              if($state.current.name == 'root.access.signin'){
-                $state.go('root.app.dashboard');
+              if($state.current.name == 'access.signin'){
+                $state.go('app.dashboard');
               }
             }else{
-               $state.go('root.access.signin');
+
+               $state.go('access.signin');
             }
           });
       }
-      getUserInfor();
+      getUserInfor(1);
+      function stateChange(){
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
+          if(fromState.name  != toState.name){
+            if(isEmpty(loginService.syn.user_data)){
+              if(toState.name != 'access.signin'){
+                event.preventDefault();
+                //$state.go('access.signin');
+              }
+            }else{
+              if(toState.name == 'access.signin'){
+                event.preventDefault();
+              }
+            }
+          }
+        })
+      }
       // save settings to local storage
       if ( angular.isDefined($localStorage.settings) ) {
         $scope.app.settings = $localStorage.settings;
@@ -120,18 +140,6 @@ angular.module('app')
       $scope.lang = { isopen: false };
       $scope.langs = {en:'English', de_DE:'German', it_IT:'Italian'};
       $scope.selectLang = $scope.langs[$translate.proposedLanguage()] || "English";
-      $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
-          if(isEmpty(loginService.syn.user_data) && toState.name != 'root.access.signin' ){
-            event.preventDefault();
-            //$state.current.name = 'access.signin';
-            $state.go('root.access.signin');
-          }
-          if(!isEmpty(loginService.syn.user_data) && toState.name == 'root.access.signin'){
-            event.preventDefault();
-            //$state.current.name = 'app.dashboard'
-            //$state.go('app.dashboard');
-          }
-      })
       $scope.setLang = function(langKey, $event) {
         // set the current lang
         $scope.selectLang = $scope.langs[langKey];
@@ -145,7 +153,7 @@ angular.module('app')
           .then(function(response) {
             if (response.status) {
               angular.copy({}, loginService.syn.user_data);  
-              $state.go('root.access.signin');
+              $state.go('access.signin');
             }
           }
         );  

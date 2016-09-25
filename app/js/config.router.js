@@ -19,28 +19,11 @@ angular.module('app')
           $urlRouterProvider
               .otherwise('/access/signin');
           $stateProvider
-              .state('root', {
-                  url: '',
-                  templateUrl: adBaseUrl+'app_ctrl.html',/*
-                  resolve: {
-                    promiseObj:  function($http,loginService){
-                      // $http returns a promise for the url data
-                      $http({method: 'GET', url: [baseConfig.apiUrl, 'user/user_ss'].join('/')})
-                        .success(function (data) {
-                          if(typeof(data.user_data)){
-                            angular.copy(data.user_data, loginService.syn.user_data);
-                          }else{
-                            $state.go('root.access.signin');
-                          }
-                      });
-                    }
-                  },
-                  controller: 'AppCtrl'*/
-              })
-              .state('root.app', {
+             
+              .state('app', {
                   abstract: true,
                   url: '/app',
-                  templateUrl: adBaseUrl+'app.html'/*,
+                  templateUrl: adBaseUrl+'app.html',
                   resolve: {
                     promiseObj:  function($http,loginService){
                       // $http returns a promise for the url data
@@ -51,10 +34,9 @@ angular.module('app')
                           }
                       });
                     }
-                  },
-                  controller: 'AppCtrl'*/
+                  }
               })
-              .state('root.app.dashboard', {
+              .state('app.dashboard', {
                   url: '/dashboard',
                   templateUrl: adBaseUrl+'app_dashboard_v1.html',
                   resolve: {
@@ -304,15 +286,15 @@ angular.module('app')
                   }
               })
               // pages
-              .state('root.app.page', {
+              .state('app.page', {
                   url: '/page',
                   template: '<div ui-view class="fade-in-down"></div>'
               })
-              .state('root.app.page.profile', {
+              .state('app.page.profile', {
                   url: '/profile',
                   templateUrl: adBaseUrl+'page_profile.html'
               })
-              .state('root.app.page.post', {
+              .state('app.page.post', {
                   url: '/post',
                   templateUrl: adBaseUrl+'page_post.html'
               })
@@ -333,7 +315,7 @@ angular.module('app')
                   templateUrl: 'tpl/docs.html'
               })
               // system
-              .state('root.app.system', {
+              .state('app.system', {
                   url: '/system',
                   template: '<div ui-view class="fade-in-down"></div>',
                   resolve: {
@@ -345,20 +327,20 @@ angular.module('app')
                       }]
                   }
               })
-              .state('root.app.system.users', {
+              .state('app.system.users', {
                   url: '/users',
                   templateUrl: adBaseUrl+'system_users.html'
               })
-              .state('root.app.system.user_groups', {
+              .state('app.system.user_groups', {
                   url: '/user_groups',
                   templateUrl: adBaseUrl+'system_user_groups.html'
               })
               //category
-              .state('root.app.catalog', {
+              .state('app.catalog', {
                   url: '/catalog',
                   template: '<div ui-view class="fade-in-down"></div>'
               })
-              .state('root.app.catalog.category', {
+              .state('app.catalog.category', {
                   url: '/category',
                   templateUrl: adBaseUrl+'catalog_category.html',
                   resolve: {
@@ -368,7 +350,7 @@ angular.module('app')
                       }]
                   }
               })
-              .state('root.app.catalog.product', {
+              .state('app.catalog.product', {
                   url: '/product',
                   templateUrl: adBaseUrl+'catalog_product.html',
                   resolve: {
@@ -398,7 +380,7 @@ angular.module('app')
                   url: '/lockme',
                   templateUrl: 'tpl/page_lockme.html'
               })
-              .state('root.access', {
+              .state('access', {
                   url: '/access',
                   template: '<div ui-view class="fade-in-right-big smooth"></div>',
                   /*  resolve: {
@@ -415,7 +397,7 @@ angular.module('app')
                   },
                   controller: 'AppCtrl'*/
               })
-              .state('root.access.signin', {
+              .state('access.signin', {
                   url: '/signin',
                   templateUrl: adBaseUrl+'page_signin.html',
                   resolve: {
@@ -445,7 +427,7 @@ angular.module('app')
               })
 
               // fullCalendar
-              .state('root.app.calendar', {
+              .state('app.calendar', {
                   url: '/calendar',
                   templateUrl: adBaseUrl+'app_calendar.html',
                   // use resolve to load other dependences
