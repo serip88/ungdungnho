@@ -2,8 +2,7 @@
 
 /* Controllers */
 
-angular.module('app')
-  .factory("loginService", ["$http", "$q", "$state", function ($http, $q, $state) {
+app.factory("loginService", ["$http", "$q", "$state", function ($http, $q, $state) {
     var userObject = {};    
     userObject.syn = {user_data:{},is_requested:0};
     userObject.httpGet = function (path, params, block) {
@@ -94,12 +93,12 @@ angular.module('app')
                 stateChange();
             }
             if (response.status) {
+              //$urlRouterProvider.otherwise('/app/dashboard');
               angular.copy(response.user_data, loginService.syn.user_data);  
-              if($state.current.name == 'access.signin'){
+              if(!$state.current.name || $state.current.name == 'access.signin'){
                 $state.go('app.dashboard');
               }
             }else{
-
                $state.go('access.signin');
             }
           });
