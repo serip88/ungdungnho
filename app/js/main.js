@@ -40,8 +40,8 @@ angular.module('app')
 
     return userObject;
   }])
-  .controller('AppCtrl', ['$scope', '$rootScope', '$translate', '$localStorage', '$window', '$state', 'loginService', 
-    function(              $scope, $rootScope,  $translate,   $localStorage, $window, $state, loginService ) {
+  .controller('AppCtrl', ['$scope', '$rootScope', '$translate', '$localStorage', '$window', '$state', 'loginService', 'commonService' ,
+    function($scope, $rootScope,  $translate,   $localStorage, $window, $state, loginService, commonService ) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -49,7 +49,7 @@ angular.module('app')
 
       // config
       $scope.app = {
-        name: 'Angulr',
+        name: '',//Your Site Name
         version: '1.3.3',
         // for chart colors
         color: {
@@ -75,8 +75,19 @@ angular.module('app')
           baseUrl: baseUrl,
           adBaseUrl: adBaseUrl,
         },
-        user_data: loginService.syn.user_data
+        user_data: loginService.syn.user_data,
+        api:{
+          main:{base_info:'main/base_info'},
+        }
       }
+      //get site info
+      commonService.httpGet($scope.app.api.main.base_info)
+      .then(function(response) {
+          if (response.status) {
+            $scope.app.name = response.data.site_name;
+            $scope.app.version = response.data.site_version;
+          }
+      });
       function getUserInfor(){
         loginService.httpGet('user/user_ss').then(function(response) {
             if (response.status) {

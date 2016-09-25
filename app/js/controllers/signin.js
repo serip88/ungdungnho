@@ -9,22 +9,23 @@ var loginApi = {
 
 /* Controllers */
   // signin controller
-app.controller('SigninFormController', ['$scope', '$http', '$state', 'loginService', function($scope, $http, $state, loginService) {
-    $scope.user = {};
-    $scope.authError = null;
-    $scope.login = function() {
+app.controller('SigninFormController', ['$scope', '$http', '$state', 'loginService', 'commonService', function($scope, $http, $state, loginService, commonService) {
+      $scope.user = {};
       $scope.authError = null;
-      // Try to login
-      loginService.httpPost(loginApi.userLogin, {email: $scope.user.email, password: $scope.user.password})
-      .then(function(response) {
-        if ( !response.status ) {
-          $scope.authError = response.msg ? response.msg : 'Email or Password not is wrong!';
-        }else{          
-          $state.go('root.app.dashboard');
-        }
-      }/*, function(x) {
-        $scope.authError = 'Server Error';
-      }*/);
-    };
+      $scope.login = function() {
+        $scope.authError = null;
+        // Try to login
+        loginService.httpPost(loginApi.userLogin, {email: $scope.user.email, password: $scope.user.password})
+        .then(function(response) {
+          if ( !response.status ) {
+            $scope.authError = response.msg ? response.msg : 'Email or Password not is wrong!';
+          }else{          
+            $state.go('root.app.dashboard');
+          }
+        }/*, function(x) {
+          $scope.authError = 'Server Error';
+        }*/);
+      };
+      
   }])
 ;

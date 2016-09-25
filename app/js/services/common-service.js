@@ -20,7 +20,7 @@ app.factory("commonService", ["$http", "$q", function ($http, $q) {
             block = true;
         }
         var deferred = $q.defer();
-        $http.get([expenseApi.baseUrl, path].join('/'), {block: block, params: params})
+        $http.get([baseConfig.apiUrl, path].join('/'), {block: block, params: params})
             .success(function (data) {
                 deferred.resolve(data);
             }).error(function (data) {
@@ -34,7 +34,7 @@ app.factory("commonService", ["$http", "$q", function ($http, $q) {
         if(typeof block == 'undefined'){
             block = httpBlockConfig;
         }
-        $http.post([expenseApi.baseUrl, path].join('/'), params, block)
+        $http.post([baseConfig.apiUrl, path].join('/'), params, block)
             .success(function (data) {
                 deferred.resolve(data);
             }).error(function (data) {

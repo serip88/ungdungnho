@@ -2,12 +2,11 @@
 var baseUrl = 'http://ungdungnho.localhost/app/';
 var adBaseUrl = 'http://ungdungnho.localhost/app/tpl/admin/';
 var baseConfig = {};
-    baseConfig.apiUrl = 'http://ungdungnho.localhost/api/';
+    baseConfig.apiUrl = 'http://ungdungnho.localhost/api';
     baseConfig.adminBaseUrl = 'http://ungdungnho.localhost/app/tpl/admin/';
     baseConfig.baseUrl = 'http://ungdungnho.localhost/app/';
     baseConfig.host = 'http://ungdungnho.localhost/';
-var app =  
-angular.module('app')
+var app =  angular.module('app')
   .config(
     [        '$controllerProvider', '$compileProvider', '$filterProvider', '$provide',
     function ($controllerProvider,   $compileProvider,   $filterProvider,   $provide) {
