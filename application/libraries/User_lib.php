@@ -85,7 +85,7 @@ class User_lib extends Common_lib {
 
     $select="user_group_id as id,name";
     $where = array();
-    $data = $this->CI->User_Group_Model->get_data($select,$where);
+    $data = $this->CI->user_group_model->get_data($select,$where);
     return $data;
   }
   function validate_save_user($param){
@@ -254,14 +254,14 @@ class User_lib extends Common_lib {
     $permission = array('access'=>$param['access_selected'],'modify'=>$param['modify_selected'] );
     $data['name'] = $param['user_group_name'];
     $data['permission'] = json_encode($permission);
-    $id = $this->CI->User_Group_Model->insert_data($data);
+    $id = $this->CI->user_group_model->insert_data($data);
     return $id;
   }
   function get_user_group_detail($group_id){
 
     $select="user_group_id as id,name,permission";
     $where = array('user_group_id'=>$group_id);
-    $data = $this->CI->User_Group_Model->get_data($select,$where);
+    $data = $this->CI->user_group_model->get_data($select,$where);
     if($data){
       return $data[0];
     }else{
@@ -291,7 +291,7 @@ class User_lib extends Common_lib {
       $data['name'] = $param['user_group_name'];
       $data['permission'] = json_encode($permission);
       $where = array("user_group_id"=> $param['id']);
-      $stt = $this->CI->User_Group_Model->update_data($data,$where); 
+      $stt = $this->CI->user_group_model->update_data($data,$where); 
       return $stt;
     }else{
       return false;
@@ -301,7 +301,7 @@ class User_lib extends Common_lib {
   function user_group_delete($group_id){
     if($group_id){
       $where = array("user_group_id"=>$group_id);
-      $stt = $this->CI->User_Group_Model->delete_data($where);
+      $stt = $this->CI->user_group_model->delete_data($where);
       return $stt;
     }else
       return false;
