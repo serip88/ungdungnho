@@ -1,11 +1,11 @@
 // config
-var baseUrl = 'http://ungdungnho.localhost/app/';
-var adBaseUrl = 'http://ungdungnho.localhost/app/tpl/admin/';
+var baseUrl = '/app/';
+var adBaseUrl = '/app/tpl/admin/';
 var baseConfig = {};
-    baseConfig.apiUrl = 'http://ungdungnho.localhost/api';
-    baseConfig.adminBaseUrl = 'http://ungdungnho.localhost/app/tpl/admin/';
-    baseConfig.baseUrl = 'http://ungdungnho.localhost/app/';
-    baseConfig.host = 'http://ungdungnho.localhost/';
+    baseConfig.apiUrl = '/api';
+    baseConfig.adminBaseUrl = '/app/tpl/admin/';
+    baseConfig.baseUrl = '/app/';
+    baseConfig.host = '/';
 var app =  angular.module('app')
   .config(
     [        '$controllerProvider', '$compileProvider', '$filterProvider', '$provide',
