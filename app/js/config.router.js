@@ -23,7 +23,7 @@ angular.module('app')
               .state('app', {
                   abstract: true,
                   url: '/app',
-                  templateUrl: adBaseUrl+'app.html',
+                  templateUrl: baseConfig.adminTpl+'/app.html',
                   resolve: {
                     promiseObj:  function($http,loginService){
                       // $http returns a promise for the url data
@@ -38,11 +38,11 @@ angular.module('app')
               })
               .state('app.dashboard', {
                   url: '/dashboard',
-                  templateUrl: adBaseUrl+'app_dashboard_v1.html',
+                  templateUrl: baseConfig.adminTpl+'/app_dashboard_v1.html',
                   resolve: {
                     deps: ['$ocLazyLoad',
                       function( $ocLazyLoad ){
-                        return $ocLazyLoad.load([baseUrl+'js/controllers/chart.js']);
+                        return $ocLazyLoad.load([baseConfig.app+'/js/controllers/chart.js']);
                     }]
                   }
               })
@@ -78,7 +78,7 @@ angular.module('app')
               })          
               .state('app.ui.bootstrap', {
                   url: '/bootstrap',
-                  templateUrl: adBaseUrl+'ui_bootstrap.html'
+                  templateUrl: baseConfig.adminTpl+'/ui_bootstrap.html'
               })
               .state('app.ui.sortable', {
                   url: '/sortable',
@@ -94,13 +94,13 @@ angular.module('app')
               })
               .state('app.ui.tree', {
                   url: '/tree',
-                  templateUrl: adBaseUrl+'ui_tree.html',
+                  templateUrl: baseConfig.adminTpl+'/ui_tree.html',
                   resolve: {
                       deps: ['$ocLazyLoad',
                         function( $ocLazyLoad ){
                           return $ocLazyLoad.load('angularBootstrapNavTree').then(
                               function(){
-                                 return $ocLazyLoad.load(baseUrl+'js/controllers/tree.js');
+                                 return $ocLazyLoad.load(baseConfig.app+'/js/controllers/tree.js');
                               }
                           );
                         }
@@ -196,7 +196,7 @@ angular.module('app')
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad){
-                          return uiLoad.load(baseUrl+'js/controllers/form.js');
+                          return uiLoad.load(baseConfig.app+'/js/controllers/form.js');
                       }]
                   }
               })
@@ -206,7 +206,7 @@ angular.module('app')
               })
               .state('app.form.validation', {
                   url: '/validation',
-                  templateUrl: adBaseUrl+'form_validation.html'
+                  templateUrl: baseConfig.adminTpl+'/form_validation.html'
               })
               .state('app.form.wizard', {
                   url: '/wizard',
@@ -292,11 +292,11 @@ angular.module('app')
               })
               .state('app.page.profile', {
                   url: '/profile',
-                  templateUrl: adBaseUrl+'page_profile.html'
+                  templateUrl: baseConfig.adminTpl+'/page_profile.html'
               })
               .state('app.page.post', {
                   url: '/post',
-                  templateUrl: adBaseUrl+'page_post.html'
+                  templateUrl: baseConfig.adminTpl+'/page_post.html'
               })
               .state('app.page.search', {
                   url: '/search',
@@ -321,19 +321,19 @@ angular.module('app')
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad ){
-                          return uiLoad.load( [baseUrl+'js/app/user/user.js',
-                                              baseUrl+'js/app/user/user_groups.js',
-                                              baseUrl+'vendor/libs/moment.min.js'] );
+                          return uiLoad.load( [baseConfig.app+'/js/controllers/user.js',
+                                              baseConfig.app+'/js/controllers/user_groups.js',
+                                              baseConfig.app+'/vendor/libs/moment.min.js'] );
                       }]
                   }
               })
               .state('app.system.users', {
                   url: '/users',
-                  templateUrl: adBaseUrl+'system_users.html'
+                  templateUrl: baseConfig.adminTpl+'/system/users/system_users.html'
               })
               .state('app.system.user_groups', {
                   url: '/user_groups',
-                  templateUrl: adBaseUrl+'system_user_groups.html'
+                  templateUrl: baseConfig.adminTpl+'/system/user_groups/system_user_groups.html'
               })
               //category
               .state('app.catalog', {
@@ -342,33 +342,33 @@ angular.module('app')
               })
               .state('app.catalog.category', {
                   url: '/category',
-                  templateUrl: adBaseUrl+'catalog_category.html',
+                  templateUrl: baseConfig.adminTpl+'/catalog/category/catalog_category.html',
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad ){
-                          return uiLoad.load( [baseUrl+'js/controllers/category.js'] );
+                          return uiLoad.load( [baseConfig.app+'/js/controllers/category.js'] );
                       }]
                   }
               })
               .state('app.catalog.product', {
                   url: '/product',
-                  templateUrl: adBaseUrl+'catalog_product.html',
+                  templateUrl: baseConfig.adminTpl+'/catalog/product/catalog_product.html',
                   resolve: {
                       deps: ['$ocLazyLoad',
                         function( $ocLazyLoad ){
                           /*return $ocLazyLoad.load('angularFileUpload').then(
                             function(){
-                              return $ocLazyLoad.load( [baseUrl+'js/controllers/product.js', 
-                                baseUrl+'js/controllers/file-upload.js',
-                                baseUrl+'js/controllers/upload.js'
+                              return $ocLazyLoad.load( [baseConfig.app+'/js/controllers/product.js', 
+                                baseConfig.app+'/js/controllers/file-upload.js',
+                                baseConfig.app+'/js/controllers/upload.js'
                               ]);
                             }
                           );*/
                           return $ocLazyLoad.load(['ngFileUpload','angularFileUpload']).then(
                             function(){
-                              return $ocLazyLoad.load( [baseUrl+'js/controllers/product.js', 
-                                baseUrl+'js/controllers/upload.js',
-                                baseUrl+'js/controllers/file-upload.js'
+                              return $ocLazyLoad.load( [baseConfig.app+'/js/controllers/product.js', 
+                                baseConfig.app+'/js/controllers/upload.js',
+                                baseConfig.app+'/js/controllers/file-upload.js'
                               ]);
                             }
                           )
@@ -399,11 +399,11 @@ angular.module('app')
               })
               .state('access.signin', {
                   url: '/signin',
-                  templateUrl: adBaseUrl+'page_signin.html',
+                  templateUrl: baseConfig.adminTpl+'/page_signin.html',
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad ){
-                          return uiLoad.load( [baseUrl+'js/controllers/signin.js'] );
+                          return uiLoad.load( [baseConfig.app+'/js/controllers/signin.js'] );
                       }]
                   }
               })
@@ -423,24 +423,24 @@ angular.module('app')
               })
               .state('access.404', {
                   url: '/404',
-                  templateUrl: adBaseUrl+'page_404.html'
+                  templateUrl: baseConfig.adminTpl+'/page_404.html'
               })
 
               // fullCalendar
               .state('app.calendar', {
                   url: '/calendar',
-                  templateUrl: adBaseUrl+'app_calendar.html',
+                  templateUrl: baseConfig.adminTpl+'/app_calendar.html',
                   // use resolve to load other dependences
                   resolve: {
                       deps: ['$ocLazyLoad', 'uiLoad',
                         function( $ocLazyLoad, uiLoad ){
                           return uiLoad.load(
-                            [baseUrl+'vendor/jquery/fullcalendar/fullcalendar.css',
-                              baseUrl+'vendor/jquery/fullcalendar/theme.css',
-                              baseUrl+'vendor/jquery/jquery-ui-1.10.3.custom.min.js',
-                              baseUrl+'vendor/libs/moment.min.js',
-                              baseUrl+'vendor/jquery/fullcalendar/fullcalendar.min.js',
-                              baseUrl+'js/app/calendar/calendar.js']
+                            [baseConfig.app+'/vendor/jquery/fullcalendar/fullcalendar.css',
+                              baseConfig.app+'/vendor/jquery/fullcalendar/theme.css',
+                              baseConfig.app+'/vendor/jquery/jquery-ui-1.10.3.custom.min.js',
+                              baseConfig.app+'/vendor/libs/moment.min.js',
+                              baseConfig.app+'/vendor/jquery/fullcalendar/fullcalendar.min.js',
+                              baseConfig.app+'/js/app/calendar/calendar.js']
                           ).then(
                             function(){
                               return $ocLazyLoad.load('ui.calendar');
@@ -454,24 +454,24 @@ angular.module('app')
               .state('app.mail', {
                   abstract: true,
                   url: '/mail',
-                  templateUrl: adBaseUrl+'mail.html',
+                  templateUrl: baseConfig.adminTpl+'/mail.html',
                   // use resolve to load other dependences
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad ){
-                          return uiLoad.load( [baseUrl+'js/app/mail/mail.js',
-                                               baseUrl+'js/app/mail/mail-service.js',
-                                               baseUrl+'vendor/libs/moment.min.js'] );
+                          return uiLoad.load( [baseConfig.app+'/js/app/mail/mail.js',
+                                               baseConfig.app+'/js/app/mail/mail-service.js',
+                                               baseConfig.app+'/vendor/libs/moment.min.js'] );
                       }]
                   }
               })
               .state('app.mail.list', {
                   url: '/inbox/{fold}',
-                  templateUrl: adBaseUrl+'mail.list.html'
+                  templateUrl: baseConfig.adminTpl+'/mail.list.html'
               })
               .state('app.mail.detail', {
                   url: '/{mailId:[0-9]{1,4}}',
-                  templateUrl: adBaseUrl+'mail.detail.html'
+                  templateUrl: baseConfig.adminTpl+'/mail.detail.html'
               })
               .state('app.mail.compose', {
                   url: '/compose',

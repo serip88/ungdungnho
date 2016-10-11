@@ -46,7 +46,7 @@
     }; 
     function modalAddUser(size,list_permissions) {
       var modalObj = {
-        templateUrl: adBaseUrl +'modal/user/add_group_user.html',
+        templateUrl: baseConfig.adminTpl +'/system/user_groups/add_group_user.html',
         size: size,
         controller: ['$scope', '$uibModalInstance', function(scope, $uibModalInstance){
           scope.newuser = {};
@@ -108,7 +108,7 @@
     }
     function modalEditUser(size,data) {
        var modalObj = {
-        templateUrl: adBaseUrl +'modal/user/add_group_user.html',
+        templateUrl: baseConfig.adminTpl +'/system/user_groups/add_group_user.html',
         size: size,
         controller: ['$scope', '$uibModalInstance', function(scope, $uibModalInstance){
           scope.newuser = {};

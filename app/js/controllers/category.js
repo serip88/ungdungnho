@@ -85,7 +85,7 @@
 	    };
 	    function modalAddCategory(size,category_list) {
 	        var modalObj = {
-		        templateUrl: adBaseUrl +'modal/category/add_category.html',
+		        templateUrl: baseConfig.adminTpl +'/catalog/category/add_category.html',
 		        size: size,
 		        controller: ['$scope', '$uibModalInstance', 'dataInit', function(scope, $uibModalInstance, dataInit){
 		          	scope.category = {};
@@ -132,7 +132,7 @@
 	    }
 	    function modalEditCategory(size,category_list,item) {
 	    var modalObj = {
-	      templateUrl: adBaseUrl +'modal/category/add_category.html',
+	      templateUrl: baseConfig.adminTpl +'/catalog/category/add_category.html',
 	      size: size,
 	      controller: ['$scope', '$uibModalInstance','dataInit', function(scope, $uibModalInstance, dataInit){
 	        scope.category = item;

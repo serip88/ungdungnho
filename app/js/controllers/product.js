@@ -83,7 +83,7 @@
 	    };
 	    function modalAddProduct(size,category_list) {
 	        var modalObj = {
-		        templateUrl: adBaseUrl +'modal/product/add_product.html',
+		        templateUrl: baseConfig.adminTpl +'/catalog/product/add_product.html',
 		        size: size,
 		        controller: ['$scope', '$uibModalInstance', 'dataInit', function(scope, $uibModalInstance, dataInit){
 		          	scope.product = {};
@@ -131,10 +131,10 @@
 	    }
 	    function modalEditProduct(size,category_list,item) {
 		    var modalObj = {
-		      templateUrl: adBaseUrl +'modal/product/add_product.html',
+		      templateUrl: baseConfig.adminTpl +'/catalog/product/add_product.html',
 		      size: size,
 		      controller: ['$scope','commonService', '$uibModalInstance','Upload','$timeout','dataInit', function(scope, commonService, $uibModalInstance,Upload, $timeout, dataInit){
-				scope.popover = {title: 'Title', content: '', templateUrl: adBaseUrl +'catalog/product/popover/edit_image.html'};
+				scope.popover = {title: 'Title', content: '', templateUrl: baseConfig.adminTpl +'/catalog/product/popover/edit_image.html'};
 
 		        scope.product = angular.copy(item);
 		        scope.categoryList = dataInit;

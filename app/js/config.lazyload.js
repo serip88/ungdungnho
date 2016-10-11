@@ -7,36 +7,36 @@ angular.module('app')
    * value: array of the css js file located
    */
   .constant('JQ_CONFIG', {
-      easyPieChart:   [baseUrl+'vendor/jquery/charts/easypiechart/jquery.easy-pie-chart.js'],
-      sparkline:      [baseUrl+'vendor/jquery/charts/sparkline/jquery.sparkline.min.js'],
-      plot:           [baseUrl+'vendor/jquery/charts/flot/jquery.flot.min.js', 
-                          baseUrl+'vendor/jquery/charts/flot/jquery.flot.resize.js',
-                          baseUrl+'vendor/jquery/charts/flot/jquery.flot.tooltip.min.js',
-                          baseUrl+'vendor/jquery/charts/flot/jquery.flot.spline.js',
-                          baseUrl+'vendor/jquery/charts/flot/jquery.flot.orderBars.js',
-                          baseUrl+'vendor/jquery/charts/flot/jquery.flot.pie.min.js'],
-      slimScroll:     [baseUrl+'vendor/jquery/slimscroll/jquery.slimscroll.min.js'],
-      sortable:       [baseUrl+'vendor/jquery/sortable/jquery.sortable.js'],
-      nestable:       [baseUrl+'vendor/jquery/nestable/jquery.nestable.js',
-                          baseUrl+'vendor/jquery/nestable/nestable.css'],
-      filestyle:      [baseUrl+'vendor/jquery/file/bootstrap-filestyle.min.js'],
-      slider:         [baseUrl+'vendor/jquery/slider/bootstrap-slider.js',
-                          baseUrl+'vendor/jquery/slider/slider.css'],
-      chosen:         [baseUrl+'vendor/jquery/chosen/chosen.jquery.min.js',
-                          baseUrl+'vendor/jquery/chosen/chosen.css'],
-      TouchSpin:      [baseUrl+'vendor/jquery/spinner/jquery.bootstrap-touchspin.min.js',
-                          baseUrl+'vendor/jquery/spinner/jquery.bootstrap-touchspin.css'],
-      wysiwyg:        [baseUrl+'vendor/jquery/wysiwyg/bootstrap-wysiwyg.js',
-                          baseUrl+'vendor/jquery/wysiwyg/jquery.hotkeys.js'],
-      dataTable:      [baseUrl+'vendor/jquery/datatables/jquery.dataTables.min.js',
-                          baseUrl+'vendor/jquery/datatables/dataTables.bootstrap.js',
-                          baseUrl+'vendor/jquery/datatables/dataTables.bootstrap.css'],
-      vectorMap:      [baseUrl+'vendor/jquery/jvectormap/jquery-jvectormap.min.js', 
-                          baseUrl+'vendor/jquery/jvectormap/jquery-jvectormap-world-mill-en.js',
-                          baseUrl+'vendor/jquery/jvectormap/jquery-jvectormap-us-aea-en.js',
-                          baseUrl+'vendor/jquery/jvectormap/jquery-jvectormap.css'],
-      footable:       [baseUrl+'vendor/jquery/footable/footable.all.min.js',
-                          baseUrl+'vendor/jquery/footable/footable.core.css']
+      easyPieChart:   [baseConfig.app+'/vendor/jquery/charts/easypiechart/jquery.easy-pie-chart.js'],
+      sparkline:      [baseConfig.app+'/vendor/jquery/charts/sparkline/jquery.sparkline.min.js'],
+      plot:           [baseConfig.app+'/vendor/jquery/charts/flot/jquery.flot.min.js', 
+                          baseConfig.app+'/vendor/jquery/charts/flot/jquery.flot.resize.js',
+                          baseConfig.app+'/vendor/jquery/charts/flot/jquery.flot.tooltip.min.js',
+                          baseConfig.app+'/vendor/jquery/charts/flot/jquery.flot.spline.js',
+                          baseConfig.app+'/vendor/jquery/charts/flot/jquery.flot.orderBars.js',
+                          baseConfig.app+'/vendor/jquery/charts/flot/jquery.flot.pie.min.js'],
+      slimScroll:     [baseConfig.app+'/vendor/jquery/slimscroll/jquery.slimscroll.min.js'],
+      sortable:       [baseConfig.app+'/vendor/jquery/sortable/jquery.sortable.js'],
+      nestable:       [baseConfig.app+'/vendor/jquery/nestable/jquery.nestable.js',
+                          baseConfig.app+'/vendor/jquery/nestable/nestable.css'],
+      filestyle:      [baseConfig.app+'/vendor/jquery/file/bootstrap-filestyle.min.js'],
+      slider:         [baseConfig.app+'/vendor/jquery/slider/bootstrap-slider.js',
+                          baseConfig.app+'/vendor/jquery/slider/slider.css'],
+      chosen:         [baseConfig.app+'/vendor/jquery/chosen/chosen.jquery.min.js',
+                          baseConfig.app+'/vendor/jquery/chosen/chosen.css'],
+      TouchSpin:      [baseConfig.app+'/vendor/jquery/spinner/jquery.bootstrap-touchspin.min.js',
+                          baseConfig.app+'/vendor/jquery/spinner/jquery.bootstrap-touchspin.css'],
+      wysiwyg:        [baseConfig.app+'/vendor/jquery/wysiwyg/bootstrap-wysiwyg.js',
+                          baseConfig.app+'/vendor/jquery/wysiwyg/jquery.hotkeys.js'],
+      dataTable:      [baseConfig.app+'/vendor/jquery/datatables/jquery.dataTables.min.js',
+                          baseConfig.app+'/vendor/jquery/datatables/dataTables.bootstrap.js',
+                          baseConfig.app+'/vendor/jquery/datatables/dataTables.bootstrap.css'],
+      vectorMap:      [baseConfig.app+'/vendor/jquery/jvectormap/jquery-jvectormap.min.js', 
+                          baseConfig.app+'/vendor/jquery/jvectormap/jquery-jvectormap-world-mill-en.js',
+                          baseConfig.app+'/vendor/jquery/jvectormap/jquery-jvectormap-us-aea-en.js',
+                          baseConfig.app+'/vendor/jquery/jvectormap/jquery-jvectormap.css'],
+      footable:       [baseConfig.app+'/vendor/jquery/footable/footable.all.min.js',
+                          baseConfig.app+'/vendor/jquery/footable/footable.core.css']
       }
   )
   // oclazyload config
@@ -64,20 +64,20 @@ angular.module('app')
               {
                   name:'angularFileUpload',
                   files: [
-                      baseUrl+'vendor/modules/angular-file-upload/2.3.4/angular-file-upload.min.js'
+                      baseConfig.app+'/vendor/modules/angular-file-upload/2.3.4/angular-file-upload.min.js'
                   ]
               },
               {
                   name:'ngFileUpload',
                   files: [
-                      baseUrl+'vendor/modules/ng-file-upload/12.0.4/common.css',
-                      baseUrl+'vendor/modules/ng-file-upload/12.0.4/ng-file-upload-shim.js',
-                      baseUrl+'vendor/modules/ng-file-upload/12.0.4/ng-file-upload.js'
+                      baseConfig.app+'/vendor/modules/ng-file-upload/12.0.4/common.css',
+                      baseConfig.app+'/vendor/modules/ng-file-upload/12.0.4/ng-file-upload-shim.js',
+                      baseConfig.app+'/vendor/modules/ng-file-upload/12.0.4/ng-file-upload.js'
                   ]
               },
               {
                   name:'ui.calendar',
-                  files: [baseUrl+'vendor/modules/angular-ui-calendar/calendar.js']
+                  files: [baseConfig.app+'/vendor/modules/angular-ui-calendar/calendar.js']
               },
               {
                   name: 'ngImgCrop',
@@ -89,8 +89,8 @@ angular.module('app')
               {
                   name: 'angularBootstrapNavTree',
                   files: [
-                      baseUrl+'vendor/modules/angular-bootstrap-nav-tree/abn_tree_directive.js',
-                      baseUrl+'vendor/modules/angular-bootstrap-nav-tree/abn_tree.css'
+                      baseConfig.app+'/vendor/modules/angular-bootstrap-nav-tree/abn_tree_directive.js',
+                      baseConfig.app+'/vendor/modules/angular-bootstrap-nav-tree/abn_tree.css'
                   ]
               },
               {

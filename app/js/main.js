@@ -71,8 +71,8 @@ app.factory("loginService", ["$http", "$q", "$state", function ($http, $q, $stat
           asideFolded: false,
           asideDock: false,
           container: false,
-          baseUrl: baseUrl,
-          adBaseUrl: adBaseUrl,
+          appUrl: baseConfig.app,
+          adminTpl: baseConfig.adminTpl,
         },
         user_data: loginService.syn.user_data,
         api:{

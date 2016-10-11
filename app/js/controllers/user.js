@@ -98,7 +98,7 @@ var userApi = {
     };*/
   function modalAddUser(size,group_user) {
     var modalObj = {
-      templateUrl: adBaseUrl +'modal/add_user.html',
+      templateUrl: baseConfig.adminTpl +'/system/users/add_user.html',
       size: size,
       controller: ['$scope', '$uibModalInstance', function(scope, $uibModalInstance){
         scope.newuser = {};
@@ -227,7 +227,7 @@ var userApi = {
   }
   function modalEditUser(size,group_user,item) {
     var modalObj = {
-      templateUrl: adBaseUrl +'modal/edit_user.html',
+      templateUrl: baseConfig.adminTpl +'/system/users/edit_user.html',
       size: size,
       controller: ['$scope', '$uibModalInstance','dataInit', function(scope, $uibModalInstance, dataInit){
         scope.newuser = item;
