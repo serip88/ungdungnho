@@ -54,7 +54,7 @@
 	              angular.forEach( $scope.categoryList, function(value, key) {
 	                $scope.categoryList[key]['id'] = parseInt(value.id) ;
 	                //$scope.user.roles[value.user_id]= value.username ;
-	                $scope.category.roles.push({id:value.id,name:value.name_vn});
+	                $scope.category.roles.push({id:value.id,name:value.name});
 	              });
 	            }
 	        });
@@ -90,7 +90,7 @@
 		        controller: ['$scope', '$uibModalInstance', 'dataInit', function(scope, $uibModalInstance, dataInit){
 		          	scope.category = {};
 		          	scope.categoryList = dataInit;
-		          	scope.categoryList.push({id:0,path_parent_name_vn:'[Không danh mục]',path_parent_name_en:'[No Category]'});
+		          	scope.categoryList.push({id:0,path_parent_name:'[Không danh mục]'});
 		           	scope.cancel = function(){
 		            	$uibModalInstance.close();
 		           	};
@@ -108,7 +108,7 @@
 			            });
 		          	};
 		          	function validateAddCategory() {
-			            if(typeof(scope.category.name_vn) == 'undefined' || typeof(scope.category.name_en) == 'undefined' ){
+			            if(typeof(scope.category.name) == 'undefined'){
 			              return 0;
 			            }else{
 			              return 1;
@@ -137,7 +137,7 @@
 	      controller: ['$scope', '$uibModalInstance','dataInit', function(scope, $uibModalInstance, dataInit){
 	        scope.category = item;
 	        scope.categoryList = dataInit;
-	        scope.categoryList.push({id:0,path_parent_name_vn:'[Không danh mục]',path_parent_name_en:'[No Category]'});
+	        scope.categoryList.push({id:0,path_parent_name:'[Không danh mục]'});
 	        scope.category.parent_selected = {id:item.parent_id};
 	        scope.cancel = function(){
 	          $uibModalInstance.close();
@@ -163,7 +163,7 @@
 	          });
 	        };
 	        function validateAddCategory() {
-	            if(typeof(scope.category.name_vn) == 'undefined' || typeof(scope.category.name_en) == 'undefined' ){
+	            if(typeof(scope.category.name) == 'undefined' ){
 	              return 0;
 	            }else{
 	              return 1;

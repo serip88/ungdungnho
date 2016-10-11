@@ -28,15 +28,12 @@ class Category_lib extends Common_lib {
       	$this->_config =  $this->CI->config;
   	}
   	function validate_save_category($param){
-	    $requite = array('name_vn','name_en');//description_vn,description_en,status,parent_id
-	    $param['name_vn'] 	= isset($param['name_vn']) && $param['name_vn'] ?$param['name_vn']: '';
-	    $param['name_vn'] 	= str_replace('/', '-', $param['name_vn']);
-	    $param['name_en'] 	= isset($param['name_en']) && $param['name_en'] ?$param['name_en']: '';  
-		$param['name_en'] 	= str_replace('/', '-', $param['name_en']);
+	    $requite = array('name');//description,description_en,status,parent_id
+	    $param['name'] 	= isset($param['name']) && $param['name'] ?$param['name']: '';
+	    $param['name'] 	= str_replace('/', '-', $param['name']);
 	    $param['status'] 	= isset($param['status']) && $param['status'] ? $param['status']: 0;   
 	    $param['parent_id'] 	= isset($param['parent_id']) && $param['parent_id'] ? $param['parent_id']: 0;   
-	    $param['description_vn'] = isset($param['description_vn']) && $param['description_vn'] ? $param['description_vn']: '';   
-	    $param['description_en'] = isset($param['description_en']) && $param['description_en'] ? $param['description_en']: '';   
+	    $param['description'] = isset($param['description']) && $param['description'] ? $param['description']: '';   
 	    foreach ($requite as $key => $value) {
 	      if(!$param[$value]){
 	        return 0;
@@ -47,18 +44,15 @@ class Category_lib extends Common_lib {
 
 	function save_category($param){ 
 	    $data = array();
-	    $data['name_vn'] 	= $param['name_vn'];
-	    $data['name_en'] 	= $param['name_en'];
-	    $data['slug'] 		= $param['name_vn'];
+	    $data['name'] 	= $param['name'];
+	    $data['slug'] 		= $param['name'];
 	    $data['parent_id'] 	= $param['parent_id'];
-	    $data['description_vn'] = $param['description_vn'];
-	    $data['description_en'] = $param['description_en'];
+	    $data['description'] = $param['description'];
 	    $data['path_parent'] = $param['path_parent'];
-	    $data['path_parent_name_vn'] = $param['path_parent_name_vn'];
-	    $data['path_parent_name_en'] = $param['path_parent_name_en'];
+	    $data['path_parent_name'] = $param['path_parent_name'];
 	    $data['type'] 		= $this->_tag_type;
 	    $data['level'] 		= $param['level'];
-	    $data['order'] 		= 0;
+	    $data['orders'] 		= 0;
 	    $data['count'] 		= 0;
 	    $data['enabled'] 	= $param['status']; 
 	    $id = $this->CI->tag_model->insert_data($data);
@@ -75,22 +69,19 @@ class Category_lib extends Common_lib {
 	    return $param;
 	}
 	function handle_save_category($param){
-		//path_parent,level,path_parent_name_vn,path_parent_name_en
+		//path_parent,level,path_parent_name
 		$param['path_parent']=0;
-		$param['path_parent_name_vn']=$param['name_vn'];
-		$param['path_parent_name_en']=$param['name_en'];
+		$param['path_parent_name']=$param['name'];
 		$param['level']=0;
 		if($param['parent_id']){
 			$category = $this->get_category($param['parent_id']);
 			if($category['path_parent'] && $category['level']){
 				$param['path_parent'] = $category['path_parent'].','.$category['id'];
-				$param['path_parent_name_vn'] = $category['path_parent_name_vn'].'/'.$param['name_vn'];
-				$param['path_parent_name_en'] = $category['path_parent_name_en'].'/'.$param['name_en'];
+				$param['path_parent_name'] = $category['path_parent_name'].'/'.$param['name'];
 				$param['level'] = $category['level']+1;
 			}else{
 				$param['path_parent'] = $category['id'];
-				$param['path_parent_name_vn'] = $category['name_vn'].'/'.$param['name_vn'];
-				$param['path_parent_name_en'] = $category['name_en'].'/'.$param['name_en'];
+				$param['path_parent_name'] = $category['name'].'/'.$param['name'];
 				$param['level']=1;
 			}
 		}
@@ -98,18 +89,15 @@ class Category_lib extends Common_lib {
 	}
 	function edit_category($param){ 
 	    $data = array();
-	    $data['name_vn'] 	= $param['name_vn'];
-	    $data['name_en'] 	= $param['name_en'];
-	    $data['slug'] 		= $param['name_vn'];
+	    $data['name'] 	= $param['name'];
+	    $data['slug'] 		= $param['name'];
 	    $data['parent_id'] 	= $param['parent_id'];
-	    $data['description_vn'] = $param['description_vn'];
-	    $data['description_en'] = $param['description_en'];
+	    $data['description'] = $param['description'];
 	    $data['path_parent'] = $param['path_parent'];
-	    $data['path_parent_name_vn'] = $param['path_parent_name_vn'];
-	    $data['path_parent_name_en'] = $param['path_parent_name_en'];
+	    $data['path_parent_name'] = $param['path_parent_name'];
 	    $data['type'] 		= $this->_tag_type;
 	    $data['level'] 		= $param['level'];
-	    $data['order'] 		= 0;
+	    $data['orders'] 		= 0;
 	    $data['enabled'] 	= $param['status']; 
 	    if(isset($param['id']) && $param['id']){
 	      $where = array("id"=> $param['id']);
@@ -120,7 +108,7 @@ class Category_lib extends Common_lib {
 	    }
 	}
 	function get_category($id){
-	    $select="id,name_vn,name_en,description_en,description_vn,enabled as status,path_parent,level,path_parent_name_vn,path_parent_name_en";
+	    $select="id,name,description,enabled as status,path_parent,level,path_parent_name";
 	    $where = array('id'=>$id, 'type'=>$this->_tag_type);
 	    $data = $this->CI->tag_model->get_data($select,$where,1);
 	    if($data){
@@ -130,7 +118,7 @@ class Category_lib extends Common_lib {
 	    }
 	}
 	function get_category_list(){
-	    $select="id,parent_id,name_vn,name_en,description_en,description_vn,enabled as status,path_parent,level,path_parent_name_vn,path_parent_name_en";
+	    $select="id,parent_id,name,description,enabled as status,path_parent,level,path_parent_name";
 	    $where = array('type'=>$this->_tag_type);
 	    $data = $this->CI->tag_model->get_data($select,$where);
 	    /*if($data){

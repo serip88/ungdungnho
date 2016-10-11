@@ -14,14 +14,7 @@
         <div class="form-group" >
             <label class="col-sm-2 control-label" for="input-category">Product name (vn)</label>
             <div class="col-sm-10">
-                <input type="text"  ng-pattern="/^.{2,20}$/" placeholder="product" class="form-control" data-ng-model="product.name_vn" required>
-                <div class="help-block">Product must be 3-20 characters.</div>
-            </div>
-        </div>
-        <div class="form-group" >
-            <label class="col-sm-2 control-label" for="input-category">Product name (en)</label>
-            <div class="col-sm-10">
-                <input type="text" ng-pattern="/^.{2,20}$/" placeholder="product" class="form-control" data-ng-model="product.name_en" required>
+                <input type="text"  ng-pattern="/^.{2,20}$/" placeholder="product" class="form-control" data-ng-model="product.name" required>
                 <div class="help-block">Product must be 3-20 characters.</div>
             </div>
         </div>
@@ -30,9 +23,9 @@
             <div class="col-sm-10">
                 <!--<select  class="form-control" ng-model="category.parent_id" required>
                     <option value="">Please choose</option>
-                    <option ng-repeat="item in categoryList" value="{{item.id}}">{{item.name_vn}}</option>
+                    <option ng-repeat="item in categoryList" value="{{item.id}}">{{item.name}}</option>
                 </select>-->
-                <select  class="form-control" ng-model="product.parent_selected" ng-options="option as option.path_parent_name_vn for option in categoryList track by option.id">
+                <select  class="form-control" ng-model="product.parent_selected" ng-options="option as option.path_parent_name for option in categoryList track by option.id">
                 </select>
             </div>
         </div>
@@ -85,13 +78,7 @@
         <div class="form-group" >
             <label class="col-sm-2 control-label" for="input-firstname">Description (vn)</label>
             <div class="col-sm-10">
-                <textarea data-ng-model="product.description_vn" rows="5" placeholder="Description" class="form-control"></textarea>
-            </div>
-        </div>
-        <div class="form-group" >
-            <label class="col-sm-2 control-label" for="input-firstname">Description (en)</label>
-            <div class="col-sm-10">
-                <textarea data-ng-model="product.description_en" rows="5" placeholder="Description" class="form-control"></textarea>
+                <textarea data-ng-model="product.description" rows="5" placeholder="Description" class="form-control"></textarea>
             </div>
         </div>
         

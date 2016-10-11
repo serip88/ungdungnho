@@ -67,7 +67,7 @@
 	              angular.forEach( $scope.productList, function(value, key) {
 	                $scope.productList[key]['product_id'] = parseInt(value.product_id) ;
 	                //$scope.user.roles[value.user_id]= value.username ;
-	                $scope.products.roles.push({id:value.product_id,name:value.title_vn});
+	                $scope.products.roles.push({id:value.product_id,name:value.title});
 	              });
 	            }
 	        });
@@ -88,7 +88,7 @@
 		        controller: ['$scope', '$uibModalInstance', 'dataInit', function(scope, $uibModalInstance, dataInit){
 		          	scope.product = {};
 		          	scope.categoryList = dataInit;
-		          	scope.categoryList.push({id:0,path_parent_name_vn:'[Không danh mục]',path_parent_name_en:'[No Category]'});
+		          	scope.categoryList.push({id:0,path_parent_name:'[Không danh mục]'});
 		           	scope.cancel = function(){
 		            	$uibModalInstance.close();
 		           	};
@@ -106,7 +106,7 @@
 			            });
 		          	};
 		          	function validateAddProduct() {
-			            if(typeof(scope.product.name_vn) == 'undefined' || typeof(scope.product.name_en) == 'undefined' ){
+			            if(typeof(scope.product.name) == 'undefined' ){
 			              return 0;
 			            }else{
 			              return 1;
@@ -138,7 +138,7 @@
 
 		        scope.product = angular.copy(item);
 		        scope.categoryList = dataInit;
-		        scope.categoryList.push({id:0,path_parent_name_vn:'[Không danh mục]',path_parent_name_en:'[No Category]'});
+		        scope.categoryList.push({id:0,path_parent_name:'[Không danh mục]'});
 		        scope.product.parent_selected = {id:item.parent_id};
 		        scope.cancel = function(){
 		          $uibModalInstance.close();
@@ -209,7 +209,7 @@
 			        }   
 			    }
 		        function validateEditProduct() {
-		            if(typeof(scope.product.name_vn) == 'undefined' || typeof(scope.product.name_en) == 'undefined' ){
+		            if(typeof(scope.product.name) == 'undefined' ){
 		              return 0;
 		            }else{
 		              return 1;
