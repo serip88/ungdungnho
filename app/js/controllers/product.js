@@ -85,7 +85,7 @@
 	        var modalObj = {
 		        templateUrl: baseConfig.adminTpl +'/catalog/product/add_product.html',
 		        size: size,
-		        controller: ['$scope', '$uibModalInstance', 'dataInit', function(scope, $uibModalInstance, dataInit){
+		        controller: ['$scope','commonService', '$uibModalInstance','Upload','$timeout','dataInit', function(scope, commonService, $uibModalInstance,Upload, $timeout, dataInit){
 		          	scope.product = {};
 		          	scope.categoryList = dataInit;
 		          	scope.categoryList.push({id:0,path_parent_name:'[Không danh mục]'});
@@ -105,6 +105,51 @@
 			                }
 			            });
 		          	};
+		          	scope.uploadFiles = function(file, errFiles) {
+			        	scope.f = file;
+			        	if(file){
+			        		//scope.f = file;	
+			        	}else{
+			        		//not update image name, image path if not select image
+			        		scope.product.file = null;
+			        	}
+				        scope.errFile = errFiles && errFiles[0];
+				        if (file) {
+				        	var file_is_valid = commonService.sup_check_file_info(file);
+				        	if(!file_is_valid){
+				        		SweetAlert.swal({
+						         	title: "Error",
+						        	text: "Image file invalid",
+						         	type: "warning",
+						         	confirmButtonText: "Ok"
+						        });
+						        file = null;
+						        scope.f = null;
+				        		return;
+				        	}
+				            file.upload = Upload.upload({
+				                url: baseConfig.home+'api/upload/upload_img_user',
+				                method: 'POST',
+							    headers: {
+							        'Content-Type': file.type
+							    },
+				                data: {file: file}
+				            });
+
+				            file.upload.then(function (response) {
+				                $timeout(function () {
+				                    file.result = response.data;
+				                    scope.product.file = response.data;
+
+				                });
+				            }, function (response) {
+				                if (response.status > 0)
+				                    scope.errorMsg = response.status + ': ' + response.data;
+				            }, function (evt) {
+				                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+				            });
+				        }   
+				    }
 		          	function validateAddProduct() {
 			            if(typeof(scope.product.name) == 'undefined' ){
 			              return 0;
@@ -186,7 +231,7 @@
 			        		return;
 			        	}
 			            file.upload = Upload.upload({
-			                url: baseConfig.host+'api/upload/upload_img_user',
+			                url: baseConfig.home+'api/upload/upload_img_user',
 			                method: 'POST',
 						    headers: {
 						        'Content-Type': file.type

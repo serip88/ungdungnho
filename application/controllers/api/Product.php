@@ -32,17 +32,42 @@ class Product extends Base_controller {
     }
     public function save_post(){
         $param = $this->post();
+        $upload_image = false;
         $stt=FALSE;
         $msg='';
         $param = $this->product_lib->validate_save_product($param);
         if($param){
             $param = $this->product_lib->handle_save_product($param);
-            $stt = $this->product_lib->save_product($param);
-            if(!$stt){
+            $id = $stt = $this->product_lib->save_product($param);
+            if($stt){
+                //B upload file
+                if(isset($param['file']) ){
+                    $file_exit = $this->product_lib->check_file_exit($param['file']);
+                    if($file_exit){
+                        $param['new_file'] = $this->move_file_to_product_folder($param['file']['name'],$param['file']['path']);
+                        if($param['new_file']){
+                            $upload_image = true;
+                            $dir_path_user_tmp = $this->get_dir_path_user_tmp();
+                            $this->remove_all_files_in_folder($dir_path_user_tmp);
+                        }
+                    }
+                }
+                //E upload file
+                if($upload_image){
+                    $data = array();
+                    $data['image_name']= $param['new_file']['name'];
+                    $data['image_path']= $param['new_file']['path'];
+                    $where = array("product_id"=> $id);
+                    $stt = $this->product_model->update_data($data,$where); 
+                    if(!$stt){
+                        $msg = 'Error! Save image have problem.';
+                    }
+                }
+            }else{
                 $msg = 'Error! Cannot save product.';
             }
         }
-        $response = array('status' => $stt,'msg'=> $msg);
+        $response = array('status' => $stt?true:false,'msg'=> $msg);
         $this->custom_response($response);
     }
     public function product_list_get(){
@@ -77,7 +102,6 @@ class Product extends Base_controller {
                             if($param['image_path']){
                                 $param['image_path'] = strpos($param['image_path'], ".") == 0 ? $param['image_path'] : ".".$param['image_path'];
                                 @unlink(FCPATH.$param['image_path']);
-
                             }
                             $upload_image = true;
                             $dir_path_user_tmp = $this->get_dir_path_user_tmp();
@@ -87,9 +111,14 @@ class Product extends Base_controller {
                 }
                 //E upload file
                 if($upload_image){
-                    $param['file_name_mb']= $param['new_file']['name'];
-                    $param['file_path_mb']= $param['new_file']['path'];
-                    $stt = $this->product_lib->edit_product($param);
+                    $data = array();
+                    $data['image_name']= $param['new_file']['name'];
+                    $data['image_path']= $param['new_file']['path'];
+                    $where = array("product_id"=> $param['product_id']);
+                    $stt = $this->product_model->update_data($data,$where); 
+                    if(!$stt){
+                        $msg = 'Error! Save image have problem.';
+                    }
                 }
             }else{
                 $msg = 'Error! Cannot save product.';
