@@ -388,6 +388,15 @@ class Base_controller extends REST_Controller {
         $this->check_and_create_folder($root_path.'/'.$option['store_value'],$user_id);
         $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$user_id,$this->dir_path_user_tmp);
     }
+    public function handle_check_user_folder_is_created($root_path,$option,$user_id){
+        $root_path = $root_path ? $root_path : $this->dir_path_user;
+        $this->check_and_create_folder($root_path,$option['group_folder']);
+        $this->check_and_create_folder($root_path.'/'.$option['group_folder'],$user_id);
+        $this->check_and_create_folder($root_path.'/'.$option['group_folder'].'/'.$user_id,$option['group_current']);
+        $this->check_and_create_folder($root_path.'/'.$option['group_folder'].'/'.$user_id.'/'.$option['group_current'],IMAGE_SMALL);
+        $this->check_and_create_folder($root_path.'/'.$option['group_folder'].'/'.$user_id.'/'.$option['group_current'],IMAGE_LARGE);
+        $this->check_and_create_folder($root_path.'/'.$option['group_folder'].'/'.$user_id.'/'.$option['group_current'],IMAGE_BIG);
+    }
     public function get_dir_path_user_tmp(){
         $data_user = $this->get_user_session();
         $option = $this->handle_get_option_user_folder();
@@ -401,4 +410,17 @@ class Base_controller extends REST_Controller {
             unlink(FCPATH.$file); // delete file
         }
     }
+    public function check_file_exit($file){
+        $requite = array('name','path');
+        foreach ($requite as $key => $value) {
+          if(! isset($file[$value])){
+            return 0;
+          }
+        }
+        if(file_exists(FCPATH.$file['path'])){
+          return 1;
+        }else{
+          return 0;
+        }
+      }
 }

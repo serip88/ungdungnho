@@ -22,7 +22,7 @@ class User extends Base_controller {
     {
         // Construct the parent class
         parent::__construct();
-        $this->load->library('user_lib');
+        $this->load->library(['user_lib','model_option_user_lib']);
         // Configure limits on our controller methods
         // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
         $this->methods['user_get']['limit'] = 500; // 500 requests per hour per user/key
@@ -124,6 +124,7 @@ class User extends Base_controller {
     }
     public function user_edit_post(){
         $stt=FALSE;
+        $upload_image = false;
         $param = $this->post();
         $param = $this->user_lib->validate_edit_user($param);
         if($param){
@@ -135,6 +136,36 @@ class User extends Base_controller {
                 $option = $this->get_option_key($option_key);
                 $response = $this->init_user_category($param['user_id'],$option);
             }
+            if($stt){
+                //B upload file
+                if(isset($param['file']) ){
+                    $file_exit = $this->check_file_exit($param['file']);
+                    if($file_exit){
+                        $param['new_file'] = $this->move_file_to_user_folder($param['file']['name'],$param['file']['path'],$param['user_id']);
+                        if($param['new_file']){
+                            //remove old image if it have
+                            if(isset($param['image_path']) && $param['image_path']){
+                                $param['image_path'] = strpos($param['image_path'], ".") == 0 ? $param['image_path'] : ".".$param['image_path'];
+                                @unlink(FCPATH.$param['image_path']);
+                            }
+                            $upload_image = true;
+                            $dir_path_user_tmp = $this->get_dir_path_user_tmp();
+                            $this->remove_all_files_in_folder($dir_path_user_tmp);
+                        }
+                    }
+                }
+                //E upload file
+                if($upload_image){
+                    $data = array();
+                    $data['image_name']= $param['new_file']['name'];
+                    $data['image_path']= $param['new_file']['path'];
+                    $where = array("user_id"=> $param['user_id']);
+                    $stt = $this->user_model->update_data($data,$where); 
+                    if(!$stt){
+                        $msg = 'Error! Save image have problem.';
+                    }
+                }
+            }
         }else{
             $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST);// BAD_REQUEST (400) being the HTTP response code
         }
@@ -142,7 +173,39 @@ class User extends Base_controller {
             'status' => $stt
         ], REST_Controller::HTTP_OK);
     }
-
+    public function move_file_to_user_folder($file_name, $file_path, $user_id){
+        $this->load->library('upload_lib');
+        $option = $this->model_option_user_lib->get_option_user($user_id);
+        //Importance check folder before upload
+        $this->handle_check_user_folder_is_created($this->dir_path_user,$option,$user_id);
+        $path_image = $this->dir_path_user.'/'.$option['group_folder'].'/'.$user_id.'/'.$option['group_current'];
+        $file_name = $this->upload_lib->validate_file_in_path($path_image.'/'.IMAGE_BIG, $file_name);
+        //$uploadPath = $path_image . '/' . $file_name;
+        $uploadPath = $path_image .'/'.IMAGE_BIG . '/' . $file_name;
+        //move file to new location
+        $stt = rename( FCPATH.$file_path, FCPATH.$uploadPath );
+        if($stt){
+            try {
+                $phpThumb = new phpThumb();
+                $phpThumb->setSourceFilename(FCPATH.$uploadPath);
+                $phpThumb->setParameter('w', IMAGE_LARGE_SIZE);
+                if($phpThumb->GenerateThumbnail()){
+                    if(!$phpThumb->RenderToFile(FCPATH.$path_image .'/'.IMAGE_LARGE . '/' . $file_name)){
+                        return false;
+                    }
+                }else{
+                    return false;
+                }
+                //Importance check full folder before upload
+                //$this->handle_check_folder_is_over_load($this->dir_path_post,$option);
+                return array( 'name'=>$file_name,'path'=>$uploadPath );
+            } catch (Exception $e) {
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
     /*public function users_post()
     {
         // $this->some_model->update_user( ... );

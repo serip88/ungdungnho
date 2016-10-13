@@ -36,4 +36,11 @@ class Model_Option_User_lib extends Common_lib {
     return $id;
   }
 
+  function get_option_user($user_id){
+    $select = array('user_id','group_folder','group_current');
+    $where = array('user_id'=>$user_id);
+    $option = $this->CI->Option_User_Model->get_data($select,$where,1);
+    return $option?$option[0]:0;
+  }
+
 }

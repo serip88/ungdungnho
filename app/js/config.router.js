@@ -319,11 +319,18 @@ angular.module('app')
                   url: '/system',
                   template: '<div ui-view class="fade-in-down"></div>',
                   resolve: {
-                      deps: ['uiLoad',
-                        function( uiLoad ){
-                          return uiLoad.load( [baseConfig.app+'/js/controllers/user.js',
+                      deps: ['$ocLazyLoad',
+                        function( $ocLazyLoad ){
+                          return $ocLazyLoad.load(['ngFileUpload','angularFileUpload']).then(
+                            function(){
+                              return $ocLazyLoad.load( [baseConfig.app+'/js/controllers/user.js',
                                               baseConfig.app+'/js/controllers/user_groups.js',
-                                              baseConfig.app+'/vendor/libs/moment.min.js'] );
+                                              baseConfig.app+'/vendor/libs/moment.min.js',
+                                              baseConfig.app+'/js/controllers/upload.js',
+                                              baseConfig.app+'/js/controllers/file-upload.js'
+                              ]);
+                            }
+                          )
                       }]
                   }
               })

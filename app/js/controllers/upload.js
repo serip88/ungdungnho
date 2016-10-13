@@ -4,7 +4,7 @@
 
 var version = '11.0.0';
 
-app.controller('MyCtrl', ['$scope', '$http', '$timeout', '$compile', 'Upload', function ($scope, $http, $timeout, $compile, Upload) {
+app.controller('uploadCtrl', ['$scope', '$http', '$timeout', '$compile', 'Upload', function ($scope, $http, $timeout, $compile, Upload) {
   $scope.usingFlash = FileAPI && FileAPI.upload != null;
   //Upload.setDefaults({ngfKeep: true, ngfPattern:'image/*'});
   $scope.changeAngularVersion = function () {
