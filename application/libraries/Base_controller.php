@@ -470,7 +470,7 @@ class Base_controller extends REST_Controller {
         $full_path = array_slice($full_path, 0,-1);
         return implode("/", $full_path);
     }
-
+    //return file to new location
     public function move_file_to_post_folder($file_name, $file_path){
         $this->load->library('upload_lib');
         $option = $this->handle_get_option_post_folder();
