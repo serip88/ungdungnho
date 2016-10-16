@@ -1,10 +1,10 @@
 <?php
 /*
   +------------------------------------------------------------------------+
-  | Copyright (C) 2016 Toigiaitri.                                        |
+  | Copyright (C) 2016 Toigiaitri.                                         |
   |                                                                        |
   | This program is free software; you can redistribute it and/or          |
-  | modify it under the terms of the Toigiaitri  License                      |
+  | modify it under the terms of the Toigiaitri  License                   |
   |                                                                        |
   +------------------------------------------------------------------------+
   | o Developer : Rain                                                     |
@@ -34,7 +34,7 @@ class User_lib extends Common_lib {
       //return $this->_lang;
   }
   function get_user_list(){
-    $select="user_id,username,status,date_added,user_group_id,firstname,lastname,email";
+    $select="user_id,username,status,date_added,user_group_id,firstname,lastname,email,image_path";
     $where = array();
     $data = $this->CI->user_model->get_data($select,$where);
     return $data;
@@ -62,7 +62,7 @@ class User_lib extends Common_lib {
     }
   }
   function get_user_by_email($user_email){
-    $select="A.user_id,A.user_group_id,A.username,A.salt,A.firstname,A.lastname,A.email,A.image,A.date_added,A.status,B.name";
+    $select="A.user_id,A.user_group_id,A.username,A.salt,A.firstname,A.lastname,A.email,A.image_path,A.date_added,A.status,B.name";
     $tb_join = array();
     $tb_join[] = array('table_name'=>'rz_user_group as B','condition'=>"A.user_group_id =B.user_group_id", 'type'=>'left');
     $where = array("A.email"=>$user_email);
