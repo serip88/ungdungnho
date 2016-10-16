@@ -11,10 +11,12 @@ define('IMAGE_BIG', 'big');
 define('IMAGE_SMALL_SIZE', 320);
 define('IMAGE_LARGE_SIZE', 700);
 define('IMAGE_BIG_SIZE', 1600);
+define('TMP_CHILD', 'Y/m');
 
 class Base_controller extends REST_Controller {
     
     protected $_is_login = false;
+    protected $dir_path_tmp="app/images/tmp";
     protected $dir_path_user="/app/images/user";
     protected $dir_path_post="/app/images/post";
     protected $dir_path_user_tmp="tmp";
@@ -135,6 +137,8 @@ class Base_controller extends REST_Controller {
             'product/product_list'  =>['api'=>'product/product_list','deny_guest'=>1,'deny_user'=>0],
 
             'upload/upload_img_user'=>['api'=>'upload/upload_img_user','deny_guest'=>1,'deny_user'=>0],
+
+            'user/test'             =>['api'=>'user/test','deny_guest'=>1,'deny_user'=>0],
 
         );
         return $api;
@@ -382,6 +386,34 @@ class Base_controller extends REST_Controller {
         }
         return $stt;
     }
+    public function check_and_create_multi_folder($root_path,$child_path){
+        $child_path = trim($child_path,"/");
+        $child_folder = explode("/", $child_path);
+        if (!file_exists(FCPATH.$root_path."/".$child_folder[0])) {
+            mkdir(FCPATH.$root_path."/".$child_folder[0], 0777);
+        }
+        if(count($child_folder)>1){
+            $child_path = implode("/", array_slice($child_folder,1));
+            return $this->check_and_create_multi_folder($root_path."/".$child_folder[0],$child_path);
+        }else{
+            return true;
+        }
+    }
+    public function check_and_create_tmp_child($child_path){
+        if($child_path){
+            $root_path = $this->dir_path_tmp;
+            if (!file_exists(FCPATH.$root_path."/".$child_path)) {
+                return $this->check_and_create_multi_folder($root_path,$child_path);
+            }
+            return true;
+        }else{
+            return false;
+        }
+            
+    }
+    public function get_tmp_year_month_path(){
+        return  date(TMP_CHILD, time());
+    }
     public function handle_check_user_folder_tmp($root_path,$option,$user_id){
         $root_path = $root_path ? $root_path : $this->dir_path_user;
         $this->check_and_create_folder($root_path,$option['store_value']);
@@ -406,8 +438,16 @@ class Base_controller extends REST_Controller {
     public function remove_all_files_in_folder($path){
         $files = glob(FCPATH.$path.'/*'); // get all file names
         foreach($files as $file){ // iterate files
-          if(is_file(FCPATH.$file))
-            unlink(FCPATH.$file); // delete file
+          if(is_file($file))
+            unlink($file); // delete file
+        }
+    }
+
+    public function remove_files_in_folder_by_prefix($path,$prefix){
+        $files = glob(FCPATH.$path."/$prefix*"); // get all file with $prefix
+        foreach($files as $file){ // iterate files
+          if(is_file($file))
+            unlink($file); // delete file
         }
     }
     public function check_file_exit($file){
