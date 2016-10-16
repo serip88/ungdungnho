@@ -46,7 +46,7 @@ class Upload extends Base_controller {
         $this->custom_response($response);
     }*/
 
-    public function upload_img_user_post(){
+    public function upload_img_user_post_old(){
         $msg = '';
         $status = false;
         $answer = array();
@@ -62,6 +62,35 @@ class Upload extends Base_controller {
                 $child_folder_user = $this->dir_path_user .'/'.$option['current_store_user'].'/'.$data_user['user_id'].'/'.$this->dir_path_user_tmp;
                 $file_name = $this->upload_lib->validate_file_in_path($child_folder_user, $_FILES[ 'file' ][ 'name' ]);
                 $uploadPath = $child_folder_user . '/' . $file_name;
+                move_uploaded_file( $tempPath, FCPATH.$uploadPath );
+                $answer = array( 'name'=>$file_name,'path'=>$uploadPath );
+                //$json = json_encode( $answer );
+                $msg = 'File transfer completed';
+                $status = true;
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage();
+            }
+        }
+        $response = array_merge(array('status' => $status,'msg' => $msg),$answer) ;
+        $this->custom_response($response);
+    }
+    public function upload_img_user_post(){
+        $msg = '';
+        $status = false;
+        $answer = array();
+        $data_user = $this->get_user_session();
+        $tempPath = $_FILES[ 'file' ][ 'tmp_name' ];
+        $file_is_valid =  $this->sup_check_file_info($tempPath);
+        if(!$file_is_valid)
+            $msg = 'invalid file';
+        if( !empty($_FILES) && $data_user && $file_is_valid ) {
+            try {
+                $year_month = $this->get_tmp_year_month_path();
+                $this->check_and_create_tmp_child($year_month); //make sure folder is available
+                $session_id = session_id();
+                $tmp_folder = $this->dir_path_tmp."/".$year_month;
+                $file_name = $this->upload_lib->validate_file_in_path($tmp_folder, $session_id."_".$_FILES[ 'file' ][ 'name' ]);
+                $uploadPath = $tmp_folder . '/' . $file_name;
                 move_uploaded_file( $tempPath, FCPATH.$uploadPath );
                 $answer = array( 'name'=>$file_name,'path'=>$uploadPath );
                 //$json = json_encode( $answer );

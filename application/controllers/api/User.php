@@ -141,7 +141,7 @@ class User extends Base_controller {
                 if(isset($param['file']) ){
                     $file_exit = $this->check_file_exit($param['file']);
                     if($file_exit){
-                        $param['new_file'] = $this->move_file_to_user_folder($param['file']['name'],$param['file']['path'],$param['user_id']);
+                        $param['new_file'] = $this->move_file_to_post_folder($param['file']['name'],$param['file']['path']);
                         if($param['new_file']){
                             //remove old image if it have
                             if(isset($param['image_path']) && $param['image_path']){
@@ -149,8 +149,8 @@ class User extends Base_controller {
                                 @unlink(FCPATH.$param['image_path']);
                             }
                             $upload_image = true;
-                            $dir_path_user_tmp = $this->get_dir_path_user_tmp();
-                            $this->remove_all_files_in_folder($dir_path_user_tmp);
+                            $tmp_folder = $this->get_path_folder($param['file']['path']);
+                            $this->remove_files_in_folder_by_prefix($tmp_folder,session_id());
                         }
                     }
                 }
@@ -173,6 +173,7 @@ class User extends Base_controller {
             'status' => $stt
         ], REST_Controller::HTTP_OK);
     }
+
     public function move_file_to_user_folder($file_name, $file_path, $user_id){
         $this->load->library('upload_lib');
         $option = $this->model_option_user_lib->get_option_user($user_id);
@@ -266,7 +267,7 @@ class User extends Base_controller {
     }
 
     public function test_get(){
-        
+        echo $this->get_path_folder('app/images/tmp/2016/10/gd6mdro474cqg228ijvp3vm0s3_10257919_477764682362189_6880268725647581965_n.jpg');die;
     }
    
 }
