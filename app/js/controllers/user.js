@@ -100,9 +100,9 @@ var userApi = {
     var modalObj = {
       templateUrl: baseConfig.adminTpl +'/system/users/add_user.html',
       size: size,
-      controller: ['$scope', '$uibModalInstance', function(scope, $uibModalInstance){
+      controller: ['$scope','commonService', '$uibModalInstance','Upload','$timeout','dataInit', function(scope, commonService, $uibModalInstance,Upload, $timeout, dataInit){
         scope.newuser = {};
-        scope.newuser.group_user = group_user;
+        scope.newuser.group_user = dataInit;
         scope.cancel = function(){
           $uibModalInstance.close();
         };
@@ -126,6 +126,51 @@ var userApi = {
               }
           });
         };
+        scope.uploadFiles = function(file, errFiles) {
+            scope.f = file;
+            if(file){
+              //scope.f = file; 
+            }else{
+              //not update image name, image path if not select image
+              scope.newuser.file = null;
+            }
+            scope.errFile = errFiles && errFiles[0];
+            if (file) {
+              var file_is_valid = commonService.sup_check_file_info(file);
+              if(!file_is_valid){
+                SweetAlert.swal({
+                  title: "Error",
+                  text: "Image file invalid",
+                  type: "warning",
+                  confirmButtonText: "Ok"
+                });
+                file = null;
+                scope.f = null;
+                return;
+              }
+                file.upload = Upload.upload({
+                    url: baseConfig.home+'api/upload/upload_img_user',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': file.type
+                    },
+                    data: {file: file}
+                });
+
+                file.upload.then(function (response) {
+                    $timeout(function () {
+                        file.result = response.data;
+                        scope.newuser.file = response.data;
+                    });
+                }, function (response) {
+                    if (response.status > 0)
+                        scope.errorMsg = response.status + ': ' + response.data;
+                }, function (evt) {
+                    file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                });
+            }   
+        }
+        
         function validateAddUser() {
           if(typeof(scope.newuser.user_group_id)=='undefined' || typeof(scope.newuser.username) == 'undefined' ){
             return 0;
@@ -137,6 +182,11 @@ var userApi = {
             return (scope.usernameGood && scope.passwordGood && scope.passwordCGood && scope.selectGood && scope.nameGood)
         }
       }]
+    };
+    modalObj.resolve = {
+        dataInit: function(){
+            return group_user;
+        }
     };
     openModal.custom(modalObj);
   }

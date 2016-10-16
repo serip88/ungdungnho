@@ -118,6 +118,31 @@ class User extends Base_controller {
                 $option = $this->get_option_key($option_key);
                 $response = $this->init_user_category($res['user_id'],$option);
             }
+            if($res['user_id']){
+                //B upload file
+                if(isset($param['file']) ){
+                    $file_exit = $this->check_file_exit($param['file']);
+                    if($file_exit){
+                        $param['new_file'] = $this->move_file_to_post_folder($param['file']['name'],$param['file']['path']);
+                        if($param['new_file']){
+                            $upload_image = true;
+                            $tmp_folder = $this->get_path_folder($param['file']['path']);
+                            $this->remove_files_in_folder_by_prefix($tmp_folder,session_id());
+                        }
+                    }
+                }
+                //E upload file
+                if($upload_image){
+                    $data = array();
+                    $data['image_name']= $param['new_file']['name'];
+                    $data['image_path']= $param['new_file']['path'];
+                    $where = array("user_id"=> $res['user_id']);
+                    $stt = $this->user_model->update_data($data,$where); 
+                    if(!$stt){
+                        $msg = 'Error! Save image have problem.';
+                    }
+                }
+            }
         }
         $response = array('status' => $stt,'msg'=> $msg);
         $this->custom_response($response);
