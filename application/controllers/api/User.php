@@ -22,7 +22,7 @@ class User extends Base_controller {
     {
         // Construct the parent class
         parent::__construct();
-        $this->load->library(['user_lib','model_option_user_lib']);
+        $this->load->library(['user_lib','model_option_user_lib','media_lib']);
         // Configure limits on our controller methods
         // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
         $this->methods['user_get']['limit'] = 500; // 500 requests per hour per user/key
@@ -137,7 +137,19 @@ class User extends Base_controller {
                     $data['image_name']= $param['new_file']['name'];
                     $data['image_path']= $param['new_file']['path'];
                     $where = array("user_id"=> $res['user_id']);
-                    $stt = $this->user_model->update_data($data,$where); 
+                    $stt = $this->user_model->update_data($data,$where);
+                    //B insert media
+                    $user_session = $this->user_lib->get_user_session();
+                    $data = array();
+                    $data['image_name'] = $param['new_file']['name'];
+                    $data['image_path'] = $this->get_path_folder($param['new_file']['path'],0,-2);
+                    $data['parent_id']  = $res['user_id'];
+                    $data['user_created']  = $user_session['user_id'];
+                    $data['created_date']  = time();
+                    $data['is_main']  = 1;
+                    $data['type']  = MEDIA_USER_TYPE;
+                    $this->media_model->insert_data($data);
+                    //E insert media
                     if(!$stt){
                         $msg = 'Error! Save image have problem.';
                     }
@@ -254,8 +266,12 @@ class User extends Base_controller {
             foreach ($users_id as $key => $id) {
                 try {
                     $stt = $this->user_lib->user_delete($id);
-                    if(!$stt)
+                    if($stt){
+                        //REMOVE PROFILE PICTURE
+                        $this->media_lib->delete_media($id);
+                    }else{
                         $count_false = $count_false +1;    
+                    }
                 } catch (Exception $e) {
                     $count_false = $count_false +1;
                     //echo 'Caught exception: ',  $e->getMessage(), "\n";
@@ -292,7 +308,7 @@ class User extends Base_controller {
     }
 
     public function test_get(){
-        echo $this->get_path_folder('app/images/tmp/2016/10/gd6mdro474cqg228ijvp3vm0s3_10257919_477764682362189_6880268725647581965_n.jpg');die;
+        echo $this->user_lib->test();die;
     }
    
 }

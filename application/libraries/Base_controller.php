@@ -12,6 +12,7 @@ define('IMAGE_SMALL_SIZE', 320);
 define('IMAGE_LARGE_SIZE', 700);
 define('IMAGE_BIG_SIZE', 1600);
 define('TMP_CHILD', 'Y/m');
+define('MEDIA_USER_TYPE', 1);
 
 class Base_controller extends REST_Controller {
     
@@ -450,6 +451,16 @@ class Base_controller extends REST_Controller {
             unlink($file); // delete file
         }
     }
+    public function unlink_media($media_path,$folders,$media_name){
+        if(is_array($folders)){
+            foreach ($folders as $key => $folder) {
+                @unlink(FCPATH.$media_path."/".$folder."/".$media_name);
+            }
+        }else{
+            @unlink(FCPATH.$media_path."/".$folders."/".$media_name);
+        }
+    }
+
     public function check_file_exit($file){
         $requite = array('name','path');
         foreach ($requite as $key => $value) {
@@ -464,10 +475,10 @@ class Base_controller extends REST_Controller {
         }
     }
 
-    public function get_path_folder($full_path){
+    public function get_path_folder($full_path,$start=0,$end=-1){
         $full_path = trim($full_path,"/");
         $full_path = explode("/", $full_path);
-        $full_path = array_slice($full_path, 0,-1);
+        $full_path = array_slice($full_path, $start,$end);
         return implode("/", $full_path);
     }
     //return file to new location

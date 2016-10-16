@@ -22,7 +22,7 @@ class User_lib extends Common_lib {
   function __construct() {
       $this->CI =& get_instance();
       $this->CI->load->database('default');
-      $this->CI->load->model(array('user/user_group_model','user/user_model'));
+      $this->CI->load->model(array('user/user_group_model','user/user_model','media/media_model'));
       $this->_config =  $this->CI->config;
       $this->init_lang();
   }
@@ -220,8 +220,8 @@ class User_lib extends Common_lib {
       return $stt;
     }else
       return false;
-      
   }
+  
   function set_user_session($user_data){      
       $_SESSION['user_data'] = $user_data;
   }
