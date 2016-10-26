@@ -5,9 +5,9 @@ session_start();
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
 require APPPATH . '/libraries/REST_Controller.php';
 require_once(APPPATH . '/third_party/phpThumb/phpthumb.class.php') ;
-define('IMAGE_SMALL', 'small');
-define('IMAGE_LARGE', 'large');
-define('IMAGE_BIG', 'big');
+define('IMAGE_SMALL_FOLDER', 'small');
+define('IMAGE_LARGE_FOLDER', 'large');
+define('IMAGE_BIG_FOLDER', 'big');
 define('IMAGE_SMALL_SIZE', 320);
 define('IMAGE_LARGE_SIZE', 700);
 define('IMAGE_BIG_SIZE', 1600);
@@ -337,9 +337,9 @@ class Base_controller extends REST_Controller {
         $this->check_and_create_folder($root_path,$option['store_value']);
         $this->check_and_create_folder($root_path.'/'.$option['store_value'],$option['group_value']);
         $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'],$option['child_value']);
-        $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'],IMAGE_SMALL);
-        $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'],IMAGE_LARGE);
-        $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'],IMAGE_BIG);
+        $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'],IMAGE_SMALL_FOLDER);
+        $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'],IMAGE_LARGE_FOLDER);
+        $this->check_and_create_folder($root_path.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'],IMAGE_BIG_FOLDER);
     }
     //$option = array(store_value=>1,store_key=>'',group_value=>1,group_key=>'',child_value=>1,child_key=>'',max_group_value=>'',max_group_key=>'');
     //after add image
@@ -426,9 +426,9 @@ class Base_controller extends REST_Controller {
         $this->check_and_create_folder($root_path,$option['group_folder']);
         $this->check_and_create_folder($root_path.'/'.$option['group_folder'],$user_id);
         $this->check_and_create_folder($root_path.'/'.$option['group_folder'].'/'.$user_id,$option['group_current']);
-        $this->check_and_create_folder($root_path.'/'.$option['group_folder'].'/'.$user_id.'/'.$option['group_current'],IMAGE_SMALL);
-        $this->check_and_create_folder($root_path.'/'.$option['group_folder'].'/'.$user_id.'/'.$option['group_current'],IMAGE_LARGE);
-        $this->check_and_create_folder($root_path.'/'.$option['group_folder'].'/'.$user_id.'/'.$option['group_current'],IMAGE_BIG);
+        $this->check_and_create_folder($root_path.'/'.$option['group_folder'].'/'.$user_id.'/'.$option['group_current'],IMAGE_SMALL_FOLDER);
+        $this->check_and_create_folder($root_path.'/'.$option['group_folder'].'/'.$user_id.'/'.$option['group_current'],IMAGE_LARGE_FOLDER);
+        $this->check_and_create_folder($root_path.'/'.$option['group_folder'].'/'.$user_id.'/'.$option['group_current'],IMAGE_BIG_FOLDER);
     }
     public function get_dir_path_user_tmp(){
         $data_user = $this->get_user_session();
@@ -490,21 +490,14 @@ class Base_controller extends REST_Controller {
         $path_image = $this->dir_path_post.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'];
         $file_name = $this->upload_lib->validate_file_in_path($path_image, $file_name);
         //$uploadPath = $path_image . '/' . $file_name;
-        $uploadPath = $path_image .'/'.IMAGE_BIG . '/' . $file_name;
+        $uploadPath = $path_image .'/'.IMAGE_BIG_FOLDER . '/' . $file_name;
         //move file to new location
         $stt = rename( FCPATH.$file_path, FCPATH.$uploadPath );
         if($stt){
             try {
-                $phpThumb = new phpThumb();
-                $phpThumb->setSourceFilename(FCPATH.$uploadPath);
-                $phpThumb->setParameter('w', IMAGE_LARGE_SIZE);
-                if($phpThumb->GenerateThumbnail()){
-                    if(!$phpThumb->RenderToFile(FCPATH.$path_image .'/'.IMAGE_LARGE . '/' . $file_name)){
-                        return false;
-                    }
-                }else{
-                    return false;
-                }
+                $this->sup_gen_thumb($uploadPath,IMAGE_BIG_SIZE,IMAGE_BIG_FOLDER,$path_image,$file_name);
+                $this->sup_gen_thumb($uploadPath,IMAGE_LARGE_SIZE,IMAGE_LARGE_FOLDER,$path_image,$file_name);
+                $this->sup_gen_thumb($uploadPath,IMAGE_SMALL_SIZE,IMAGE_SMALL_FOLDER,$path_image,$file_name);
                 //Importance check full folder before upload
                 $this->handle_check_folder_is_over_load($this->dir_path_post,$option);
                 return array( 'name'=>$file_name,'path'=>$uploadPath );
@@ -515,4 +508,17 @@ class Base_controller extends REST_Controller {
             return false;
         }
     }
+    public function sup_gen_thumb($source_path,$size,$folder,$path_image,$file_name){
+        $stt = false;
+        $phpThumb = new phpThumb();
+        $phpThumb->setSourceFilename(FCPATH.$source_path);
+        $phpThumb->setParameter('w', $size);
+        if($phpThumb->GenerateThumbnail()){
+            if($phpThumb->RenderToFile(FCPATH.$path_image .'/'.$folder . '/' . $file_name)){
+                $stt = true;
+            }
+        }
+        return $stt;
+    }
+    
 }
