@@ -177,8 +177,8 @@ class User extends Base_controller {
                         if($param['new_file']){
                             //remove old image if it have
                             if(isset($param['image_path']) && $param['image_path']){
-                                //$param['image_path'] = strpos($param['image_path'], "./") == 0 ? $param['image_path'] : "./".$param['image_path'];
-                                @unlink(FCPATH.$param['image_path']);
+                                list($media_path,$media_name) = $this->sup_get_media_path_name($param['image_path']);
+                                $this->unlink_media($media_path,array(IMAGE_SMALL_FOLDER,IMAGE_LARGE_FOLDER,IMAGE_BIG_FOLDER),$media_name);
                             }
                             $upload_image = true;
                             $tmp_folder = $this->get_path_folder($param['file']['path']);

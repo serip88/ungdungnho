@@ -29,7 +29,7 @@ class Media_lib extends Common_lib {
       $media_data = $this->CI->media_model->get_media_by_parent($user_id,MEDIA_USER_TYPE);
       if($media_data){
         foreach ($media_data as $key => $media) {
-          $this->CI->unlink_media($media['image_path'],array(IMAGE_SMALL,IMAGE_LARGE,IMAGE_BIG),$media['image_name']);
+          $this->CI->unlink_media($media['image_path'],array(IMAGE_SMALL_FOLDER,IMAGE_LARGE_FOLDER,IMAGE_BIG_FOLDER),$media['image_name']);
         }
         $this->CI->media_model->delete_media($media['media_id']);
       }

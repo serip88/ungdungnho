@@ -520,5 +520,10 @@ class Base_controller extends REST_Controller {
         }
         return $stt;
     }
-    
+    public function sup_get_media_path_name($media_full_path){
+        $media_path = $this->get_path_folder($media_full_path,0,-2);
+        $tmp_arr = explode("/", $media_full_path);
+        $media_name = end($tmp_arr);
+        return array($media_path,$media_name);
+    }
 }
