@@ -34,7 +34,7 @@ class User_lib extends Common_lib {
       //return $this->_lang;
   }
   function get_user_list(){
-    $select="A.user_id,A.username,A.status,A.date_added,A.user_group_id,A.firstname,A.lastname,A.email,A.image_path,B.image_path as media_path,B.image_name as media_name";
+    $select="A.user_id,A.username,A.status,A.date_added,A.user_group_id,A.firstname,A.lastname,A.email,A.image_path,B.image_path as media_path,B.image_name as media_name,B.media_id";
     $where = array();
     $tb_join = array();
     $tb_join[] = array('table_name'=>'rz_media as B','condition'=>"A.user_id =B.parent_id", 'type'=>'left');
@@ -47,7 +47,10 @@ class User_lib extends Common_lib {
       $date = date("Y-m-d H:i", time());
       $data[$key]['ui_date_added'] = $date;
       $data[$key]['ui_status'] =  $value['status']?$this->_lang['user_status_enabled']:$this->_lang['user_status_disabled'];
-      $data[$key]['image_path'] = implode("/", array($value['media_path'],'large',$value['media_name']));
+      $data[$key]['image_path'] = implode("/", array($value['media_path'],'large',$value['media_name']));  
+      if(!file_exists($data[$key]['image_path'])){
+        $data[$key]['image_path'] = '';
+      }
     }
     return $data;
   }

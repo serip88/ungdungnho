@@ -198,8 +198,12 @@ class User extends Base_controller {
                     $data['created_date']  = time();
                     $data['is_main']  = 1;
                     $data['type']  = MEDIA_USER_TYPE;
-                    $where = array("parent_id"=> $param['user_id']);
-                    $this->media_model->update_data($data,$where);
+                    if(isset($param['media_id']) && $param['media_id']){
+                        $where = array("media_id"=> $param['media_id']);    
+                        $stt = $this->media_model->update_data($data,$where);
+                    }else{
+                        $stt = $this->media_model->insert_data($data);
+                    }
                     //E insert media
                     if(!$stt){
                         $msg = 'Error! Save image have problem.';
