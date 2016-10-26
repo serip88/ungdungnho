@@ -193,11 +193,25 @@ class User extends Base_controller {
                 }
                 //E upload file
                 if($upload_image){
+                    //This is tmp action
                     $data = array();
                     $data['image_name']= $param['new_file']['name'];
                     $data['image_path']= $param['new_file']['path'];
                     $where = array("user_id"=> $param['user_id']);
                     $stt = $this->user_model->update_data($data,$where); 
+                    //B insert media
+                    $user_session = $this->user_lib->get_user_session();
+                    $data = array();
+                    $data['image_name'] = $param['new_file']['name'];
+                    $data['image_path'] = $this->get_path_folder($param['new_file']['path'],0,-2);
+                    $data['parent_id']  = $param['user_id'];
+                    $data['user_created']  = $user_session['user_id'];
+                    $data['created_date']  = time();
+                    $data['is_main']  = 1;
+                    $data['type']  = MEDIA_USER_TYPE;
+                    $where = array("parent_id"=> $param['user_id']);
+                    $this->media_model->update_data($data,$where);
+                    //E insert media
                     if(!$stt){
                         $msg = 'Error! Save image have problem.';
                     }

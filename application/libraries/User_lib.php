@@ -34,9 +34,11 @@ class User_lib extends Common_lib {
       //return $this->_lang;
   }
   function get_user_list(){
-    $select="user_id,username,status,date_added,user_group_id,firstname,lastname,email,image_path";
+    $select="A.user_id,A.username,A.status,A.date_added,A.user_group_id,A.firstname,A.lastname,A.email,A.image_path,B.image_path as media_path,B.image_name as media_name";
     $where = array();
-    $data = $this->CI->user_model->get_data($select,$where);
+    $tb_join = array();
+    $tb_join[] = array('table_name'=>'rz_media as B','condition'=>"A.user_id =B.parent_id", 'type'=>'left');
+    $data = $this->CI->user_model->get_data_join($select,$where,$tb_join);
     return $data;
   }
   function format_user_list($data){
@@ -45,12 +47,13 @@ class User_lib extends Common_lib {
       $date = date("Y-m-d H:i", time());
       $data[$key]['ui_date_added'] = $date;
       $data[$key]['ui_status'] =  $value['status']?$this->_lang['user_status_enabled']:$this->_lang['user_status_disabled'];
+      $data[$key]['image_path'] = implode("/", array($value['media_path'],'large',$value['media_name']));
     }
     return $data;
   }
   function get_user($user_id){
 
-    $select="A.user_id,A.user_group_id,A.username,A.salt,A.firstname,A.lastname,A.email,A.image,A.date_added,B.name";
+    $select="A.user_id,A.user_group_id,A.username,A.salt,A.firstname,A.lastname,A.email,A.image_path,A.date_added,B.name";
     $tb_join = array();
     $tb_join[] = array('table_name'=>'rz_user_group as B','condition'=>"A.user_group_id =B.user_group_id", 'type'=>'left');
     $where = array("A.user_id"=>$user_id);
