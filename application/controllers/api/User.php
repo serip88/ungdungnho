@@ -133,11 +133,6 @@ class User extends Base_controller {
                 }
                 //E upload file
                 if($upload_image){
-                    $data = array();
-                    $data['image_name']= $param['new_file']['name'];
-                    $data['image_path']= $param['new_file']['path'];
-                    $where = array("user_id"=> $res['user_id']);
-                    $stt = $this->user_model->update_data($data,$where);
                     //B insert media
                     $user_session = $this->user_lib->get_user_session();
                     $data = array();
@@ -193,12 +188,6 @@ class User extends Base_controller {
                 }
                 //E upload file
                 if($upload_image){
-                    //This is tmp action
-                    $data = array();
-                    $data['image_name']= $param['new_file']['name'];
-                    $data['image_path']= $param['new_file']['path'];
-                    $where = array("user_id"=> $param['user_id']);
-                    $stt = $this->user_model->update_data($data,$where); 
                     //B insert media
                     $user_session = $this->user_lib->get_user_session();
                     $data = array();
