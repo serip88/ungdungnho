@@ -9,5 +9,15 @@ class Product_Model extends Starter_Model{
         $this->load->helper('url');
         $this->_tb_name="rz_product";
     }
+
+    function get_product($id){
+	      $select="product_id,name,description,image_name,image_path,price,enabled as status,parent_id";
+	      $where = array('product_id'=>$id);
+	      $data = $this->get_data($select,$where,1);      
+	      if($data){
+	        return $data[0];
+	      }
+	      return 0;
+	  }
     
 }

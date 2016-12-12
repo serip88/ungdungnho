@@ -89,9 +89,10 @@ class Product extends Base_controller {
         $param = $this->post();
         $param = $this->product_lib->validate_edit_product($param);
         if($param){
+            $data = $this->product_model->get_product($param['product_id']);
             $param = $this->product_lib->handle_save_product($param);
             $stt = $this->product_lib->edit_product($param);
-            if($stt){
+            if($stt && $data){
                 //B upload file
                 if(isset($param['file']) ){
                     $file_exit = $this->product_lib->check_file_exit($param['file']);
@@ -101,7 +102,9 @@ class Product extends Base_controller {
                             //remove old image if it have
                             if($param['image_path']){
                                 $param['image_path'] = strpos($param['image_path'], ".") == 0 ? $param['image_path'] : ".".$param['image_path'];
-                                @unlink(FCPATH.$param['image_path']);
+                                @unlink(FCPATH.$data['image_path']);
+                                @unlink( str_replace(IMAGE_BIG_FOLDER, IMAGE_LARGE_FOLDER, FCPATH.$data['image_path']));
+                                @unlink( str_replace(IMAGE_BIG_FOLDER, IMAGE_SMALL_FOLDER, FCPATH.$data['image_path']));
                             }
                             $upload_image = true;
                             $tmp_folder = $this->get_path_folder($param['file']['path']);

@@ -24,7 +24,8 @@ class Upload_lib extends Common_lib {
   }
   
   function validate_file_in_path($path,$filename){
-    while (file_exists(FCPATH.$path.'/'.$filename) )
+    $path = str_replace("//", "/",FCPATH.$path);
+    while ( file_exists($path.'/'.$filename) )
     {
       $filename = rand(1, 9).$filename;
       if(strlen($filename)>50){

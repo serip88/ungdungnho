@@ -488,7 +488,7 @@ class Base_controller extends REST_Controller {
         //Importance check folder before upload
         $this->handle_check_option_folder_is_created($this->dir_path_post,$option);
         $path_image = $this->dir_path_post.'/'.$option['store_value'].'/'.$option['group_value'].'/'.$option['child_value'];
-        $file_name = $this->upload_lib->validate_file_in_path($path_image, $file_name);
+        $file_name = $this->upload_lib->validate_file_in_path($path_image.'/'.IMAGE_BIG_FOLDER, $file_name);
         //$uploadPath = $path_image . '/' . $file_name;
         $uploadPath = $path_image .'/'.IMAGE_BIG_FOLDER . '/' . $file_name;
         //move file to new location

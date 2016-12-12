@@ -1,10 +1,10 @@
 <?php
 /*
   +------------------------------------------------------------------------+
-  | Copyright (C) 2016 Toigiaitri.                                        |
+  | Copyright (C) 2016 Toigiaitri.                                         |
   |                                                                        |
   | This program is free software; you can redistribute it and/or          |
-  | modify it under the terms of the Toigiaitri  License                      |
+  | modify it under the terms of the Toigiaitri  License                   |
   |                                                                        |
   +------------------------------------------------------------------------+
   | o Developer : Rain                                                     |
