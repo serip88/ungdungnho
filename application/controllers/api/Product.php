@@ -140,10 +140,16 @@ class Product extends Base_controller {
         if(count($product_ids)){
             foreach ($product_ids as $key => $id) {
                 try {
+                    $data = $this->product_model->get_product($id);
                     $stt = $this->product_lib->product_delete($id);
-                    if(!$stt)
+                    if($stt){
+                        @unlink(FCPATH.$data['image_path']);
+                        @unlink( str_replace(IMAGE_BIG_FOLDER, IMAGE_LARGE_FOLDER, FCPATH.$data['image_path']));
+                        @unlink( str_replace(IMAGE_BIG_FOLDER, IMAGE_SMALL_FOLDER, FCPATH.$data['image_path']));
+
+                    }else{
                         $count_false = $count_false +1;    
-                    
+                    }
                 } catch (Exception $e) {
                     $count_false = $count_false +1;
                     //echo 'Caught exception: ',  $e->getMessage(), "\n";
