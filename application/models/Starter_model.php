@@ -137,6 +137,9 @@ class Starter_Model extends CI_Model
       }
       return $result;
   }
+  protected function check_admin($uid){
+    
+  }
     
 }
 
