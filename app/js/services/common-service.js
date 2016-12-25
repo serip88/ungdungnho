@@ -12,7 +12,7 @@ var isDefined = angular.isDefined,
     sessionStorageEnabled = ("sessionStorage" in window) ? true : false,
     localStorageEnabled = ("localStorage" in window) ? true : false;
 
-app.factory("commonService", ["$http", "$q", function ($http, $q) {
+app.factory("commonService", ["$http", "$q", 'SweetAlert', function ($http, $q, SweetAlert) {
     var commonObject = {};
 
     commonObject.httpGet = function (path, params, block) {
@@ -25,6 +25,12 @@ app.factory("commonService", ["$http", "$q", function ($http, $q) {
                 deferred.resolve(data);
             }).error(function (data) {
                 deferred.resolve(data);
+                SweetAlert.swal({
+                    title: "Error",
+                    text: data.msg,
+                    type: "warning",
+                    confirmButtonText: "Ok"
+                });
             });
         return deferred.promise;
     }
@@ -39,6 +45,12 @@ app.factory("commonService", ["$http", "$q", function ($http, $q) {
                 deferred.resolve(data);
             }).error(function (data) {
                 deferred.resolve(data);
+                SweetAlert.swal({
+                    title: "Error",
+                    text: data.msg,
+                    type: "warning",
+                    confirmButtonText: "Ok"
+                });
             });
         return deferred.promise;
     }

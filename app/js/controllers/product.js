@@ -12,7 +12,7 @@
 (function(window, angular, $, undefined){
 	'use strict';
 
-    app.factory("productService", ["$http", "$q", function ($http, $q) {
+    app.factory("productService", ["$http", "$q", 'SweetAlert', function ($http, $q, SweetAlert) {
 	    var productObject = {};
 	    
 	    productObject.httpGet = function (path, params, block) {
@@ -44,7 +44,7 @@
 	    return productObject;
 	}]);
 
-	app.controller('ProductCtrl', ['$scope', '$log', 'openModal', 'SweetAlert', 'productService', function($scope, $log, openModal, SweetAlert, productService) {
+	app.controller('ProductCtrl', ['$scope', '$log', 'openModal', 'SweetAlert', 'productService', 'commonService', function($scope, $log, openModal, SweetAlert, productService, commonService) {
 		$scope.checkAll = function() {
 	    	$scope.products.selected = $scope.products.roles.map(function(item) { return item.id; });
 	    };
@@ -74,7 +74,7 @@
 	    }
 	    productList();
 		$scope.openAddProduct = function (size) {
-			productService.httpGet(productApi.categoryList).then(function(responseData) {
+			commonService.httpGet(productApi.categoryList).then(function(responseData) {
 	            if (responseData.status) {
 	      			modalAddProduct(size,responseData.rows);
 	      		}
@@ -168,7 +168,7 @@
 	    }
 
 	    $scope.productEdit = function (item) {
-	      	productService.httpGet(productApi.categoryList).then(function(responseData) {
+	      	commonService.httpGet(productApi.categoryList).then(function(responseData) {
 	          	if (responseData.status) {
 	            	modalEditProduct('lg',responseData.rows,item);
 	          	}

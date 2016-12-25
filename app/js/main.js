@@ -95,7 +95,7 @@ app.factory("loginService", ["$http", "$q", "$state", function ($http, $q, $stat
             if (response.status) {
               //$urlRouterProvider.otherwise('/app/dashboard');
               angular.copy(response.user_data, loginService.syn.user_data);  
-              if(!$state.current.name || $state.current.name == 'access.signin'){
+              if($state.current.name == 'access.signin'){
                 $state.go('app.dashboard');
               }
             }else{
