@@ -26,7 +26,7 @@ app.factory("commonService", ["$http", "$q", 'SweetAlert', function ($http, $q, 
             }).error(function (data) {
                 deferred.resolve(data);
                 SweetAlert.swal({
-                    title: "Error",
+                    title: "Warning",
                     text: data.msg,
                     type: "warning",
                     confirmButtonText: "Ok"
@@ -46,7 +46,7 @@ app.factory("commonService", ["$http", "$q", 'SweetAlert', function ($http, $q, 
             }).error(function (data) {
                 deferred.resolve(data);
                 SweetAlert.swal({
-                    title: "Error",
+                    title: "Warning",
                     text: data.msg,
                     type: "warning",
                     confirmButtonText: "Ok"
