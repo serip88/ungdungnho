@@ -382,6 +382,21 @@ angular.module('app')
                       }]
                   }
               })
+              //area
+              .state('app.area', {
+                  url: '/area',
+                  template: '<div ui-view class="fade-in-down"></div>'
+              })
+              .state('app.area.province', {
+                  url: '/province',
+                  templateUrl: baseConfig.adminTpl+'/area/province_list.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( [baseConfig.app+'/js/controllers/area.js'] );
+                      }]
+                  }
+              })
               // others
               .state('lockme', {
                   url: '/lockme',

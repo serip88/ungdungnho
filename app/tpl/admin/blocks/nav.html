@@ -417,6 +417,33 @@
       </li>
     </ul>
   </li>
+  <li ng-class="{active:$state.includes('app.area')}">
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-cog"></i>
+      <span translate="aside.nav.components.rz_area.AREA">Area</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span translate="aside.nav.components.rz_area.AREA">Area</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.area.province">
+          <span translate="aside.nav.components.rz_area.PROVINCECITY">Province/City</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.area.users">
+          <span translate="aside.nav.components.rz_area.DISTRICT">District</span>
+        </a>
+      </li>
+    </ul>
+  </li>
   <li class="line dk hidden-folded"></li>
 
   <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">          

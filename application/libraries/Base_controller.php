@@ -109,6 +109,9 @@ class Base_controller extends REST_Controller {
     }
     public function get_all_api(){
         $api = array(
+            'area/edit'             =>['api'=>'area/edit','deny_guest'=>1,'deny_user'=>0],
+            'area/save'             =>['api'=>'area/save','deny_guest'=>1,'deny_user'=>0],
+            'area/list'             =>['api'=>'area/list','deny_guest'=>1,'deny_user'=>0],
             'main/base_info'        =>['api'=>'main/base_info','deny_guest'=>0,'deny_user'=>0],
 
             'user/user_save'        =>['api'=>'user/user_save','deny_guest'=>1,'deny_user'=>0],
