@@ -63,7 +63,19 @@ class Area extends Base_controller {
     }
 
     public function list_get(){
-    	$data = $this->area_lib->get_area_list();
+    	$data = $this->area_lib->get_area_list(0);
+        if($data)
+            $stt=TRUE;
+        else 
+            $stt=FALSE;
+
+        $this->set_response([
+            'status' => $stt,
+            'rows' => $data
+        ], REST_Controller::HTTP_OK);
+    }
+    public function district_list_get(){
+        $data = $this->area_lib->get_area_list(1);
         if($data)
             $stt=TRUE;
         else 

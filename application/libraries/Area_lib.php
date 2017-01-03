@@ -117,9 +117,12 @@ class Area_lib extends Common_lib {
 	    	return 0;
 	    }
 	}
-	function get_area_list(){
+	function get_area_list($level=false){
 	    $select="id,parent_id,name,description,enabled as status,path_parent,level,path_parent_name";
 	    $where = array('type'=>$this->_tag_type);
+	    if($level!==false){
+	    	$where['level'] = $level;
+	    }
 	    $data = $this->CI->tag_model->get_data($select,$where);
 	    /*if($data){
 	    	$data = $this->format_path_parent($data);

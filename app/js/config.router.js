@@ -397,6 +397,16 @@ angular.module('app')
                       }]
                   }
               })
+              .state('app.area.district', {
+                  url: '/district',
+                  templateUrl: baseConfig.adminTpl+'/area/district_list.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( [baseConfig.app+'/js/controllers/area.js'] );
+                      }]
+                  }
+              })
               // others
               .state('lockme', {
                   url: '/lockme',
