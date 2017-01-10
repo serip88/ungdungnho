@@ -46,7 +46,7 @@
                         <i></i></label>
                       </td>
                       <td class="text-left"> 
-                        <a class="asc"> <span class="hide"> {{province.selected}} </span>  Province Name</a></td>
+                        <a class="asc"> <span class="hide"> {{category.selected}} </span>  Province Name</a></td>
                       <td class="text-left"><a>Sort Order</a></td>
                       
                       <td class="text-right">Action</td>
@@ -56,7 +56,7 @@
                     <tr ng-repeat="(key, value) in list">
                       <td class="text-center">
                         <label class="i-checks m-b-none" data-ng-click="myform.selected.click()">
-                        <input type="checkbox" checklist-model="province.selected" name="selected[]"  checklist-value="value.id">
+                        <input type="checkbox" checklist-model="category.selected" name="selected[]"  checklist-value="value.id">
                         <i></i></label>
                       </td>
                       <td class="text-left">{{value.path_parent_name}}</td>

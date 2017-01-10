@@ -8,6 +8,7 @@
     areaList: 'area/list',
     areaDelete: 'area/delete',
     districtList: 'area/district_list',
+    districtDelete: 'area/district_delete'
 };
 (function(window, angular, $, undefined){
     'use strict';
@@ -171,7 +172,7 @@
 	    openModal.custom(modalObj);
 	}
 
-	$scope.deleteCategory = function () {
+	$scope.deleteProvince = function () {
 	    if($scope.category.selected.length){
 	      SweetAlert.swal({
 	         title: "Are you sure?",
@@ -198,10 +199,9 @@
 	    }
 	}
 	function deleteCategoryAction(){
-      	categoryService.httpPost(categoryApi.categoryDelete,{'category_delete':$scope.category.selected} ).then(function(responseData) {
+      	commonService.httpPost(areaApi.areaDelete,{'category_delete':$scope.category.selected} ).then(function(responseData) {
           	if(responseData.status) {
            		SweetAlert.swal("Delete success!", "", "success");
-           		//categoryList();
           	}else{
 	            SweetAlert.swal({
 	              	title:  "Error",
@@ -211,7 +211,7 @@
 	              	html: true
 	            });
           	}
-          	categoryList();
+          	areaList();
       	});
     }
 
@@ -277,7 +277,7 @@
 			                if(responseData.status) {
 			                 	SweetAlert.swal("Add success!", "", "success");
 			                 	$uibModalInstance.close();
-			                 	areaList();
+			                 	districtList();
 			                }
 			            });
 		          	};
@@ -327,7 +327,7 @@
 	              if (responseData.status) {
 	               SweetAlert.swal("Edit success!", "", "success");
 	               $uibModalInstance.close();
-	               areaList();
+	               districtList();
 	              }else{
 	                SweetAlert.swal({
 	                  title: "Edit False!",
@@ -355,11 +355,11 @@
 	    openModal.custom(modalObj);
 	}
 
-	$scope.deleteCategory = function () {
+	$scope.deleteProvince = function () {
 	    if($scope.category.selected.length){
 	      SweetAlert.swal({
 	         title: "Are you sure?",
-	         text: 'Your will not be able to recover this category!',
+	         text: 'Your will not be able to recover this item!',
 	         html: true,
 	         type: "warning",
 	         showCancelButton: true,
@@ -369,23 +369,22 @@
 	     	}, 
 	      function(isConfirm){ 
 	          if(isConfirm){
-	            deleteCategoryAction();
+	            deleteProvinceAction();
 	          }
 	      });
 	    }else{
 	      SweetAlert.swal({
-	         title: "Please select group!",
+	         title: "Please select item!",
 	         text: "",
 	         type: "warning",
 	         confirmButtonText: "Ok"
 	       });
 	    }
 	}
-	function deleteCategoryAction(){
-      	categoryService.httpPost(categoryApi.categoryDelete,{'category_delete':$scope.category.selected} ).then(function(responseData) {
+	function deleteProvinceAction(){
+      	commonService.httpPost(areaApi.areaDelete,{'category_delete':$scope.category.selected} ).then(function(responseData) {
           	if(responseData.status) {
            		SweetAlert.swal("Delete success!", "", "success");
-           		//categoryList();
           	}else{
 	            SweetAlert.swal({
 	              	title:  "Error",
@@ -395,7 +394,7 @@
 	              	html: true
 	            });
           	}
-          	categoryList();
+          	districtList();
       	});
     }
 

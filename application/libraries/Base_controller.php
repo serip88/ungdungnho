@@ -113,6 +113,7 @@ class Base_controller extends REST_Controller {
             'area/save'             =>['api'=>'area/save','deny_guest'=>1,'deny_user'=>0],
             'area/list'             =>['api'=>'area/list','deny_guest'=>1,'deny_user'=>0],
             'area/district_list'    =>['api'=>'area/district_list','deny_guest'=>1,'deny_user'=>0],
+            'area/delete'           =>['api'=>'area/delete','deny_guest'=>1,'deny_user'=>0],
             'main/base_info'        =>['api'=>'main/base_info','deny_guest'=>0,'deny_user'=>0],
 
             'user/user_save'        =>['api'=>'user/user_save','deny_guest'=>1,'deny_user'=>0],
