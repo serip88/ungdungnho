@@ -259,6 +259,7 @@ class User_lib extends Common_lib {
     $data =array();
     $permission = array('access'=>$param['access_selected'],'modify'=>$param['modify_selected'] );
     $data['name'] = $param['user_group_name'];
+    $data['slug'] = $this->CI->user_group_model->get_slug($param['user_group_name']);
     $data['permission'] = json_encode($permission);
     $id = $this->CI->user_group_model->insert_data($data);
     return $id;
