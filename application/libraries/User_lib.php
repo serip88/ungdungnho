@@ -296,6 +296,7 @@ class User_lib extends Common_lib {
       $data =array();
       $permission = array('access'=>$param['access_selected'],'modify'=>$param['modify_selected'] );
       $data['name'] = $param['user_group_name'];
+      $data['slug'] = $this->CI->user_group_model->get_slug($param['user_group_name'],'edit');
       $data['permission'] = json_encode($permission);
       $where = array("user_group_id"=> $param['id']);
       $stt = $this->CI->user_group_model->update_data($data,$where); 

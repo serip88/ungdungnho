@@ -162,7 +162,7 @@
             });
           };
           function validateAddUser() {
-            if(typeof(scope.newuser.user_group_name == 'undefined') ){
+            if(typeof(scope.newuser.user_group_name) == 'undefined'){
               return 0;
             }else{
               return 1;
