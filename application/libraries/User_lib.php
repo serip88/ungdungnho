@@ -266,7 +266,7 @@ class User_lib extends Common_lib {
   }
   function get_user_group_detail($group_id){
 
-    $select="user_group_id as id,name,permission";
+    $select="user_group_id as id,name,type,permission";
     $where = array('user_group_id'=>$group_id);
     $data = $this->CI->user_group_model->get_data($select,$where);
     if($data){

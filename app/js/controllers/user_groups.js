@@ -112,11 +112,12 @@
         size: size,
         controller: ['$scope', '$uibModalInstance', function(scope, $uibModalInstance){
           scope.newuser = {};
-          scope.usergroup = {access_selected:[],roles:[],access_check_all:false,modify_selected:[],type_group:[],type_group_selected:0};
+          scope.usergroup = {access_selected:[],roles:[],access_check_all:false,modify_selected:[],type_group:[],type_group_selected:{} };
           scope.newuser.id = data.id;
           scope.newuser.user_group_name = data.name;
           scope.usergroup.roles = scope.newuser.list_permissions = data.list_permissions;
           scope.usergroup.type_group = data.type_group;
+          scope.usergroup.type_group_selected = {id:data.type};
             angular.forEach( data.permission.access, function(value, key) {
               scope.usergroup.access_selected.push(value);
             });
