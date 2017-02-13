@@ -22,7 +22,7 @@ class User_lib extends Common_lib {
   function __construct() {
       $this->CI =& get_instance();
       $this->CI->load->database('default');
-      $this->CI->load->model(array('user/user_group_model','user/user_model','media/media_model'));
+      $this->CI->load->model(array('user/user_group_model','user/user_model','media/media_model','type/type_model'));
       $this->_config =  $this->CI->config;
       $this->init_lang();
   }
@@ -277,9 +277,10 @@ class User_lib extends Common_lib {
   }
 
   function validate_edit_user_group($param){
-    $requite = array('user_group_name','id');
+    $requite = array('user_group_name','id','type_selected');
     $param['user_group_name'] = isset($param['user_group_name']) && $param['user_group_name'] ?$param['user_group_name']: null;
     $param['id'] = isset($param['id']) && $param['id'] ?$param['id']: 0;
+    $param['type_selected'] = isset($param['type_selected']) && $param['type_selected'] ?$param['type_selected']: 0;
     foreach ($requite as $key => $value) {
       if(!$param[$value]){
         return 0;
@@ -297,6 +298,7 @@ class User_lib extends Common_lib {
       $permission = array('access'=>$param['access_selected'],'modify'=>$param['modify_selected'] );
       $data['name'] = $param['user_group_name'];
       $data['slug'] = $this->CI->user_group_model->get_slug($param['user_group_name'],'edit');
+      $data['type'] = $param['type_selected'];
       $data['permission'] = json_encode($permission);
       $where = array("user_group_id"=> $param['id']);
       $stt = $this->CI->user_group_model->update_data($data,$where); 

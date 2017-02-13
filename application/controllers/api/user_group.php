@@ -48,8 +48,10 @@ class User_group extends Base_controller {
         $group_id = isset($param['id']) && $param['id'] ? $param['id'] : 0;
         $data_group = $this->user_lib->get_user_group_detail($group_id);
         $list_action = $this->get_list_action();
-        if($data_group && $list_action){
+        $type_group = $this->type_model->get_type('user_group');
+        if($data_group && $list_action && $type_group){
             $stt=TRUE;
+            $data_group['type_group']= $type_group;
             $data_group['permission']=  json_decode($data_group['permission'],true);
             $data_group['list_permissions'] = $list_action;
             $data_group['permission']['access'] = array_uintersect($data_group['permission']['access'],$list_action,array($this,'array_matches'));

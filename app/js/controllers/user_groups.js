@@ -112,11 +112,11 @@
         size: size,
         controller: ['$scope', '$uibModalInstance', function(scope, $uibModalInstance){
           scope.newuser = {};
-          scope.usergroup = {access_selected:[],roles:[],access_check_all:false,modify_selected:[]};
+          scope.usergroup = {access_selected:[],roles:[],access_check_all:false,modify_selected:[],type_group:[],type_group_selected:0};
           scope.newuser.id = data.id;
           scope.newuser.user_group_name = data.name;
           scope.usergroup.roles = scope.newuser.list_permissions = data.list_permissions;
-
+          scope.usergroup.type_group = data.type_group;
             angular.forEach( data.permission.access, function(value, key) {
               scope.usergroup.access_selected.push(value);
             });
@@ -146,6 +146,7 @@
             }       
             scope.newuser.access_selected = scope.usergroup.access_selected;
             scope.newuser.modify_selected = scope.usergroup.modify_selected;
+            scope.newuser.type_selected   = scope.usergroup.type_group_selected.id;
             userService.httpPost(userApi.groupEdit,scope.newuser).then(function(responseData) {
                 if (responseData.status) {
                  SweetAlert.swal("Edit success!", "", "success");
