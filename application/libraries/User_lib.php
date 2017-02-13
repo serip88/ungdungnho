@@ -243,8 +243,9 @@ class User_lib extends Common_lib {
   }
 
   function validate_save_user_group($param){
-    $requite = array('user_group_name');
+    $requite = array('user_group_name','type_selected');
     $param['user_group_name'] = isset($param['user_group_name']) && $param['user_group_name'] ?$param['user_group_name']: null;
+    $param['type_selected'] = isset($param['type_selected']) && $param['type_selected'] ?$param['type_selected']: 0;
     foreach ($requite as $key => $value) {
       if(!$param[$value]){
         return 0;
@@ -260,6 +261,7 @@ class User_lib extends Common_lib {
     $permission = array('access'=>$param['access_selected'],'modify'=>$param['modify_selected'] );
     $data['name'] = $param['user_group_name'];
     $data['slug'] = $this->CI->user_group_model->get_slug($param['user_group_name']);
+    $data['type'] = $param['type_selected'];
     $data['permission'] = json_encode($permission);
     $id = $this->CI->user_group_model->insert_data($data);
     return $id;

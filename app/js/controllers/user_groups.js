@@ -44,14 +44,15 @@
       });
       
     }; 
-    function modalAddUser(size,list_permissions) {
+    function modalAddUser(size,data) {
       var modalObj = {
         templateUrl: baseConfig.adminTpl +'/system/user_groups/add_group_user.html',
         size: size,
         controller: ['$scope', '$uibModalInstance', function(scope, $uibModalInstance){
           scope.newuser = {};
-          scope.newuser.list_permissions = list_permissions;
-          scope.usergroup = {access_selected:[],roles:[],access_check_all:false,modify_selected:[]};
+          scope.newuser.list_permissions = data.list_permissions;
+          scope.usergroup = {access_selected:[],roles:[],access_check_all:false,modify_selected:[],type_group:[],type_group_selected:{} };
+          scope.usergroup.type_group = data.type_group;
             angular.forEach( scope.newuser.list_permissions, function(value, key) {
               scope.usergroup.roles.push(value);
             });
@@ -78,6 +79,7 @@
             }       
             scope.newuser.access_selected = scope.usergroup.access_selected;
             scope.newuser.modify_selected = scope.usergroup.modify_selected;
+            scope.newuser.type_selected   = scope.usergroup.type_group_selected.id;
             userService.httpPost(userApi.groupSave,scope.newuser).then(function(responseData) {
                 if (responseData.status) {
                  SweetAlert.swal("Add success!", "", "success");

@@ -23,8 +23,13 @@ class User_group extends Base_controller {
     }
 	
 	public function permissions_get(){
+        $stt = false;
 		$list_action = $this->get_list_action();
-		$response = array('status' => true,'rows' => $list_action);
+        $type_group = $this->type_model->get_type('user_group');
+        if($type_group){
+            $stt = true;
+        }
+		$response = array('status' => $stt,'rows' => array('list_permissions'=>$list_action,'type_group'=>$type_group));
 		$this->custom_response($response);
 	}
 
