@@ -19,5 +19,15 @@ class Type_Model extends Starter_Model{
 	      return FALSE;  
 	    }
     }
+    public function get_id_type($value){
+        $select="*";
+        $where = array('value'=>$value);
+        $data = $this->get_data($select,$where,1);
+        if($data){
+          return $data[0]['id'];
+        }else{
+          return FALSE;  
+        }
+    }
     
 }

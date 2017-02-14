@@ -33,11 +33,12 @@ class User_lib extends Common_lib {
       $this->_lang = $this->CI->lang->language;
       //return $this->_lang;
   }
-  function get_user_list(){
+  function get_user_list($id_type){
     $select="A.user_id,A.username,A.status,A.date_added,A.user_group_id,A.firstname,A.lastname,A.email,A.image_path,B.image_path as media_path,B.image_name as media_name,B.media_id";
-    $where = array();
+    $where = array('C.type'=>$id_type);
     $tb_join = array();
     $tb_join[] = array('table_name'=>'rz_media as B','condition'=>"A.user_id =B.parent_id", 'type'=>'left');
+    $tb_join[] = array('table_name'=>'rz_user_group as C','condition'=>"A.user_group_id =C.user_group_id", 'type'=>'left');
     $data = $this->CI->user_model->get_data_join($select,$where,$tb_join);
     return $data;
   }

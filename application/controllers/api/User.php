@@ -48,7 +48,8 @@ class User extends Base_controller {
     }
     public function user_list_get()
     {
-        $data = $this->user_lib->get_user_list();
+        $id_type = $this->type_model->get_id_type('admin');
+        $data = $this->user_lib->get_user_list($id_type);
         if($data){
             $stt=TRUE;
             $data = $this->user_lib->format_user_list($data);
