@@ -60,6 +60,7 @@
       },
       "rz_system" : {
         "SYSTEM" : "System",
+        "MEMBERS" : "Members",
         "USERS" : "Users",
         "USER_GROUPS" : "User Groups"
       },

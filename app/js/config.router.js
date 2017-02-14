@@ -334,6 +334,10 @@ angular.module('app')
                       }]
                   }
               })
+              .state('app.system.members', {
+                  url: '/members',
+                  templateUrl: baseConfig.adminTpl+'/system/users/system_members.html'
+              })
               .state('app.system.users', {
                   url: '/users',
                   templateUrl: baseConfig.adminTpl+'/system/users/system_users.html'
