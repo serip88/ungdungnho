@@ -14,7 +14,7 @@ var isDefined = angular.isDefined,
 
 app.factory("commonService", ["$http", "$q", 'SweetAlert', function ($http, $q, SweetAlert) {
     var commonObject = {};
-
+    commonObject.sync = {user_data:{},is_requested:0};
     commonObject.httpGet = function (path, params, block) {
         if(typeof block == 'undefined'){
             block = true;

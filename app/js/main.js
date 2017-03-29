@@ -39,8 +39,9 @@ app.factory("loginService", ["$http", "$q", "$state", function ($http, $q, $stat
 
     return userObject;
   }])
-  .controller('AppCtrl', ['$scope', '$rootScope', '$translate', '$localStorage', '$window', '$state', 'loginService', 'commonService' ,
-    function($scope, $rootScope,  $translate,   $localStorage, $window, $state, loginService, commonService ) {
+  .controller('AppCtrl', ['$scope', '$rootScope', '$translate', '$localStorage', '$window', '$state', 'initData', 'loginService', 'commonService' ,
+    function($scope, $rootScope,  $translate,   $localStorage, $window, $state, initData, loginService, commonService ) {
+      init();
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -74,7 +75,7 @@ app.factory("loginService", ["$http", "$q", "$state", function ($http, $q, $stat
           appUrl: baseConfig.app,
           adminTpl: baseConfig.adminTpl,
         },
-        user_data: loginService.syn.user_data,
+        user_data: initData.user_data,
         api:{
           main:{base_info:'main/base_info'},
         }
@@ -87,7 +88,12 @@ app.factory("loginService", ["$http", "$q", "$state", function ($http, $q, $stat
             $scope.app.version = response.data.site_version;
           }
       });
-      function getUserInfor(init){
+      function init(){
+        if(!initData.data.status){
+          $state.go('access.signin');
+        }
+      }
+      /*function getUserInfor(init){
         loginService.httpGet('user/user_ss').then(function(response) {
             if(init==1){
                 stateChange();
@@ -103,11 +109,11 @@ app.factory("loginService", ["$http", "$q", "$state", function ($http, $q, $stat
             }
           });
       }
-      getUserInfor(1);
+      getUserInfor(1);*/
       function stateChange(){
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
           if(fromState.name  != toState.name){
-            if(isEmpty(loginService.syn.user_data)){
+            if(isEmpty(initData.user_data)){
               if(toState.name != 'access.signin'){
                 event.preventDefault();
                 //$state.go('access.signin');
@@ -148,10 +154,10 @@ app.factory("loginService", ["$http", "$q", "$state", function ($http, $q, $stat
       };
 
       $scope.logout = function() {
-        loginService.httpPost('login/logout')
+        commonService.httpPost('login/logout')
           .then(function(response) {
             if (response.status) {
-              angular.copy({}, loginService.syn.user_data);  
+              angular.copy({}, commonService.sync.user_data);  
               $state.go('access.signin');
             }
           }

@@ -19,21 +19,22 @@ angular.module('app')
           $urlRouterProvider
               .otherwise('/');
           $stateProvider
-             
               .state('app', {
                   abstract: true,
                   url: '/app',
                   templateUrl: baseConfig.adminTpl+'/app.html',
+                  controller: 'AppCtrl',
                   resolve: {
-                    promiseObj:  function($http,loginService){
+                    initData:  ['$http', 'loginService', function($http,loginService){
                       // $http returns a promise for the url data
-                      $http({method: 'GET', url: [baseConfig.apiUrl, 'user/user_ss'].join('/')})
+                        return $http({method: 'GET', url: [baseConfig.apiUrl, 'user/user_ss'].join('/')})
                         .success(function (data) {
                           if(typeof(data.user_data)){
                             angular.copy(data.user_data, loginService.syn.user_data);
+                            return data.user_data;
                           }
                       });
-                    }
+                    }]
                   }
               })
               .state('app.dashboard', {
