@@ -91,6 +91,10 @@ app.factory("loginService", ["$http", "$q", "$state", function ($http, $q, $stat
       function init(){
         if(!initData.data.status){
           $state.go('access.signin');
+        }else{
+          if($state.current.name == 'access.signin'){
+            $state.go('app.dashboard');
+          }
         }
       }
       /*function getUserInfor(init){

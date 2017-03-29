@@ -31,7 +31,6 @@ angular.module('app')
                         .success(function (data) {
                           if(typeof(data.user_data)){
                             angular.copy(data.user_data, loginService.syn.user_data);
-                            return data.user_data;
                           }
                       });
                     }]
@@ -420,19 +419,18 @@ angular.module('app')
               .state('access', {
                   url: '/access',
                   template: '<div ui-view class="fade-in-right-big smooth"></div>',
-                  /*  resolve: {
-                    promiseObj:  function($http,loginService){
+                  controller: 'AppCtrl',
+                  resolve: {
+                    initData:  ['$http', 'loginService', function($http,loginService){
                       // $http returns a promise for the url data
-                      alert(222);
-                      $http({method: 'GET', url: [baseConfig.apiUrl, 'user/user_ss'].join('/')})
+                      return $http({method: 'GET', url: [baseConfig.apiUrl, 'user/user_ss'].join('/')})
                         .success(function (data) {
                           if(typeof(data.user_data)){
                             angular.copy(data.user_data, loginService.syn.user_data);
                           }
                       });
-                    }
-                  },
-                  controller: 'AppCtrl'*/
+                    }]
+                  }                  
               })
               .state('access.signin', {
                   url: '/signin',
