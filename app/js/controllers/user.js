@@ -17,7 +17,8 @@ var userApi = {
   };
 var memberApi = {
     baseUrl: baseConfig.apiUrl,
-    memberList: 'user/member_list'
+    memberList: 'user/member_list',
+    memberGroup: 'user/member_group'
   };
 (function(window, angular, $, undefined){
     'use strict';
@@ -256,7 +257,14 @@ var memberApi = {
        });
     }
   }
-  
+  $scope.openAddMember = function (size) {
+    userService.httpGet(memberApi.memberGroup).then(function(responseData) {
+        if (responseData.status) {
+          modalAddUser(size,responseData.rows);
+        }
+    });
+    
+  };
   $scope.openAddUser = function (size) {
     userService.httpGet(userApi.userGroup).then(function(responseData) {
         if (responseData.status) {
@@ -269,6 +277,13 @@ var memberApi = {
      userService.httpGet(userApi.userDetail,{user_id:user_id}).then(function(responseData) {
         if (responseData.status) {
           modalEditUser('lg',responseData.user_group,responseData.user);
+        }
+    });
+  }
+  $scope.memberEdit = function (item) {
+     userService.httpGet(memberApi.memberGroup).then(function(responseData) {
+        if (responseData.status) {
+          modalEditUser('lg',responseData.rows,item);
         }
     });
   }

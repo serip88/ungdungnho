@@ -88,10 +88,10 @@ class User_lib extends Common_lib {
       return 1;
       
   }
-  function get_user_group(){
+  function get_user_group($type){
 
     $select="user_group_id as id,name";
-    $where = array();
+    $where = array('type'=>$type);
     $data = $this->CI->user_group_model->get_data($select,$where);
     return $data;
   }

@@ -16,7 +16,7 @@
       <div class="page-header">
         <div class="container-fluid">
           <div class="pull-right"  >
-              <a ng-click="openAddUser('lg')" data-toggle="tooltip" title="Add user" class="btn btn-primary" data-original-title="Add New"><i class="fa fa-plus"></i></a>
+              <a ng-click="openAddMember('lg')" data-toggle="tooltip" title="Add user" class="btn btn-primary" data-original-title="Add New"><i class="fa fa-plus"></i></a>
               <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" data-ng-click="deleteUser()" data-original-title="Delete"><i class="fa fa-trash-o"></i></button> 
               <!-- onClick="confirm('Are you sure?') ? $('#myform').submit() : false;"  -->
           </div>
@@ -67,7 +67,7 @@
                       <td class="text-left">{{value.ui_date_added}}</td>
                       <td class="text-right">
                         <a data-ng-click="userView(value.user_id)" data-toggle="tooltip" title="" class="btn btn-success hide" data-original-title="Edit"><i class="fa fa-eye"></i></a>
-                        <a data-ng-click="userEdit(value)" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+                        <a data-ng-click="memberEdit(value)" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
                       </td>
                     </tr>
                   </tbody>

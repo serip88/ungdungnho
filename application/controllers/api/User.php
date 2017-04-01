@@ -18,7 +18,7 @@ require APPPATH . '/libraries/Base_controller.php';
  */
 class User extends Base_controller {
 
-    private $_type = '' ;
+    private $_user_type = '' ;
     function __construct()
     {
         // Construct the parent class
@@ -49,13 +49,13 @@ class User extends Base_controller {
     }
     public function member_list_get()
     {
-        $this->_type = 'member';
+        $this->_user_type = 'member';
         $this->user_list_get();
     }
     public function user_list_get()
     {
-        $_type = $this->_type ? $this->_type : 'admin';
-        $id_type = $this->type_model->get_id_type($_type);
+        $_user_type = $this->_user_type ? $this->_user_type : 'admin';
+        $id_type = $this->type_model->get_id_type($_user_type);
         $data = $this->user_lib->get_user_list($id_type);
         if($data){
             $stt=TRUE;
@@ -96,10 +96,16 @@ class User extends Base_controller {
         $response = array('status' => $status, 'user_data'=> $data_user);
         $this->custom_response($response);
     }
-
+    public function member_group_get()
+    {
+        $this->_user_type = 'member';
+        $this->user_group_get();
+    }
     public function user_group_get()
     {
-        $data = $this->user_lib->get_user_group();
+        $_user_type = $this->_user_type ? $this->_user_type : 'admin';
+        $id_type = $this->type_model->get_id_type($_user_type);
+        $data = $this->user_lib->get_user_group($id_type);
         if($data)
             $stt=TRUE;
         else 
