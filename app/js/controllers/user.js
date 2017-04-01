@@ -15,6 +15,10 @@ var userApi = {
     groupEdit: 'user_group/edit',
     groupDelete: 'user_group/delete'
   };
+var memberApi = {
+    baseUrl: baseConfig.apiUrl,
+    memberList: 'user/member_list'
+  };
 (function(window, angular, $, undefined){
     'use strict';
 
@@ -357,7 +361,7 @@ var userApi = {
     };
     openModal.custom(modalObj);
   }
-  function userList() {
+  $scope.userList = function() {  
       $scope.userList = {};
       userService.httpGet(userApi.userList).then(function(responseData) {
         if (responseData.status) {
@@ -371,7 +375,20 @@ var userApi = {
         }
       });
   }
-  userList();
+  $scope.memberList = function() {  
+      $scope.userList = {};
+      userService.httpGet(memberApi.memberList).then(function(responseData) {
+        if (responseData.status) {
+            $scope.userList = responseData.rows;
+            $scope.user = {selected:[],roles:[],is_check_all:false};
+            angular.forEach( $scope.userList, function(value, key) {
+              $scope.userList[key]['user_id'] = parseInt(value.user_id) ;
+              //$scope.user.roles[value.user_id]= value.username ;
+              $scope.user.roles.push({id:value.user_id,name:value.username});
+            });
+        }
+      });
+  }
 
   $scope.checkAll = function() {
     $scope.user.selected = $scope.user.roles.map(function(item) { return item.id; });
@@ -405,18 +422,13 @@ var userApi = {
   }]);
 
   app.controller('UserListCtrl', ['$scope', '$uibModal', 'userService', function($scope, $uibModal, userService) {
-    /*$scope.newuser = ['newuser1', 'newuser2', 'newuser3'];
-    function userList() {
-        $scope.userList = {};
-      userService.httpGet(userApi.userList).then(function(responseData) {
-        if (responseData.status) {
-            $scope.userList = responseData.rows;
-        }
-      });
-    }
-    userList();
-    */
    
+    $scope.userList();
+  
+  }]);
+  app.controller('MemberListCtrl', ['$scope', '$uibModal', 'userService', function($scope, $uibModal, userService) {
+   
+    $scope.memberList();
   
   }]);
 

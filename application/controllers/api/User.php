@@ -18,6 +18,7 @@ require APPPATH . '/libraries/Base_controller.php';
  */
 class User extends Base_controller {
 
+    private $_type = '' ;
     function __construct()
     {
         // Construct the parent class
@@ -46,9 +47,15 @@ class User extends Base_controller {
             ], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
         }*/
     }
+    public function member_list_get()
+    {
+        $this->_type = 'member';
+        $this->user_list_get();
+    }
     public function user_list_get()
     {
-        $id_type = $this->type_model->get_id_type('admin');
+        $_type = $this->_type ? $this->_type : 'admin';
+        $id_type = $this->type_model->get_id_type($_type);
         $data = $this->user_lib->get_user_list($id_type);
         if($data){
             $stt=TRUE;
