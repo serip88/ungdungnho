@@ -3,7 +3,7 @@
  */
 var userApi = {
     baseUrl: baseConfig.apiUrl,
-    userGroup: 'user/user_group',
+    adminGroup: 'user/admin_group',
     userList: 'user/user_list',
     userDetail: 'user/user_detail',
     userSave: 'user/user_save',
@@ -13,13 +13,12 @@ var userApi = {
     groupSave: 'user_group/save',
     groupDetail: 'user_group/detail',
     groupEdit: 'user_group/edit',
-    groupDelete: 'user_group/delete'
-  };
-var memberApi = {
-    baseUrl: baseConfig.apiUrl,
+    groupDelete: 'user_group/delete',
+
     memberList: 'user/member_list',
     memberGroup: 'user/member_group'
   };
+
 (function(window, angular, $, undefined){
     'use strict';
 
@@ -258,7 +257,7 @@ var memberApi = {
     }
   }
   $scope.openAddMember = function (size) {
-    userService.httpGet(memberApi.memberGroup).then(function(responseData) {
+    userService.httpGet(userApi.memberGroup).then(function(responseData) {
         if (responseData.status) {
           modalAddUser(size,responseData.rows);
         }
@@ -266,7 +265,7 @@ var memberApi = {
     
   };
   $scope.openAddUser = function (size) {
-    userService.httpGet(userApi.userGroup).then(function(responseData) {
+    userService.httpGet(userApi.adminGroup).then(function(responseData) {
         if (responseData.status) {
           modalAddUser(size,responseData.rows);
         }
@@ -281,14 +280,14 @@ var memberApi = {
     });
   }
   $scope.memberEdit = function (item) {
-     userService.httpGet(memberApi.memberGroup).then(function(responseData) {
+     userService.httpGet(userApi.memberGroup).then(function(responseData) {
         if (responseData.status) {
           modalEditUser('lg',responseData.rows,item);
         }
     });
   }
   $scope.userEdit = function (item) {
-     userService.httpGet(userApi.userGroup).then(function(responseData) {
+     userService.httpGet(userApi.adminGroup).then(function(responseData) {
         if (responseData.status) {
           modalEditUser('lg',responseData.rows,item);
         }
@@ -392,7 +391,7 @@ var memberApi = {
   }
   $scope.memberList = function() {  
       $scope.userList = {};
-      userService.httpGet(memberApi.memberList).then(function(responseData) {
+      userService.httpGet(userApi.memberList).then(function(responseData) {
         if (responseData.status) {
             $scope.userList = responseData.rows;
             $scope.user = {selected:[],roles:[],is_check_all:false};

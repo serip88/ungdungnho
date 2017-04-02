@@ -16,6 +16,8 @@ require APPPATH . '/libraries/Base_controller.php';
  * @license         MIT
  * @link            https://github.com/chriskacerguis/codeigniter-restserver
  */
+define('MEMBER_TYPE', 'member');
+define('ADMIN_TYPE', 'admin');
 class User extends Base_controller {
 
     private $_user_type = '' ;
@@ -49,12 +51,12 @@ class User extends Base_controller {
     }
     public function member_list_get()
     {
-        $this->_user_type = 'member';
+        $this->_user_type = MEMBER_TYPE;
         $this->user_list_get();
     }
     public function user_list_get()
     {
-        $_user_type = $this->_user_type ? $this->_user_type : 'admin';
+        $_user_type = $this->_user_type ? $this->_user_type : ADMIN_TYPE;
         $id_type = $this->type_model->get_id_type($_user_type);
         $data = $this->user_lib->get_user_list($id_type);
         if($data){
@@ -98,12 +100,17 @@ class User extends Base_controller {
     }
     public function member_group_get()
     {
-        $this->_user_type = 'member';
-        $this->user_group_get();
+        $this->_user_type = MEMBER_TYPE;
+        $this->user_group();
     }
-    public function user_group_get()
+    public function admin_group_get()
     {
-        $_user_type = $this->_user_type ? $this->_user_type : 'admin';
+        $this->_user_type = ADMIN_TYPE;
+        $this->user_group();
+    }
+    private function user_group()
+    {
+        $_user_type = $this->_user_type ? $this->_user_type : MEMBER_TYPE;
         $id_type = $this->type_model->get_id_type($_user_type);
         $data = $this->user_lib->get_user_group($id_type);
         if($data)
