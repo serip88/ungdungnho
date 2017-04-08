@@ -2,10 +2,9 @@
 
 /* Controllers */
 
-angular.module('app')
-  .factory("loginService", ["$http", "$q", "$state", function ($http, $q, $state) {
+app.factory("loginService", ["$http", "$q", "$state", function ($http, $q, $state) {
     var userObject = {};    
-    userObject.syn = {user_data:{}};
+    userObject.syn = {user_data:{},is_requested:0};
     userObject.httpGet = function (path, params, block) {
         if(typeof block == 'undefined'){
             block = true;
@@ -40,8 +39,9 @@ angular.module('app')
 
     return userObject;
   }])
-  .controller('AppCtrl', ['$scope', '$rootScope', '$translate', '$localStorage', '$window', '$state', 'loginService', 
-    function(              $scope, $rootScope,  $translate,   $localStorage, $window, $state, loginService ) {
+  .controller('AppCtrl', ['$scope', '$rootScope', '$translate', '$localStorage', '$window', '$state', 'initData', 'loginService', 'commonService' ,
+    function($scope, $rootScope,  $translate,   $localStorage, $window, $state, initData, loginService, commonService ) {
+      init();
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -49,7 +49,7 @@ angular.module('app')
 
       // config
       $scope.app = {
-        name: 'Angulr',
+        name: '',//Your Site Name
         version: '1.3.3',
         // for chart colors
         color: {
@@ -72,24 +72,64 @@ angular.module('app')
           asideFolded: false,
           asideDock: false,
           container: false,
-          adBaseUrl: baseUrl,
-          adBaseUrl: adBaseUrl,
+          appUrl: baseConfig.app,
+          adminTpl: baseConfig.adminTpl,
         },
-        user_data: loginService.syn.user_data
+        user_data: initData.user_data,
+        api:{
+          main:{base_info:'main/base_info'},
+        }
       }
-      function getUserInfor(){
+      //get site info
+      commonService.httpGet($scope.app.api.main.base_info)
+      .then(function(response) {
+          if (response.status) {
+            $scope.app.name = response.data.site_name;
+            $scope.app.version = response.data.site_version;
+          }
+      });
+      function init(){
+        if(!initData.data.status){
+          $state.go('access.signin');
+        }else{
+          if($state.current.name == 'access.signin'){
+            $state.go('app.dashboard');
+          }
+        }
+      }
+      /*function getUserInfor(init){
         loginService.httpGet('user/user_ss').then(function(response) {
+            if(init==1){
+                stateChange();
+            }
             if (response.status) {
+              //$urlRouterProvider.otherwise('/app/dashboard');
               angular.copy(response.user_data, loginService.syn.user_data);  
-              if($state.current.name == 'root.access.signin'){
-                $state.go('root.app.dashboard');
+              if($state.current.name == 'access.signin'){
+                $state.go('app.dashboard');
               }
             }else{
-               $state.go('root.access.signin');
+               $state.go('access.signin');
             }
           });
       }
-      getUserInfor();
+      getUserInfor(1);*/
+      function stateChange(){
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
+          if(fromState.name  != toState.name){
+            if(isEmpty(initData.user_data)){
+              if(toState.name != 'access.signin'){
+                event.preventDefault();
+                //$state.go('access.signin');
+              }
+            }else{
+              if(toState.name == 'access.signin'){
+                event.preventDefault();
+              }
+            }
+          }
+        })
+      }
       // save settings to local storage
       if ( angular.isDefined($localStorage.settings) ) {
         $scope.app.settings = $localStorage.settings;
@@ -109,18 +149,6 @@ angular.module('app')
       $scope.lang = { isopen: false };
       $scope.langs = {en:'English', de_DE:'German', it_IT:'Italian'};
       $scope.selectLang = $scope.langs[$translate.proposedLanguage()] || "English";
-      $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
-          if(isEmpty(loginService.syn.user_data) && toState.name != 'root.access.signin' ){
-            event.preventDefault();
-            //$state.current.name = 'access.signin';
-            $state.go('root.access.signin');
-          }
-          if(!isEmpty(loginService.syn.user_data) && toState.name == 'root.access.signin'){
-            event.preventDefault();
-            //$state.current.name = 'app.dashboard'
-            //$state.go('app.dashboard');
-          }
-      })
       $scope.setLang = function(langKey, $event) {
         // set the current lang
         $scope.selectLang = $scope.langs[langKey];
@@ -130,11 +158,11 @@ angular.module('app')
       };
 
       $scope.logout = function() {
-        loginService.httpPost('login/logout')
+        commonService.httpPost('login/logout')
           .then(function(response) {
             if (response.status) {
-              angular.copy({}, loginService.syn.user_data);  
-              $state.go('root.access.signin');
+              angular.copy({}, commonService.sync.user_data);  
+              $state.go('access.signin');
             }
           }
         );  

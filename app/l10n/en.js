@@ -60,6 +60,7 @@
       },
       "rz_system" : {
         "SYSTEM" : "System",
+        "MEMBERS" : "Members",
         "USERS" : "Users",
         "USER_GROUPS" : "User Groups"
       },
@@ -68,6 +69,11 @@
         "CATEGORY" : "Category",
         "PRODUCT" : "Product",
         "ATTRIBUTE" : "Attribute"
+      },
+      "rz_area" : {
+        "AREA" : "Area",
+        "PROVINCECITY" : "Province/City",
+        "DISTRICT" : "District"
       }
     },
     "your_stuff" : {

@@ -1,12 +1,12 @@
 // config
-var baseUrl = 'http://ungdungnho.localhost/app/';
-var adBaseUrl = 'http://ungdungnho.localhost/app/tpl/admin/';
+var baseUrl = '/app/';
+var adBaseUrl = '/app/tpl/admin/';
 var baseConfig = {};
-    baseConfig.apiUrl = 'http://ungdungnho.localhost/api/';
-    baseConfig.adminBaseUrl = 'http://ungdungnho.localhost/app/tpl/admin/';
-    baseConfig.baseUrl = 'http://ungdungnho.localhost/app/';
-var app =  
-angular.module('app')
+    baseConfig.apiUrl = '/api';
+    baseConfig.adminTpl = '/app/tpl/admin';
+    baseConfig.app = '/app';
+    baseConfig.home = '/';
+var app =  angular.module('app')
   .config(
     [        '$controllerProvider', '$compileProvider', '$filterProvider', '$provide',
     function ($controllerProvider,   $compileProvider,   $filterProvider,   $provide) {
@@ -31,7 +31,7 @@ angular.module('app')
     // Those urls are [prefix][langKey][suffix].
     
     $translateProvider.useStaticFilesLoader({
-      prefix: baseUrl+'l10n/',
+      prefix: baseConfig.app+'/l10n/',
       suffix: '.js'
     });
     // Tell the module what language to use by default

@@ -1,6 +1,6 @@
 app.controller('FileUploadCtrl', ['$scope', 'FileUploader', function($scope, FileUploader) {
     var uploader = $scope.uploader = new FileUploader({
-        url: baseUrl+'js/controllers/upload.php'
+        url: baseConfig.app+'/js/controllers/upload.php'
     });
 
     // FILTERS
