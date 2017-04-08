@@ -8,7 +8,7 @@
   app.controller('UserGroupCtrl', ['$scope', '$uibModal', '$log', 'openModal', 'userService', 'SweetAlert', function($scope, $uibModal, $log, openModal, userService, SweetAlert) {
 
     function userGroupList() {
-        userService.httpGet(userApi.userGroup).then(function(responseData) {
+        userService.httpGet(userApi.adminGroup).then(function(responseData) {
             if (responseData.status) {
               $scope.userGroupList = responseData.rows;
               $scope.user_group = {selected:[],roles:[],is_check_all:false};
