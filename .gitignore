@@ -13,9 +13,11 @@ user_guide_src/build/*
 user_guide_src/cilexer/build/*
 user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
-app/vendor/
+#app/vendor/
+app/images/post/*
+app/images/user/*
+app/images/tmp/*
 app/js/controllers/uploads/
-
 # IDE Files
 #-------------------------
 /nbproject/
@@ -29,3 +31,4 @@ app/js/controllers/uploads/
 *.sublime-project
 app/js/lib/Validation-Engine
 _backup
+_info/
