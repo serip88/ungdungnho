@@ -7,7 +7,7 @@ if ( !empty( $_FILES ) ) {
 
     move_uploaded_file( $tempPath, $uploadPath );
 
-    $answer = array( 'answer' => 'File transfer completed' );
+    $answer = array( 'answer' => 'File transfer completed','name'=>$_FILES[ 'file' ][ 'name' ],'path'=>$uploadPath );
     $json = json_encode( $answer );
 
     echo $json;

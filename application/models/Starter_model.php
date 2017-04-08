@@ -6,11 +6,10 @@ if (!defined('BASEPATH'))
 class Starter_Model extends CI_Model
 {
   protected $_tb_name = '';
-         
   public function __construct()
   {
-      parent::__construct();     
-      $this->load->database();   
+      parent::__construct(); 
+      $this->load->database();
   }
 
   public function insert_data($data){ 
@@ -136,6 +135,30 @@ class Starter_Model extends CI_Model
         }
       }
       return $result;
+  }
+  
+  public function get_slug($title,$type='add'){
+    $this->load->library('common_lib');
+    $common_lib= new common_lib();
+    $slug= $common_lib->name_on_bar($title);
+    $select="*";
+    $where = array('slug'=>$slug);
+    $data = $this->user_group_model->get_data($select,$where,1);
+    if($type=='add'){
+      if(count($data)>0){
+        $slug=$slug.'-'.rand(0,100);
+        return $this->get_slug($slug);
+      }  
+    }else{
+      if(count($data)>1){
+        $slug=$slug.'-'.rand(0,100);
+        return $this->get_slug($slug);
+      } 
+    }
+    return $slug;
+  }
+  protected function check_admin($uid){
+    
   }
     
 }

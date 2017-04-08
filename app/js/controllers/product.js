@@ -12,7 +12,7 @@
 (function(window, angular, $, undefined){
 	'use strict';
 
-    app.factory("productService", ["$http", "$q", function ($http, $q) {
+    app.factory("productService", ["$http", "$q", 'SweetAlert', function ($http, $q, SweetAlert) {
 	    var productObject = {};
 	    
 	    productObject.httpGet = function (path, params, block) {
@@ -44,7 +44,7 @@
 	    return productObject;
 	}]);
 
-	app.controller('ProductCtrl', ['$scope', '$log', 'openModal', 'SweetAlert', 'productService', function($scope, $log, openModal, SweetAlert, productService) {
+	app.controller('ProductCtrl', ['$scope', '$log', 'openModal', 'SweetAlert', 'productService', 'commonService', function($scope, $log, openModal, SweetAlert, productService, commonService) {
 		$scope.checkAll = function() {
 	    	$scope.products.selected = $scope.products.roles.map(function(item) { return item.id; });
 	    };
@@ -67,14 +67,14 @@
 	              angular.forEach( $scope.productList, function(value, key) {
 	                $scope.productList[key]['product_id'] = parseInt(value.product_id) ;
 	                //$scope.user.roles[value.user_id]= value.username ;
-	                $scope.products.roles.push({id:value.product_id,name:value.title_vn});
+	                $scope.products.roles.push({id:value.product_id,name:value.title});
 	              });
 	            }
 	        });
 	    }
 	    productList();
 		$scope.openAddProduct = function (size) {
-			productService.httpGet(productApi.categoryList).then(function(responseData) {
+			commonService.httpGet(productApi.categoryList).then(function(responseData) {
 	            if (responseData.status) {
 	      			modalAddProduct(size,responseData.rows);
 	      		}
@@ -83,12 +83,12 @@
 	    };
 	    function modalAddProduct(size,category_list) {
 	        var modalObj = {
-		        templateUrl: adBaseUrl +'modal/product/add_product.html',
+		        templateUrl: baseConfig.adminTpl +'/catalog/product/add_product.html',
 		        size: size,
-		        controller: ['$scope', '$uibModalInstance', 'dataInit', function(scope, $uibModalInstance, dataInit){
+		        controller: ['$scope','commonService', '$uibModalInstance','Upload','$timeout','dataInit', function(scope, commonService, $uibModalInstance,Upload, $timeout, dataInit){
 		          	scope.product = {};
 		          	scope.categoryList = dataInit;
-		          	scope.categoryList.push({id:0,path_parent_name_vn:'[Không danh mục]',path_parent_name_en:'[No Category]'});
+		          	scope.categoryList.push({id:0,path_parent_name:'[Không danh mục]'});
 		           	scope.cancel = function(){
 		            	$uibModalInstance.close();
 		           	};
@@ -105,8 +105,53 @@
 			                }
 			            });
 		          	};
+		          	scope.uploadFiles = function(file, errFiles) {
+			        	scope.f = file;
+			        	if(file){
+			        		//scope.f = file;	
+			        	}else{
+			        		//not update image name, image path if not select image
+			        		scope.product.file = null;
+			        	}
+				        scope.errFile = errFiles && errFiles[0];
+				        if (file) {
+				        	var file_is_valid = commonService.sup_check_file_info(file);
+				        	if(!file_is_valid){
+				        		SweetAlert.swal({
+						         	title: "Error",
+						        	text: "Image file invalid",
+						         	type: "warning",
+						         	confirmButtonText: "Ok"
+						        });
+						        file = null;
+						        scope.f = null;
+				        		return;
+				        	}
+				            file.upload = Upload.upload({
+				                url: baseConfig.home+'api/upload/upload_img_user',
+				                method: 'POST',
+							    headers: {
+							        'Content-Type': file.type
+							    },
+				                data: {file: file}
+				            });
+
+				            file.upload.then(function (response) {
+				                $timeout(function () {
+				                    file.result = response.data;
+				                    scope.product.file = response.data;
+
+				                });
+				            }, function (response) {
+				                if (response.status > 0)
+				                    scope.errorMsg = response.status + ': ' + response.data;
+				            }, function (evt) {
+				                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+				            });
+				        }   
+				    }
 		          	function validateAddProduct() {
-			            if(typeof(scope.product.name_vn) == 'undefined' || typeof(scope.product.name_en) == 'undefined' ){
+			            if(typeof(scope.product.name) == 'undefined' ){
 			              return 0;
 			            }else{
 			              return 1;
@@ -123,7 +168,7 @@
 	    }
 
 	    $scope.productEdit = function (item) {
-	      	productService.httpGet(productApi.categoryList).then(function(responseData) {
+	      	commonService.httpGet(productApi.categoryList).then(function(responseData) {
 	          	if (responseData.status) {
 	            	modalEditProduct('lg',responseData.rows,item);
 	          	}
@@ -131,14 +176,14 @@
 	    }
 	    function modalEditProduct(size,category_list,item) {
 		    var modalObj = {
-		      templateUrl: adBaseUrl +'modal/product/add_product.html',
+		      templateUrl: baseConfig.adminTpl +'/catalog/product/add_product.html',
 		      size: size,
-		      controller: ['$scope', '$uibModalInstance','dataInit', function(scope, $uibModalInstance, dataInit){
-				scope.popover = {title: 'Title', content: '', templateUrl: adBaseUrl +'catalog/product/popover/edit_image.html'};
+		      controller: ['$scope','commonService', '$uibModalInstance','Upload','$timeout','dataInit', function(scope, commonService, $uibModalInstance,Upload, $timeout, dataInit){
+				scope.popover = {title: 'Title', content: '', templateUrl: baseConfig.adminTpl +'/catalog/product/popover/edit_image.html'};
 
 		        scope.product = angular.copy(item);
 		        scope.categoryList = dataInit;
-		        scope.categoryList.push({id:0,name_vn:'[Không danh mục]',name_en:'[No Category]'});
+		        scope.categoryList.push({id:0,path_parent_name:'[Không danh mục]'});
 		        scope.product.parent_selected = {id:item.parent_id};
 		        scope.cancel = function(){
 		          $uibModalInstance.close();
@@ -147,7 +192,7 @@
 		        	if(!validateEditProduct() || invalid){
 		              return;
 		            }
-		          	scope.product.parent_id = scope.product.parent_selected?scope.product.parent_selected.id:0;;
+		          	scope.product.parent_id = scope.product.parent_selected?scope.product.parent_selected.id:0;
 		          	productService.httpPost(productApi.productEdit,scope.product).then(function(responseData) {
 		              if (responseData.status) {
 		               SweetAlert.swal("Edit Product success!", "", "success");
@@ -163,8 +208,53 @@
 		              }
 		          });
 		        };
+		        scope.uploadFiles = function(file, errFiles) {
+		        	scope.f = file;
+		        	if(file){
+		        		//scope.f = file;	
+		        	}else{
+		        		//not update image name, image path if not select image
+		        		scope.product.file = null;
+		        	}
+			        scope.errFile = errFiles && errFiles[0];
+			        if (file) {
+			        	var file_is_valid = commonService.sup_check_file_info(file);
+			        	if(!file_is_valid){
+			        		SweetAlert.swal({
+					         	title: "Error",
+					        	text: "Image file invalid",
+					         	type: "warning",
+					         	confirmButtonText: "Ok"
+					        });
+					        file = null;
+					        scope.f = null;
+			        		return;
+			        	}
+			            file.upload = Upload.upload({
+			                url: baseConfig.home+'api/upload/upload_img_user',
+			                method: 'POST',
+						    headers: {
+						        'Content-Type': file.type
+						    },
+			                data: {file: file}
+			            });
+
+			            file.upload.then(function (response) {
+			                $timeout(function () {
+			                    file.result = response.data;
+			                    scope.product.file = response.data;
+
+			                });
+			            }, function (response) {
+			                if (response.status > 0)
+			                    scope.errorMsg = response.status + ': ' + response.data;
+			            }, function (evt) {
+			                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+			            });
+			        }   
+			    }
 		        function validateEditProduct() {
-		            if(typeof(scope.product.name_vn) == 'undefined' || typeof(scope.product.name_en) == 'undefined' ){
+		            if(typeof(scope.product.name) == 'undefined' ){
 		              return 0;
 		            }else{
 		              return 1;
