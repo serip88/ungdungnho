@@ -58,6 +58,12 @@
         "FORGOT_PASSWORD" : "Forgot password",
         "404" : "404"
       },
+      "rz_post" : {
+        "POST" : "Post",
+        "LIST" : "List Post",
+        "VALIDATION" : "Post Validation",
+        "REPORT" : "Post Report"
+      },
       "rz_system" : {
         "SYSTEM" : "System",
         "MEMBERS" : "Members",

@@ -314,6 +314,21 @@ angular.module('app')
                   url: '/docs',
                   templateUrl: 'tpl/docs.html'
               })
+              //post
+              .state('app.post', {
+                  url: '/post',
+                  template: '<div ui-view class="fade-in-down"></div>'
+              })
+              .state('app.post.list', {
+                  url: '/list',
+                  templateUrl: baseConfig.adminTpl+'/post/list.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( [baseConfig.app+'/js/controllers/post.js'] );
+                      }]
+                  }
+              })
               // system
               .state('app.system', {
                   url: '/system',
