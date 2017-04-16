@@ -32,18 +32,18 @@ class Page_lib {
 		$where = array('post_type'=>'menu_top', 'enabled'=>1);
 		$dt = $this->CI->post_model->get_data('id_post,options',$where,'',0,'order DESC');
 		$strIdPage=$this->menu_filter_id_page($dt);
-		$data_category=$this->CI->post_model->get_data('title_vn,title_en,id_post,options,slug',"id_post IN($strIdPage) AND enabled=1",'',0,"FIELD(id_post, $strIdPage)");
+		$data_category=$this->CI->post_model->get_data('title,id_post,options,slug',"id_post IN($strIdPage) AND enabled=1",'',0,"FIELD(id_post, $strIdPage)");
 		$count_cate= count($data_category);
 		$main_menu = array();
 		for($i=0; $i<$count_cate; $i++){
 			$options= json_decode($dt[$i]['options']);
-			//$total_child= get_total_table($tableName,"WHERE id_parent=".$data_category[$i]['id_post']." AND enabled=1");
-			$data_child=$this->CI->post_model->get_data('title_vn,title_en,id_post,options,slug',"id_parent=".$options->id_page." AND post_type='page_default' AND enabled=1",'',0 ,"order DESC");
+			//$total_child= get_total_table($tableName,"WHERE parent_id=".$data_category[$i]['id_post']." AND enabled=1");
+			$data_child=$this->CI->post_model->get_data('title,id_post,options,slug',"parent_id=".$options->id_page." AND post_type='page_default' AND enabled=1",'',0 ,"order DESC");
 			$total_child= count($data_child);
 			if($data_category[$i]['slug']=='san-pham' && 0){ 
-				$id_parent = get_id_slug('san-pham','product');
+				$parent_id = get_id_slug('san-pham','product');
 				
-				$data_child= get_post_type_list('product',20,0,'',"WHERE post_type='product' AND level=1 AND id_parent=$id_parent AND enabled=1 ORDER BY `order` DESC LIMIT 20",'','no');
+				$data_child= get_post_type_list('product',20,0,'',"WHERE post_type='product' AND level=1 AND parent_id=$parent_id AND enabled=1 ORDER BY `order` DESC LIMIT 20",'','no');
 				$total_child= count($data_child);
 				
 			}
@@ -68,13 +68,13 @@ class Page_lib {
 			for($j=0; $j<$total_child; $j++){
 				$sub_menu[]= array(
 					'ID'			=> $data_child[$j]['id_post'],
-					'TITLE'			=> $data_child[$j]['title_'.$language],
+					'TITLE'			=> $data_child[$j]['title'],
 					'HREF'			=> $head.'/'.$data_category[$i]['slug'].'/'.$data_child[$j]['slug'].$tail,
 				);
 			}
 			$main_menu[]= array(
 					'ID'			=> $data_category[$i]['id_post'],
-					'TITLE'			=> $data_category[$i]['title_'.$language],
+					'TITLE'			=> $data_category[$i]['title'],
 					'HREF'			=> $head.$href,
 					'DISPLAY'		=> $display,
 					'ACTIVE'		=> $active,
