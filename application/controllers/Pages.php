@@ -22,6 +22,14 @@ class Pages extends BaseUI_controller{
   	$this->ci_smarty->assign('page_info', $this->page_info);
     $this->ci_smarty->display( APPPATH.'views\client\index.tpl' );
   }
+  public function change()
+  { 
+    //$this->rz_debug($this->page_lib->get_main_menu());die;
+    $this->page_info['main_menu']=$this->page_lib->get_main_menu();
+    //$this->load->view('index');
+    $this->ci_smarty->assign('page_info', $this->page_info);
+    $this->ci_smarty->display( APPPATH.'views\client\tpl2\index.tpl' );
+  }
   public function home()
   { 
     //$this->rz_debug($this->page_lib->get_main_menu());die;
