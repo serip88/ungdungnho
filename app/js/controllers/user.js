@@ -106,7 +106,7 @@ var userApi = {
       size: size,
       controller: ['$scope','commonService', '$uibModalInstance','Upload','$timeout','dataInit', function(scope, commonService, $uibModalInstance,Upload, $timeout, dataInit){
         scope.newuser = {};
-        scope.newuser.group_user = dataInit;
+        scope.newuser.group_user = dataInit.group_user;
         scope.cancel = function(){
           $uibModalInstance.close();
         };
@@ -118,7 +118,7 @@ var userApi = {
           userService.httpPost(userApi.userSave,scope.newuser).then(function(responseData) {
               if (responseData.status) {
                SweetAlert.swal("Add success!", "", "success");
-               userList();
+               scope.getUserList();
                $uibModalInstance.close();
               }else{
                 SweetAlert.swal({
@@ -189,7 +189,7 @@ var userApi = {
     };
     modalObj.resolve = {
         dataInit: function(){
-            return group_user;
+            return {group_user:group_user,getUserList:$scope.getUserList};
         }
     };
     openModal.custom(modalObj);
@@ -198,7 +198,7 @@ var userApi = {
     userService.httpPost(userApi.userDelete,{'user_delete':$scope.user.selected} ).then(function(responseData) {
         if (responseData.status) {
          SweetAlert.swal("Delete success!", "", "success");
-         userList();
+         scope.getUserList();
         }else{
           SweetAlert.swal({
             title: "Have problem when delete user!",
@@ -221,7 +221,7 @@ var userApi = {
                 userService.httpPost(userApi.userDelete,{'user_delete':$scope.user.selected} ).then(function(responseData) {
                     if (responseData.status) {
                      SweetAlert.swal("Delete success!", "", "success");
-                     userList();
+                     scope.getUserList();
                     }else{
 
                     }
@@ -299,7 +299,7 @@ var userApi = {
       size: size,
       controller: ['$scope','commonService', '$uibModalInstance','Upload','$timeout','dataInit', function(scope, commonService, $uibModalInstance,Upload, $timeout, dataInit){
         scope.newuser = item;
-        scope.newuser.group_user = dataInit;
+        scope.newuser.group_user = dataInit.group_user;
         scope.newuser.user_group_selected = {id:item.user_group_id};
         scope.cancel = function(){
           $uibModalInstance.close();
@@ -309,7 +309,7 @@ var userApi = {
           userService.httpPost(userApi.userEdit,scope.newuser).then(function(responseData) {
               if (responseData.status) {
                SweetAlert.swal("Edit user success!", "", "success");
-               userList();
+               dataInit.getUserList();
                $uibModalInstance.close();
               }else{
                 SweetAlert.swal({
@@ -370,12 +370,12 @@ var userApi = {
     };
     modalObj.resolve = {
         dataInit: function(){
-            return group_user;
+            return {group_user:group_user,getUserList:$scope.getUserList};
         }
     };
     openModal.custom(modalObj);
   }
-  $scope.userList = function() {  
+  $scope.getUserList = function() {  
       $scope.userList = {};
       userService.httpGet(userApi.userList).then(function(responseData) {
         if (responseData.status) {
@@ -437,7 +437,7 @@ var userApi = {
 
   app.controller('UserListCtrl', ['$scope', '$uibModal', 'userService', function($scope, $uibModal, userService) {
    
-    $scope.userList();
+    $scope.getUserList();
   
   }]);
   app.controller('MemberListCtrl', ['$scope', '$uibModal', 'userService', function($scope, $uibModal, userService) {

@@ -141,6 +141,7 @@ class User extends Base_controller {
             }
             if($res['user_id']){
                 //B upload file
+                $upload_image = false;
                 if(isset($param['file']) ){
                     $file_exit = $this->check_file_exit($param['file']);
                     if($file_exit){
