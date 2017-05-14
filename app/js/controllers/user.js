@@ -118,7 +118,7 @@ var userApi = {
           userService.httpPost(userApi.userSave,scope.newuser).then(function(responseData) {
               if (responseData.status) {
                SweetAlert.swal("Add success!", "", "success");
-               scope.getUserList();
+               dataInit.getUserList();
                $uibModalInstance.close();
               }else{
                 SweetAlert.swal({

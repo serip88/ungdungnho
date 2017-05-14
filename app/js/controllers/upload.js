@@ -72,7 +72,7 @@ app.controller('uploadCtrl', ['$scope', '$http', '$timeout', '$compile', 'Upload
     }
   };
 
-  $scope.chunkSize = 2000000;
+  $scope.chunkSize = 4000000;
   function uploadUsingUpload(file, resumable) {
     file.upload = Upload.upload({
       //url: 'http://ungdungnho.localhost/app/js/controllers/upload.php' + $scope.getReqParams(),
