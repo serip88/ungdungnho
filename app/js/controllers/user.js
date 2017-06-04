@@ -73,33 +73,33 @@ var userApi = {
     $scope.items = ['item1', 'item2', 'item3'];
 
 
-    /*$scope.open = function (size) {
-      var modalInstance = $uibModal.open({
-        templateUrl: 'addUser.html',
-        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-          $scope.newuser= {};
-          $scope.ok = function () {
-            $uibModalInstance.close($scope.newuser);
-          };
-          $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
-          };
-        }],
-        size: size,
-        resolve: {
-          items: function () {
-            return scope.items;
-          }
-        }
-      });
+    // $scope.open = function (size) {
+    //   var modalInstance = $uibModal.open({
+    //     templateUrl: baseConfig.adminTpl +'/system/users/add_user.html',
+    //     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+    //       $scope.newuser= {};
+    //       $scope.ok = function () {
+    //         $uibModalInstance.close($scope.newuser);
+    //       };
+    //       $scope.cancel = function () {
+    //         $uibModalInstance.dismiss('cancel');
+    //       };
+    //     }],
+    //     size: size,
+    //     resolve: {
+    //       items: function () {
+    //         return $scope.items;
+    //       }
+    //     }
+    //   });
 
-      modalInstance.result.then(function (selectedItem) {
-        $scope.selected = selectedItem;
-        $log.info($scope.selected);
-      }, function () {
-        $log.info('Modal dismissed at: ' + new Date());
-      });
-    };*/
+    //   modalInstance.result.then(function (selectedItem) {
+    //     $scope.selected = selectedItem;
+    //     $log.info($scope.selected);
+    //   }, function () {
+    //     $log.info('Modal dismissed at: ' + new Date());
+    //   });
+    // };
   function modalAddUser(size,group_user) {
     var modalObj = {
       templateUrl: baseConfig.adminTpl +'/system/users/add_user.html',
